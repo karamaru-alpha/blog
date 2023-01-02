@@ -1,0 +1,5 @@
+[generator]
+other = "Made with <a href='https://gohugo.io'>Hugo</a> using the <a href='https://github.com/EmielH/tale-hugo/'>Tale</a> theme."
+
+[publishdate]
+other = "{{ .PublishDate.Year }}/{{ printf \"%02d\" .PublishDate.Month }}/{{ printf \"%02d\" .PublishDate.Day }}"

@@ -1,6 +1,6 @@
 baseurl = "https://karamaru-alpha.com"
 languageCode = "ja"
-DefaultContentLanguage = "ja"
+defaultContentLanguage = "ja"
 title = "からまるのブログ"
 theme = "tale"
 
