@@ -136,11 +136,11 @@ pre code > span {
   .post-title {
     color: var(--default-shade);
     font-family: "Helvetica Neue", "Segoe UI", Helvetica, Arial, sans-serif;
-    font-size: 4rem;
+    font-size: 3rem;
     margin: 1rem 0;
     text-align: center; }
   .post-line {
-    border-top: 0.4rem solid var(--default-shade);
+    border-top: 0.4rem solid orange;
     display: block;
     margin: 0 auto 3rem;
     width: 4rem; }
@@ -613,7 +613,7 @@ nav#TableOfContents li {
   -webkit-transition: background-color 0.4s ease-out, color 0.4s ease-out, border-color 0.4s ease-out, box-shadow 0.4s ease-out, width 0.3s ease-out;
   -moz-transition: background-color 0.4s ease-out, color 0.4s ease-out, border-color 0.4s ease-out, box-shadow 0.4s ease-out, width 0.3s ease-out;
   transition: background-color 0.4s ease-out, color 0.4s ease-out, border-color 0.4s ease-out, box-shadow 0.4s ease-out, width 0.3s ease-out;
-  border-top: 0.2rem solid var(--default-shade);
+  border-top: .2rem solid orange;
   display: block;
   width: 2rem; }
 
