@@ -6,3 +6,17 @@ theme = "tale"
 
 [Author]
 name = "karamaru"
+
+[menu]
+  [[menu.main]]
+    identifier = "twitter"
+    name = "twitter"
+    title = "twitter"
+    url = "https://twitter.com/karamarooon"
+    weight = 1
+  [[menu.main]]
+    identifier = "github"
+    name = "github"
+    title = "github"
+    url = "https://github.com/karamaru-alpha"
+    weight = 1
