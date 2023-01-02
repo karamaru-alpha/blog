@@ -1,0 +1,8 @@
+baseurl = "https://karamaru-alpha.github.io/blog"
+languageCode = "ja"
+DefaultContentLanguage = "ja"
+title = "からまるのブログ"
+theme = "tale"
+
+[Author]
+name = "karamaru"
