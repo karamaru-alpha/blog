@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on からまるのブログ</title><link>https://karamaru-alpha.com/posts/</link><description>Recent content in Posts on からまるのブログ</description><generator>Hugo -- gohugo.io</generator><language>ja</language><lastBuildDate>Tue, 03 Jan 2023 09:19:55 +0900</lastBuildDate><atom:link href="https://karamaru-alpha.com/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>2022年の振り返り、2023年に注力したいこと</title><link>https://karamaru-alpha.com/posts/2/</link><pubDate>Tue, 03 Jan 2023 09:19:55 +0900</pubDate><guid>https://karamaru-alpha.com/posts/2/</guid><description>あけましておめでとうございます、からまるです。
 昨年は社会人1年目ということもあり、学び・反省の多い1年間でした。
 そんな2022年の振り返りと、反省を活かした2023年の抱負を記述したいと思います。
-2022年概要 インターン (~4月) 入社 (4月) 2度目のisucon敗北 (6月) ゲーム事業部配属 (6月) 初めての新機能開発 (7月) 初めてのイベント開発 (9~12月) 2022年の反省点 主に3点あります。
+2022年概要 インターン (~4月) 入社 (4月) 2度目のisucon敗北 (6月) ゲーム事業部配属 (6月) 初めての新機能開発 (7月) 初めてのイベント開発 (9~12月) 初めてプロとしてエンジニアをしました。
+ゲームのバックエンドはドメインも深く戸惑うことも多かったですが、新機能・イベント開発をやり遂げられてよかったです。(バグは出しちゃったけど💦)
+2023年には新しいイベントの開発や後輩の育成などを任される予定なので、経験を糧に成長していけたらなと思います。
+2022年の反省点 主に3点あります。
 熱中できる技術領域・関心に避ける時間を確保できなかった どんなに業務のタスクをこなせたとしても、自分が熱中できる技術・関心領域を見つけたり、それに時間をつぎ込めなくなると次第にエンジニアとしての自信を喪失して行きます。
 6月地点までは「isucon本戦出場する」という明示的な目標があったので、毎日終業後に勉強時間を確保できていて、こんなに楽しいことがこの世にあるのかという感情でした。
 一方、業務で新機能開発などの責任領域を任されるようになった7月以降は、必要以上に本業について思い悩む日々が続き、エンジニアリングが楽しくないと思う日がみられました。
