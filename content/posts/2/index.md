@@ -11,8 +11,7 @@ date: 2023-01-03T09:19:55+09:00
 
 <!--more-->
 
-<img src="https://user-images.githubusercontent.com/38310693/210359921-24711ac1-4977-41d9-8e69-9c0e41eb6e7f.PNG" width="200">
-
+![karamaru](./karamaru.jpg)
 
 ## 2022年概要
 
