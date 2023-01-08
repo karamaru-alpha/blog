@@ -82,7 +82,9 @@ date: 2023-01-08T00:16:21+09:00
 
 図解すると以下！！！！
 
-<img width="500" alt="スクリーンショット 2023-01-08 5 52 09" src="https://user-images.githubusercontent.com/38310693/211169894-bf748d95-8c72-48db-a61c-29be1bbd5177.png">
+
+![cache_flow](./cache_flow.png)
+
 
 
 めっちゃ賢い選択とかはわからないですが、現在の浪費が軽減されることは間違い無いでしょう。
