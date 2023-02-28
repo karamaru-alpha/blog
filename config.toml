@@ -23,3 +23,4 @@ name = "karamaru"
 
 [Params]
 toc = true
+images = ["images/ren.png"]
