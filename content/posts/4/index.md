@@ -11,8 +11,7 @@ https://github.com/karamaru-alpha/wasm-compiler-in-rust
 
 ## 発表資料
 
-{{< slide src="https://docs.google.com/presentation/d/e/2PACX-1vRey87iD7F3VUToThId4xfPzCWoY4yRj1ssO9DjIu_hOX2vEh-MM7Mn1YUc6ZIQCA/embed?start=false&loop=false&delayms=3000" >}}
-
+{{< slide src="https://docs.google.com/presentation/d/e/2PACX-1vSCMNfNYYoCSB1gIV3HIcaXWtdf_1pnIEHUhCN11PIoe4xAj4j7h-IGtjeKipEXiw/embed?start=false&loop=false&delayms=3000" >}}
 
 ## 感想
 
