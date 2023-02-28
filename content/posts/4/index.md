@@ -4,9 +4,10 @@ date: 2023-03-01T05:25:00+09:00
 ---
 
 rust/wasmに入門するために、自作言語をwasmバイナリにマッピングするコンパイラを作りました。
-https://github.com/karamaru-alpha/wasm-compiler-in-rust
 
 <!--more-->
+
+https://github.com/karamaru-alpha/wasm-compiler-in-rust
 
 ## 発表資料
 
