@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>からまるのブログ</title><link>https://karamaru-alpha.com/</link><description>Recent content on からまるのブログ</description><generator>Hugo -- gohugo.io</generator><language>ja</language><lastBuildDate>Sat, 01 Apr 2023 17:06:45 +0900</lastBuildDate><atom:link href="https://karamaru-alpha.com/index.xml" rel="self" type="application/rss+xml"/><item><title>言語跨ぎで呼び出し可能なwasmプラグインを作成できるExtismを試す</title><link>https://karamaru-alpha.com/posts/6/</link><pubDate>Sat, 01 Apr 2023 17:06:45 +0900</pubDate><guid>https://karamaru-alpha.com/posts/6/</guid><description>先日はWASM I/Oがありましたね。
 中でも、言語跨ぎで呼び出し可能なwasmプラグインを作成できるExtismが気になったので試してみました。
-まだまだドキュメントが乏しく、現在の仕様で動くrepositoryがなかったので参考になれば幸いですmm
 https://github.com/karamaru-alpha/extism-trial
+主なできることとしては以下です
+PDKを用いて、wasmプラグインを作成できる SDKを用いて、wasmプラグインを呼び出せる 呼び出し元から関数を渡してwasm内で実行できる まだまだドキュメントが乏しく、現在の仕様で動くrepositoryがなかったので参考になれば幸いですmm
 一言 安全で高速、言語を超えたポータブルな実装ができるのがブラウザ外wasmの利点です。
 言語跨ぎの呼び出しを簡易化したことで、 wasmモジュールを積み木のように組み合わせるだけで処理が完結してしまう世界に一歩近づいた感じでワクワクしますね。
 (実際に、wasm版dockerhubであるwapmや、wasmモジュールをChart的に管理してpipeline的に組み合わせるScaleなども出てるし)</description></item><item><title>自作言語をwasm変換するコンパイラをrustで作った</title><link>https://karamaru-alpha.com/posts/4/</link><pubDate>Wed, 01 Mar 2023 05:25:00 +0900</pubDate><guid>https://karamaru-alpha.com/posts/4/</guid><description>&lt;p>rust/wasmに入門するために、自作言語をwasmバイナリにマッピングするコンパイラを作りました。
