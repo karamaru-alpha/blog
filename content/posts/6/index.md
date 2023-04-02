@@ -5,7 +5,7 @@ date: 2023-04-01T17:06:45+09:00
 
 先日は[WASM I/O](https://wasmio.tech/)がありましたね。
 
-中でも、言語跨ぎで呼び出し可能なwasmプラグインを作成できる[Extism](https://extism.org/)が気になったので試してみました。
+中でも、wasmプラグインの作成/呼び出しを言語跨ぎでできる[Extism](https://extism.org/)が気になったので試してみました。
 
 <!--more-->
 
