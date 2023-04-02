@@ -7,6 +7,8 @@ date: 2023-04-01T17:06:45+09:00
 
 中でも、言語跨ぎで呼び出し可能なwasmプラグインを作成できる[Extism](https://extism.org/)が気になったので試してみました。
 
+<!--more-->
+
 https://github.com/karamaru-alpha/extism-trial
 
 主なできることとしては以下です
