@@ -3,21 +3,26 @@ title: "wasmプラグインの作成/呼び出しを言語跨ぎでできるExti
 date: 2023-04-01T17:06:45+09:00
 ---
 
-先日は[WASM I/O](https://wasmio.tech)がありましたね。
-中でも、wasmプラグインの作成/呼び出しを言語跨ぎでできる[Extism](https://extism.org)が気になったので試してみました。
+先日はWASM I/Oがありましたね。
+中でも、wasmプラグインの作成/呼び出しを言語跨ぎでできるExtismが気になったので試してみました。
 
 <!--more-->
 
-https://github.com/karamaru-alpha/extism-trial
+https://extism.org/
 
 主なできることとしては以下です
 - PDKを用いて、wasmプラグインを作成できる
 - SDKを用いて、wasmプラグインを呼び出せる
   - 呼び出し元から関数を渡してwasm内で実行できる
 
+とりあえず、Goで作成したwasmプラグインをRustから呼び出すコードを書いてみました。
+https://github.com/karamaru-alpha/extism-trial
+
 まだまだドキュメントが乏しく、現在の仕様で動くrepositoryがなかったので参考になれば幸いですmm
 
 ### 一言
+
+[WASM I/O](https://wasmio.tech/)見ないとなぁ。英語できないからながら聞きできないのが悔しいです。
 
 安全で高速、言語を超えたポータブルな実装ができるのがブラウザ外wasmの利点です。
 
