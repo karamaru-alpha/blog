@@ -3,11 +3,11 @@ title: "対isuconメトリクスツールisumaru作った"
 date: 2023-10-02T00:12:48+09:00
 ---
 
-
 対isuconメトリクスツール"isumaru"作りました。
-https://github.com/karamaru-alpha/isumaru
 
 <!--more-->
+
+https://github.com/karamaru-alpha/isumaru
 
 ## 機能
 複数サーバーに対して、以下の解析を自動化します。
