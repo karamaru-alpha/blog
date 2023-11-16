@@ -21,7 +21,7 @@ https://www.warp.dev/
 
 **神ターミナル**です。
 
-自分はiTerm2ユーザーだったのですが、操作性・補完の部分で圧倒的にwarpの方が体感良く一瞬で虜になりました。
+自分はiTerm2ユーザーだったのですが、操作性・補完の部分で圧倒的にwarpの方が体感が良く、一瞬で虜になりました。
 
 抜粋するとこんな特徴があります。
 
@@ -68,7 +68,7 @@ https://github.com/peco/peco
 
 **標準出力をインクリメンタルサーチ**(動的に検索)した後に、選択した**結果を出力**するツールです。
 
-例えば`alias switch='git branch | peco | xargs git switch'`とすれば**Gitブランチの動的なswitch**なんかも実現できます。(意外と助かる)
+応用力が高く、例えば`alias switch='git branch | peco | xargs git switch'`とすれば**Gitブランチの動的なswitch**を実現できます。(意外と助かる)
 
 <参考画像> 選択したブランチに移動できる.png
 ![peco3.png](peco3.png)
