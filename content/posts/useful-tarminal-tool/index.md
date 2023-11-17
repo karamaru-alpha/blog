@@ -49,7 +49,7 @@ https://github.com/rupa/z
 
 例えば以下のような感じで、階層を気にせず縦横無尽に移動することができます。
 - `/path/to/foo`から`/path/to/bar`に移動したい場合、`z bar`で移動できる
-- `/path/to/bar`から`/path/to/baz/qux`に移動したい場合、`z quz`(もっと言えば`z q`)で移動できる
+- `/path/to/bar`から`/path/to/baz/qux`に移動したい場合、`z qux`(もっと言えば`z q`)で移動できる
 
 
 内部的には直近移動(cd)したディレクトリを記憶し、部分一致で最近移動した場所へ連れていってくれるみたいです。
