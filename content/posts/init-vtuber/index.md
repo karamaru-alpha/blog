@@ -186,7 +186,7 @@ Photoshopには10日程度の無料トライアル期間があるので、有料
 
 レイヤー分けの仕方についてはLive2Dの公式チュートリアルがとてもわかりやすいので、そちらも参考にしてください。 
 
-cf.[基本チュートリアル - イラストの加工](https://docs.live2d.com/cubism-editor-tutorials/psd/)
+cf. [基本チュートリアル - イラストの加工](https://docs.live2d.com/cubism-editor-tutorials/psd/)
 
 ### 実際にレイヤー分け・書き足しを行う
 
