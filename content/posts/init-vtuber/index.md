@@ -84,14 +84,18 @@ date: 2023-12-13T03:00:36+09:00
 次に、AIを用いて作業コストを削減する案を考えます。
 
 原画は言わずもがな生成AIに任せるとして、レイヤー分け・モデリングもAIに任せられる技術がないか調査しましたが、MacBook単体で動作するという要件もあり少し厳しそうでした。
-- [layerdivider](https://github.com/mattyamonaca/layerdivider)
-    - 色素ベースで絵のレイヤー分けしてくれるツール
-    - 色ベースのみでレイヤー分けされてしまうので見送り
-    - cf. [AIを使わずに一枚絵をレイヤー分けできないか試みた話](https://zenn.dev/aics/articles/833e6601130780)
 - [talking-head-anime-3](https://github.com/pkhungurn/talking-head-anime-3-demo)
-    - 1枚絵から自動でモデリングまでしてくれる技術
-    - つよつよGPUが必須でMacBookProでは動かないため見送り
+  - 1枚絵から自動でモデリングまでしてくれる技術
+  - つよつよGPUが必須でMacBookProでは動かないため見送り
+- [MagicAnimate](https://github.com/magic-research/magic-animate)
+  - **ByteDance製の動きを指定して静止画を動かす技術**
+  - 2023/12/04(執筆1週間前)リリースで参考文献がなさすぎたため今回は見送ったが、生成AI界隈は結構盛り上がっててこれが発展すればLive2Dモデリングとかいらなくなるんだろうなーと思ってる
+- [layerdivider](https://github.com/mattyamonaca/layerdivider)
+  - 色素ベースで絵のレイヤー分けしてくれるツール
+  - 色ベースのみでレイヤー分けされてしまうので見送り
+  - cf. [AIを使わずに一枚絵をレイヤー分けできないか試みた話](https://zenn.dev/aics/articles/833e6601130780)
 
+正直探せば他にもありそう。
 
 #### 原画だけ生成AIに任せる案 -> 採用
 
