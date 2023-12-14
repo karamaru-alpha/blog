@@ -292,7 +292,7 @@ VTube Studioには"バーチャルWebカメラ"という仮想カメラを建て
 
 よって、**[OBS Studio](https://obsproject.com/ja)を用いてVTube Studioの画面をキャプチャし、OBS Studioの仮想カメラをZoomやハドルに表示する**ことで、アバターを配信することでMacでアバター配信を実現します。
 
-画面はこんな感じ。VTubeStudio無料番だと左下で変な奴がうろちょろしているので配信にはうつさないように画角設定しましょう。
+画面はこんな感じ。VTubeStudio無料版だと左下で変な奴がうろちょろしているので配信にはうつさないように画角設定しましょう。
 
 ![obsstudio.png](./obsstudio.png)
 
