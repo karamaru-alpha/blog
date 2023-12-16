@@ -3,7 +3,7 @@ title: "レイヤードアーキテクチャでトランザクションをエレ
 date: 2023-12-16T12:14:44+09:00
 ---
 
-この記事は技術書典で弊社から出した本『[SGE Go Tech Book Vol.04](https://creator.game.cyberagent.co.jp/?p=10211)』で自分が書いた章を書き直したものです。
+この記事は技術書典で弊社から出した本『[SGE Go Tech Book Vol.04](https://creator.game.cyberagent.co.jp/?p=10211)』自分が書いた章を書き直したものです。
 
 レイヤードアーキテクチャにおけるトランザクションの実装（主に抽象化）の方法について、2つの例を紹介します。
 
@@ -17,118 +17,6 @@ https://github.com/karamaru-alpha/tx-layer
 
 - ContextにTxオブジェクトを詰め伝搬するパターン
 - Txオブジェクトを抽象化しRepositoryに引数で渡すパターン
-
-
-## レイヤードアーキテクチャにおけるトランザクション実装の悩みどころ
-
-### レイヤードアーキテクチャとは
-
-レイヤードアーキテクチャとは責務によってシステムを複数の層に分割する設計手法です。 それぞれの層の関心を疎結合に保つことで、変更の影響範囲が制限される・テスト（モック）がしやすいなどのメリットがあるとされています。
-
-以下は典型的なレイヤードアーキテクチャの層分けです。
-
-- プレゼンテーション(handler)層: ユーザーインターフェース・表示ロジックを担当する 
-- アプリケーション(usecase)層: ビジネスロジックの進行を担当する。プレゼンテーション層から値を受け取り、ドメイン層を活用して処理を進める 
-- ドメイン(domain)層: モデルの定義・振る舞いを定義する。データベースアクセスの抽象Repositoryに代表される、アプリケーション層とインフラストラクチャ層の中継役も担う 
-- インフラストラクチャ(infra)層: データベースなど外部サービスへのアクセスを主に担当する
-
-### 密結合なトランザクション実装例
-
-レイヤードアーキテクチャを採用したコードにおいて、トランザクションはどのように実装するのが良いでしょうか？
-「MySQLに保存されているユーザーの名前を更新する」というケースを例として考えてみましょう。
-
-さて、ユースケース単位でトランザクションを張りたい場合、愚直に実装すると以下のようになります。
-（本章ではMySQLとの疎通にGoの標準パッケージdatabase/sqlの拡張である[sqlxパッケージ](https://github.com/jmoiron/sqlx)を用います）
-
-<i>package構成</i>
-```shell
-$ tree ./anti-pattern/
-├── domain
-│	└── repository
-│		└── user.go
-├── infra
-│	└── mysql
-│		└── repository
-│			└── user.go
-└── usecase
-└── user.go
-```
-
-<i>anti-pattern/usecase/user.go</i>
-```go
-type UserInteractor interface {
-    UpdateName(ctx context.Context, userID, name string) error
-}
-
-type userInteractor struct {
-    db             *sqlx.DB
-    userRepository repository.UserRepository
-}
-
-func NewUserInteractor(
-    db *sqlx.DB,
-    userRepository repository.UserRepository,
-) UserInteractor {
-    return &userInteractor{
-        db,
-        userRepository,
-    }
-}
-
-// NOTE: アプリケーション層でデータベースの関心を持ってしまっている
-func (i *userInteractor) UpdateName(ctx context.Context, userID, name string) error {
-    tx, err := i.db.BeginTxx(ctx, nil)
-    if err != nil {
-        return err
-    }
-    defer func() {
-        // panic -> rollback
-        if p := recover(); p != nil {
-            if err := tx.Rollback(); err != nil {
-                slog.ErrorContext(ctx, "failed to MySQL Rollback")
-            }
-            panic(p)
-        }
-        // error -> rollback
-        if err != nil {
-            if e := tx.Rollback(); e != nil {
-                slog.ErrorContext(ctx, "failed to MySQL Rollback")
-            }
-            return
-        }
-        // success -> commit
-        if e := tx.Commit(); e != nil {
-            slog.ErrorContext(ctx, "failed to MySQL Commit")
-        }
-    }()
-
-    user, err := i.userRepository.SelectByPK(ctx, tx, userID)
-    if err != nil {
-        return err
-    }
-    user.Name = name
-    if err := i.userRepository.Update(ctx, tx, user); err != nil {
-        return err
-    }
-
-    return nil
-}
-```
-
-<i>anti-pattern/domain/repository/user.go</i>
-```go
-// NOTE: ドメイン層でデータベースの関心を持ってしまっている
-type UserRepository interface {
-    Select(ctx context.Context, tx *sqlx.Tx, userID string) (*entity.User, error)
-    Update(ctx context.Context, tx *sqlx.Tx, user *entity.User) error
-}
-```
-愚直にトランザクション処理を記述してしまうと、アプリケーション層・ドメイン層がデータベースの関心を持ってしまい、レイヤードアーキテクチャの「疎結合」というメリットが台無しです。
-アプリケーション層に記述されているビジネスロジックをテストする際に都度データベースを立ち上げなければならずテストがしづらいですし、万が一MySQL以外のデータベースに乗り換える場合インフラストラクチャ層以外のコードも修正しなければならず、変更に弱いコードになってしまいました。
-
-では、データベースへの直接的な依存をせずにユースケース層からトランザクションを呼び出すためにはどうしたら良いのでしょうか？
-次節から、疎結合にトランザクションを実現する2つの実装パターンを紹介・解説していこうと思います。
-
 
 ## 実装パターン1 TxオブジェクトをContextに詰める
 
@@ -230,6 +118,8 @@ type TxManager interface {
 
 続いて、トランザクションを実装するインフラストラクチャ層を見ていきます。
 MySQLのトランザクションを開始し、その際に得られるTxオブジェクトをContextに詰めてから、トランザクション関数の引数に渡された関数を実行しています。
+
+(みやすさのため、MySQLとの疎通にはGoの標準パッケージdatabase/sqlの拡張である[sqlxパッケージ](https://github.com/jmoiron/sqlx)を用いています)
 
 <i>context-pattern/infra/mysql/tx_manager.go</i>
 
