@@ -15,6 +15,8 @@ https://github.com/karamaru-alpha/tx-layer
 
 ## tl;dr
 
+以下2つのパターンを紹介する。後者の方がかっこいい気がしている。
+
 - ContextにTxオブジェクトを詰め伝搬するパターン
 - Txオブジェクトを抽象化しRepositoryに引数で渡すパターン
 
