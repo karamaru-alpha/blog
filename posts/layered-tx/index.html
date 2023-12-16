@@ -235,20 +235,20 @@ Contextの中にTxオブジェクトが存在するか確認し、存在すれ�
 }
 </code></pre></div><p>以上が「TxオブジェクトをContextに詰める」パターンの実装でした。
 TxオブジェクトをContext内に隠蔽しアプリケーション層とインフラストラクチャ層を疎結合を保つことで、レイヤードアーキテクチャの利点を崩さずにトランザクションを表現できています。</p><p>この方法のメリットは、各層でContextさえ受け取っていれば好きなタイミングでトランザクションの開始・Txオブジェクトの伝搬ができることです。middlewareでTxオブジェクトをContextに詰める処理を記述することで、すべてのエンドポイントでトランザクションを実現することも可能です。</p><p>一方のデメリットとして、Txオブジェクトの受け渡しがContext内部に隠蔽されていることによる見通しの悪さが挙げられます。
-コードが複雑化するにつれ、ある関数がトランザクション内で呼ばれることを期待しているのかが表面上のコード/シグニチャからは判別しづらくなる可能性があります。</p><p>そこで、Txオブジェクトの受け渡しまで抽象化して各層で扱えるようにした実装を次節で紹介します。</p><h2 id=実装パターン2-txオブジェクトを抽象化diする>実装パターン2 Txオブジェクトを抽象化・DIする</h2><p>本節では、レイヤードアーキテクチャにおけるトランザクション処理の実装パターンとして「Txオブジェクトを抽象化しDIする」方法を紹介します。</p><p>また、この実装パターンと相性のいい、ReadOnlyなトランザクションとReadWriteなトランザクションの使い分けも同時に紹介しようと思います。</p><p>package構成</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>.<span style=color:#f92672>/</span><span style=color:#a6e22e>di</span><span style=color:#f92672>-</span><span style=color:#a6e22e>pattern</span><span style=color:#f92672>/</span>
-<span style=color:#960050;background-color:#1e0010>├──</span> <span style=color:#a6e22e>domain</span>
-<span style=color:#960050;background-color:#1e0010>│</span>	<span style=color:#960050;background-color:#1e0010>├──</span> <span style=color:#a6e22e>repository</span>
-<span style=color:#960050;background-color:#1e0010>│</span>	<span style=color:#960050;background-color:#1e0010>│</span>    <span style=color:#960050;background-color:#1e0010>└──</span> <span style=color:#a6e22e>user</span>.<span style=color:#66d9ef>go</span>
-<span style=color:#960050;background-color:#1e0010>│</span>	<span style=color:#960050;background-color:#1e0010>└──</span> <span style=color:#a6e22e>transaction</span>
-<span style=color:#960050;background-color:#1e0010>│</span>	     <span style=color:#960050;background-color:#1e0010>└──</span> <span style=color:#a6e22e>tx_manager</span>.<span style=color:#66d9ef>go</span>
-<span style=color:#960050;background-color:#1e0010>├──</span> <span style=color:#a6e22e>infra</span>
-<span style=color:#960050;background-color:#1e0010>│</span>	<span style=color:#960050;background-color:#1e0010>└──</span> <span style=color:#a6e22e>mysql</span>
-<span style=color:#960050;background-color:#1e0010>│</span>		<span style=color:#960050;background-color:#1e0010>├──</span> <span style=color:#a6e22e>repository</span>
-<span style=color:#960050;background-color:#1e0010>│</span>		<span style=color:#960050;background-color:#1e0010>│</span>    <span style=color:#960050;background-color:#1e0010>└──</span> <span style=color:#a6e22e>user</span>.<span style=color:#66d9ef>go</span>
-<span style=color:#960050;background-color:#1e0010>│</span>		<span style=color:#960050;background-color:#1e0010>├──</span> <span style=color:#a6e22e>tx</span>.<span style=color:#66d9ef>go</span>
-<span style=color:#960050;background-color:#1e0010>│</span>		<span style=color:#960050;background-color:#1e0010>└──</span> <span style=color:#a6e22e>tx_manager</span>.<span style=color:#66d9ef>go</span>
-<span style=color:#960050;background-color:#1e0010>└──</span> <span style=color:#a6e22e>usecase</span>
-<span style=color:#960050;background-color:#1e0010>└──</span> <span style=color:#a6e22e>user</span>.<span style=color:#66d9ef>go</span>
+コードが複雑化するにつれ、ある関数がトランザクション内で呼ばれることを期待しているのかが表面上のコード/シグニチャからは判別しづらくなる可能性があります。</p><p>そこで、Txオブジェクトの受け渡しまで抽象化して各層で扱えるようにした実装を次節で紹介します。</p><h2 id=実装パターン2-txオブジェクトを抽象化diする>実装パターン2 Txオブジェクトを抽象化・DIする</h2><p>本節では、レイヤードアーキテクチャにおけるトランザクション処理の実装パターンとして「Txオブジェクトを抽象化しDIする」方法を紹介します。</p><p>また、この実装パターンと相性のいい、ReadOnlyなトランザクションとReadWriteなトランザクションの使い分けも同時に紹介しようと思います。</p><p>package構成</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ tree ./di-pattern/
+├── domain
+│	├── repository
+│	│    └── user.go
+│	└── transaction
+│	     └── tx_manager.go
+├── infra
+│	└── mysql
+│		├── repository
+│		│    └── user.go
+│		├── tx.go
+│		└── tx_manager.go
+└── usecase
+└── user.go
 </code></pre></div><p>まずはトランザクションの呼び出しを行うアプリケーション層から見ていきます。
 ReadOnly/ReadWriteなトランザクションの発行が可能な<code>txManager</code>をDIすることで、データベースへの直接的な依存をせずにトランザクションを扱うことができています。</p><p>di-pattern/usecase/user.go</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>UserInteractor</span> <span style=color:#66d9ef>interface</span> {
     <span style=color:#a6e22e>GetUser</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>userID</span> <span style=color:#66d9ef>string</span>) (<span style=color:#f92672>*</span><span style=color:#a6e22e>entity</span>.<span style=color:#a6e22e>User</span>, <span style=color:#66d9ef>error</span>)
@@ -492,4 +492,4 @@ MySQLのトランザクションを開始し、その際に得られるTxオブ�
 1つ目はTxオブジェクトをContextに持たせて隠蔽する実装パターンで、Context内でTxオブジェクトの伝搬が完結することが特徴でした。
 2つ目はTxオブジェクトを抽象化して各層に受け渡す実装パターンで、シグニチャを見ただけでその関数がどのようなトランザクション内での実行を期待しているかわかることが特徴でした。
 プロジェクトの思想に応じて、それぞれの実装を参考にしていただければ幸いです。</p></div><div class=pagination><a href=/posts/init-vtuber/ class="left arrow">&#8592;</a>
-<a href=# class=top>Top</a></div></main><footer><span>&copy; <time datetime="2023-12-16 03:50:36.894868944 +0000 UTC m=+0.065469828">2023</time> karamaru. Made with <a href=https://gohugo.io>Hugo</a> using the <a href=https://github.com/EmielH/tale-hugo/>Tale</a> theme.</span></footer></body></html>
+<a href=# class=top>Top</a></div></main><footer><span>&copy; <time datetime="2023-12-16 03:51:26.603044648 +0000 UTC m=+0.067779179">2023</time> karamaru. Made with <a href=https://gohugo.io>Hugo</a> using the <a href=https://github.com/EmielH/tale-hugo/>Tale</a> theme.</span></footer></body></html>
