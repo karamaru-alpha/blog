@@ -41,7 +41,7 @@ $ tree ./context-pattern/
 ├── usecase
 │	└── user.go
 └── xcontext
-└── xcontext.go
+    └── xcontext.go
 ```
 
 ### Contextとは
@@ -276,7 +276,7 @@ $ tree ./di-pattern/
 │		├── tx.go
 │		└── tx_manager.go
 └── usecase
-└── user.go
+    └── user.go
 ```
 
 まずはトランザクションの呼び出しを行うアプリケーション層から見ていきます。
