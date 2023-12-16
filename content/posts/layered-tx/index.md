@@ -363,8 +363,8 @@ TxオブジェクトをContext内に隠蔽しアプリケーション層とイ�
 また、この実装パターンと相性のいい、ReadOnlyなトランザクションとReadWriteなトランザクションの使い分けも同時に紹介しようと思います。
 
 <i>package構成</i>
-```go
-./di-pattern/
+```shell
+$ tree ./di-pattern/
 ├── domain
 │	├── repository
 │	│    └── user.go
