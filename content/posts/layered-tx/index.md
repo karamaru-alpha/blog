@@ -85,17 +85,18 @@ func NewUserInteractor(
 }
 
 func (i *userInteractor) UpdateName(ctx context.Context, userID, name string) error {
+    // NOTE: トランザクションを開始する
     if err := i.txManager.Transaction(ctx, func(ctx context.Context) error {
         user, err := i.userRepository.SelectByPK(ctx, userID)
         if err != nil {
             return err
         }
-
+    
         user.Name = name
         if err := i.userRepository.Update(ctx, user); err != nil {
             return err
         }
-
+    
         return nil
     }); err != nil {
         return err
@@ -306,7 +307,7 @@ return &userInteractor{
 func (i *userInteractor) GetUser(ctx context.Context, userID string) (*entity.User, error) {
     var user *entity.User
     
-    // NOTE: ReadOnlyなトランザクション
+    // NOTE: ReadOnlyなトランザクションを開始する
     if err := i.txManager.ReadOnlyTransaction(ctx, func(ctx context.Context, tx transaction.ROTx) error {
         var err error
         user, err = i.userRepository.SelectByPK(ctx, tx, userID)
@@ -321,7 +322,7 @@ func (i *userInteractor) GetUser(ctx context.Context, userID string) (*entity.Us
 }
 
 func (i *userInteractor) UpdateName(ctx context.Context, userID, name string) error {
-    // NOTE: ReadWriteなトランザクション
+    // NOTE: ReadWriteなトランザクションを開始する
     if err := i.txManager.ReadWriteTransaction(ctx, func(ctx context.Context, tx transaction.RWTx) error {
         user, err := i.userRepository.SelectByPK(ctx, tx, userID)
         if err != nil {
