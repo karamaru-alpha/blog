@@ -178,6 +178,7 @@ func (t *txManager) Transaction(ctx context.Context, f func(context.Context) err
 
 
 Tipsですが、Contextにおける値の出し入れはファントム型（型パラメタによって型を出し分ける方法）を利用することで次のように書くことができます。
+
 cf. https://hypirion.com/musings/spectral-contexts-in-go
 
 <i>context-pattern/xcontext/xcontext.go</i>
