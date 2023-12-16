@@ -36,17 +36,18 @@
 }
 
 <span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>i</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>userInteractor</span>) <span style=color:#a6e22e>UpdateName</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>userID</span>, <span style=color:#a6e22e>name</span> <span style=color:#66d9ef>string</span>) <span style=color:#66d9ef>error</span> {
-    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>i</span>.<span style=color:#a6e22e>txManager</span>.<span style=color:#a6e22e>Transaction</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>) <span style=color:#66d9ef>error</span> {
+    <span style=color:#75715e>// NOTE: トランザクションを開始する
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>i</span>.<span style=color:#a6e22e>txManager</span>.<span style=color:#a6e22e>Transaction</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>) <span style=color:#66d9ef>error</span> {
         <span style=color:#a6e22e>user</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>i</span>.<span style=color:#a6e22e>userRepository</span>.<span style=color:#a6e22e>SelectByPK</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#a6e22e>userID</span>)
         <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
             <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>err</span>
         }
-
+    
         <span style=color:#a6e22e>user</span>.<span style=color:#a6e22e>Name</span> = <span style=color:#a6e22e>name</span>
         <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>i</span>.<span style=color:#a6e22e>userRepository</span>.<span style=color:#a6e22e>Update</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#a6e22e>user</span>); <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
             <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>err</span>
         }
-
+    
         <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>nil</span>
     }); <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
         <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>err</span>
@@ -197,7 +198,7 @@ ReadOnly/ReadWriteなトランザクションの発行が可能な<code>txManage
 <span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>i</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>userInteractor</span>) <span style=color:#a6e22e>GetUser</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>userID</span> <span style=color:#66d9ef>string</span>) (<span style=color:#f92672>*</span><span style=color:#a6e22e>entity</span>.<span style=color:#a6e22e>User</span>, <span style=color:#66d9ef>error</span>) {
     <span style=color:#66d9ef>var</span> <span style=color:#a6e22e>user</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>entity</span>.<span style=color:#a6e22e>User</span>
     
-    <span style=color:#75715e>// NOTE: ReadOnlyなトランザクション
+    <span style=color:#75715e>// NOTE: ReadOnlyなトランザクションを開始する
 </span><span style=color:#75715e></span>    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>i</span>.<span style=color:#a6e22e>txManager</span>.<span style=color:#a6e22e>ReadOnlyTransaction</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>tx</span> <span style=color:#a6e22e>transaction</span>.<span style=color:#a6e22e>ROTx</span>) <span style=color:#66d9ef>error</span> {
         <span style=color:#66d9ef>var</span> <span style=color:#a6e22e>err</span> <span style=color:#66d9ef>error</span>
         <span style=color:#a6e22e>user</span>, <span style=color:#a6e22e>err</span> = <span style=color:#a6e22e>i</span>.<span style=color:#a6e22e>userRepository</span>.<span style=color:#a6e22e>SelectByPK</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#a6e22e>tx</span>, <span style=color:#a6e22e>userID</span>)
@@ -212,7 +213,7 @@ ReadOnly/ReadWriteなトランザクションの発行が可能な<code>txManage
 }
 
 <span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>i</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>userInteractor</span>) <span style=color:#a6e22e>UpdateName</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>userID</span>, <span style=color:#a6e22e>name</span> <span style=color:#66d9ef>string</span>) <span style=color:#66d9ef>error</span> {
-    <span style=color:#75715e>// NOTE: ReadWriteなトランザクション
+    <span style=color:#75715e>// NOTE: ReadWriteなトランザクションを開始する
 </span><span style=color:#75715e></span>    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>i</span>.<span style=color:#a6e22e>txManager</span>.<span style=color:#a6e22e>ReadWriteTransaction</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>tx</span> <span style=color:#a6e22e>transaction</span>.<span style=color:#a6e22e>RWTx</span>) <span style=color:#66d9ef>error</span> {
         <span style=color:#a6e22e>user</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>i</span>.<span style=color:#a6e22e>userRepository</span>.<span style=color:#a6e22e>SelectByPK</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#a6e22e>tx</span>, <span style=color:#a6e22e>userID</span>)
         <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
@@ -416,4 +417,4 @@ MySQLのトランザクションを開始し、その際に得られるTxオブ�
 1つ目はTxオブジェクトをContextに持たせて隠蔽する実装パターンで、Context内でTxオブジェクトの伝搬が完結することが特徴でした。
 2つ目はTxオブジェクトを抽象化して各層に受け渡す実装パターンで、シグニチャを見ただけでその関数がどのようなトランザクション内での実行を期待しているかわかることが特徴でした。
 プロジェクトの思想に応じて、それぞれの実装を参考にしていただければ幸いです。</p></div><div class=pagination><a href=/posts/init-vtuber/ class="left arrow">&#8592;</a>
-<a href=# class=top>Top</a></div></main><footer><span>&copy; <time datetime="2023-12-16 04:04:24.231802081 +0000 UTC m=+0.059670356">2023</time> karamaru. Made with <a href=https://gohugo.io>Hugo</a> using the <a href=https://github.com/EmielH/tale-hugo/>Tale</a> theme.</span></footer></body></html>
+<a href=# class=top>Top</a></div></main><footer><span>&copy; <time datetime="2023-12-16 04:06:52.495302554 +0000 UTC m=+0.065926846">2023</time> karamaru. Made with <a href=https://gohugo.io>Hugo</a> using the <a href=https://github.com/EmielH/tale-hugo/>Tale</a> theme.</span></footer></body></html>
