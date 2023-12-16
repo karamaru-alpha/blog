@@ -1,0 +1,509 @@
+<!doctype html><html lang=ja><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>レイヤードアーキテクチャにおけるトランザクションのエレガントな抽象化法2選 &#183; からまるのブログ</title><link rel=stylesheet href=/css/style.css><link rel=stylesheet href=/css/fonts.css><link rel=icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/images/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/images/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/images/apple-touch-icon.png><link href rel=alternate type=application/rss+xml title=からまるのブログ><meta property="og:title" content="レイヤードアーキテクチャにおけるトランザクションのエレガントな抽象化法2選"><meta property="og:description" content="この記事は技術書典『SGE Go Tech Book Vol.04』で自分が書いた章を書き直したものです。
+レイヤードアーキテクチャにおけるトランザクションの実装（主に抽象化）の方法について、2つの例を紹介します。
+本章のサンプルコードは次のURLから参照できます。
+https://github.com/karamaru-alpha/tx-layer
+レイヤードアーキテクチャにおけるトランザクション実装の悩みどころ レイヤードアーキテクチャとは レイヤードアーキテクチャとは責務によってシステムを複数の層に分割する設計手法です。 それぞれの層の関心を疎結合に保つことで、変更の影響範囲が制限される・テスト（モック）がしやすいなどのメリットがあるとされています。
+以下は典型的なレイヤードアーキテクチャの層分けです。
+ プレゼンテーション(handler)層: ユーザーインターフェース・表示ロジックを担当する アプリケーション(usecase)層: ビジネスロジックの進行を担当する。プレゼンテーション層から値を受け取り、ドメイン層を活用して処理を進める ドメイン(domain)層: モデルの定義・振る舞いを定義する。データベースアクセスの抽象Repositoryに代表される、アプリケーション層とインフラストラクチャ層の中継役も担う インフラストラクチャ(infra)層: データベースなど外部サービスへのアクセスを主に担当する  密結合なトランザクション実装例 レイヤードアーキテクチャを採用したコードにおいて、トランザクションはどのように実装するのが良いでしょうか？ 「MySQLに保存されているユーザーの名前を更新する」というケースを例として考えてみましょう。
+さて、ユースケース単位でトランザクションを張りたい場合、愚直に実装すると以下のようになります。 （本章ではMySQLとの疎通にGoの標準パッケージdatabase/sqlの拡張であるsqlxパッケージを用います）
+package構成$ tree ./anti-pattern/ ├── domain │	└── repository │	└── user.go ├── infra │	└── mysql │	└── repository │	└── user.go └── usecase └── user.go anti-pattern/usecase/user.gotype UserInteractor interface { UpdateName(ctx context.Context, userID, name string) error } type userInteractor struct { db *sqlx."><meta property="og:type" content="article"><meta property="og:url" content="https://karamaru-alpha.com/posts/layered-tx/"><meta property="article:section" content="posts"><meta property="article:published_time" content="2023-12-16T12:14:44+09:00"><meta property="article:modified_time" content="2023-12-16T12:14:44+09:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="レイヤードアーキテクチャにおけるトランザクションのエレガントな抽象化法2選"><meta name=twitter:description content="この記事は技術書典『SGE Go Tech Book Vol.04』で自分が書いた章を書き直したものです。
+レイヤードアーキテクチャにおけるトランザクションの実装（主に抽象化）の方法について、2つの例を紹介します。
+本章のサンプルコードは次のURLから参照できます。
+https://github.com/karamaru-alpha/tx-layer
+レイヤードアーキテクチャにおけるトランザクション実装の悩みどころ レイヤードアーキテクチャとは レイヤードアーキテクチャとは責務によってシステムを複数の層に分割する設計手法です。 それぞれの層の関心を疎結合に保つことで、変更の影響範囲が制限される・テスト（モック）がしやすいなどのメリットがあるとされています。
+以下は典型的なレイヤードアーキテクチャの層分けです。
+ プレゼンテーション(handler)層: ユーザーインターフェース・表示ロジックを担当する アプリケーション(usecase)層: ビジネスロジックの進行を担当する。プレゼンテーション層から値を受け取り、ドメイン層を活用して処理を進める ドメイン(domain)層: モデルの定義・振る舞いを定義する。データベースアクセスの抽象Repositoryに代表される、アプリケーション層とインフラストラクチャ層の中継役も担う インフラストラクチャ(infra)層: データベースなど外部サービスへのアクセスを主に担当する  密結合なトランザクション実装例 レイヤードアーキテクチャを採用したコードにおいて、トランザクションはどのように実装するのが良いでしょうか？ 「MySQLに保存されているユーザーの名前を更新する」というケースを例として考えてみましょう。
+さて、ユースケース単位でトランザクションを張りたい場合、愚直に実装すると以下のようになります。 （本章ではMySQLとの疎通にGoの標準パッケージdatabase/sqlの拡張であるsqlxパッケージを用います）
+package構成$ tree ./anti-pattern/ ├── domain │	└── repository │	└── user.go ├── infra │	└── mysql │	└── repository │	└── user.go └── usecase └── user.go anti-pattern/usecase/user.gotype UserInteractor interface { UpdateName(ctx context.Context, userID, name string) error } type userInteractor struct { db *sqlx."><script src=/js/darkmode.js></script></head><body><nav class=nav><div class=nav-container><a href=/><h2 class=nav-title>からまるのブログ</h2></a><ul><li><a href=https://github.com/karamaru-alpha target=_blank rel="noopener noreferrer"><span>github</span></a></li><li><a href=https://twitter.com/karamarooon target=_blank rel="noopener noreferrer"><span>twitter</span></a></li></ul></div></nav><div id=darkModeToggle onclick=toggleDarkMode()>&#9680;</div><main><div class=post><div class=post-info><time datetime="2023-12-16 12:14:44 +0900 +0900">2023/12/16</time></div><h1 class=post-title>レイヤードアーキテクチャにおけるトランザクションのエレガントな抽象化法2選</h1><div class=post-line></div><p>この記事は技術書典『<a href="https://creator.game.cyberagent.co.jp/?p=10211">SGE Go Tech Book Vol.04</a>』で自分が書いた章を書き直したものです。</p><p>レイヤードアーキテクチャにおけるトランザクションの実装（主に抽象化）の方法について、2つの例を紹介します。</p><p>本章のサンプルコードは次のURLから参照できます。</p><p><a href=https://github.com/karamaru-alpha/tx-layer>https://github.com/karamaru-alpha/tx-layer</a></p><h2 id=レイヤードアーキテクチャにおけるトランザクション実装の悩みどころ>レイヤードアーキテクチャにおけるトランザクション実装の悩みどころ</h2><h3 id=レイヤードアーキテクチャとは>レイヤードアーキテクチャとは</h3><p>レイヤードアーキテクチャとは責務によってシステムを複数の層に分割する設計手法です。 それぞれの層の関心を疎結合に保つことで、変更の影響範囲が制限される・テスト（モック）がしやすいなどのメリットがあるとされています。</p><p>以下は典型的なレイヤードアーキテクチャの層分けです。</p><ul><li>プレゼンテーション(handler)層: ユーザーインターフェース・表示ロジックを担当する</li><li>アプリケーション(usecase)層: ビジネスロジックの進行を担当する。プレゼンテーション層から値を受け取り、ドメイン層を活用して処理を進める</li><li>ドメイン(domain)層: モデルの定義・振る舞いを定義する。データベースアクセスの抽象Repositoryに代表される、アプリケーション層とインフラストラクチャ層の中継役も担う</li><li>インフラストラクチャ(infra)層: データベースなど外部サービスへのアクセスを主に担当する</li></ul><h3 id=密結合なトランザクション実装例>密結合なトランザクション実装例</h3><p>レイヤードアーキテクチャを採用したコードにおいて、トランザクションはどのように実装するのが良いでしょうか？
+「MySQLに保存されているユーザーの名前を更新する」というケースを例として考えてみましょう。</p><p>さて、ユースケース単位でトランザクションを張りたい場合、愚直に実装すると以下のようになります。
+（本章ではMySQLとの疎通にGoの標準パッケージdatabase/sqlの拡張である<a href=https://github.com/jmoiron/sqlx>sqlxパッケージ</a>を用います）</p><p>package構成</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ tree ./anti-pattern/
+├── domain
+│	└── repository
+│		└── user.go
+├── infra
+│	└── mysql
+│		└── repository
+│			└── user.go
+└── usecase
+└── user.go
+</code></pre></div><p>anti-pattern/usecase/user.go</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>UserInteractor</span> <span style=color:#66d9ef>interface</span> {
+    <span style=color:#a6e22e>UpdateName</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>userID</span>, <span style=color:#a6e22e>name</span> <span style=color:#66d9ef>string</span>) <span style=color:#66d9ef>error</span>
+}
+
+<span style=color:#66d9ef>type</span> <span style=color:#a6e22e>userInteractor</span> <span style=color:#66d9ef>struct</span> {
+    <span style=color:#a6e22e>db</span>             <span style=color:#f92672>*</span><span style=color:#a6e22e>sqlx</span>.<span style=color:#a6e22e>DB</span>
+    <span style=color:#a6e22e>userRepository</span> <span style=color:#a6e22e>repository</span>.<span style=color:#a6e22e>UserRepository</span>
+}
+
+<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>NewUserInteractor</span>(
+    <span style=color:#a6e22e>db</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>sqlx</span>.<span style=color:#a6e22e>DB</span>,
+    <span style=color:#a6e22e>userRepository</span> <span style=color:#a6e22e>repository</span>.<span style=color:#a6e22e>UserRepository</span>,
+) <span style=color:#a6e22e>UserInteractor</span> {
+    <span style=color:#66d9ef>return</span> <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>userInteractor</span>{
+        <span style=color:#a6e22e>db</span>,
+        <span style=color:#a6e22e>userRepository</span>,
+    }
+}
+
+<span style=color:#75715e>// NOTE: アプリケーション層でデータベースの関心を持ってしまっている
+</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>i</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>userInteractor</span>) <span style=color:#a6e22e>UpdateName</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>userID</span>, <span style=color:#a6e22e>name</span> <span style=color:#66d9ef>string</span>) <span style=color:#66d9ef>error</span> {
+    <span style=color:#a6e22e>tx</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>i</span>.<span style=color:#a6e22e>db</span>.<span style=color:#a6e22e>BeginTxx</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#66d9ef>nil</span>)
+    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+        <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>err</span>
+    }
+    <span style=color:#66d9ef>defer</span> <span style=color:#66d9ef>func</span>() {
+        <span style=color:#75715e>// panic -&gt; rollback
+</span><span style=color:#75715e></span>        <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>p</span> <span style=color:#f92672>:=</span> recover(); <span style=color:#a6e22e>p</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+            <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>tx</span>.<span style=color:#a6e22e>Rollback</span>(); <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+                <span style=color:#a6e22e>slog</span>.<span style=color:#a6e22e>ErrorContext</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#e6db74>&#34;failed to MySQL Rollback&#34;</span>)
+            }
+            panic(<span style=color:#a6e22e>p</span>)
+        }
+        <span style=color:#75715e>// error -&gt; rollback
+</span><span style=color:#75715e></span>        <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+            <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>e</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>tx</span>.<span style=color:#a6e22e>Rollback</span>(); <span style=color:#a6e22e>e</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+                <span style=color:#a6e22e>slog</span>.<span style=color:#a6e22e>ErrorContext</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#e6db74>&#34;failed to MySQL Rollback&#34;</span>)
+            }
+            <span style=color:#66d9ef>return</span>
+        }
+        <span style=color:#75715e>// success -&gt; commit
+</span><span style=color:#75715e></span>        <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>e</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>tx</span>.<span style=color:#a6e22e>Commit</span>(); <span style=color:#a6e22e>e</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+            <span style=color:#a6e22e>slog</span>.<span style=color:#a6e22e>ErrorContext</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#e6db74>&#34;failed to MySQL Commit&#34;</span>)
+        }
+    }()
+
+    <span style=color:#a6e22e>user</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>i</span>.<span style=color:#a6e22e>userRepository</span>.<span style=color:#a6e22e>SelectByPK</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#a6e22e>tx</span>, <span style=color:#a6e22e>userID</span>)
+    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+        <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>err</span>
+    }
+    <span style=color:#a6e22e>user</span>.<span style=color:#a6e22e>Name</span> = <span style=color:#a6e22e>name</span>
+    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>i</span>.<span style=color:#a6e22e>userRepository</span>.<span style=color:#a6e22e>Update</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#a6e22e>tx</span>, <span style=color:#a6e22e>user</span>); <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+        <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>err</span>
+    }
+
+    <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>nil</span>
+}
+</code></pre></div><p>anti-pattern/domain/repository/user.go</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#75715e>// NOTE: ドメイン層でデータベースの関心を持ってしまっている
+</span><span style=color:#75715e></span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>UserRepository</span> <span style=color:#66d9ef>interface</span> {
+    <span style=color:#a6e22e>Select</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>tx</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>sqlx</span>.<span style=color:#a6e22e>Tx</span>, <span style=color:#a6e22e>userID</span> <span style=color:#66d9ef>string</span>) (<span style=color:#f92672>*</span><span style=color:#a6e22e>entity</span>.<span style=color:#a6e22e>User</span>, <span style=color:#66d9ef>error</span>)
+    <span style=color:#a6e22e>Update</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>tx</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>sqlx</span>.<span style=color:#a6e22e>Tx</span>, <span style=color:#a6e22e>user</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>entity</span>.<span style=color:#a6e22e>User</span>) <span style=color:#66d9ef>error</span>
+}
+</code></pre></div><p>愚直にトランザクション処理を記述してしまうと、アプリケーション層・ドメイン層がデータベースの関心を持ってしまい、レイヤードアーキテクチャの「疎結合」というメリットが台無しです。
+アプリケーション層に記述されているビジネスロジックをテストする際に都度データベースを立ち上げなければならずテストがしづらいですし、万が一MySQL以外のデータベースに乗り換える場合インフラストラクチャ層以外のコードも修正しなければならず、変更に弱いコードになってしまいました。</p><p>では、データベースへの直接的な依存をせずにユースケース層からトランザクションを呼び出すためにはどうしたら良いのでしょうか？
+次節から、疎結合にトランザクションを実現する2つの実装パターンを紹介・解説していこうと思います。</p><h2 id=実装パターン1-txオブジェクトをcontextに詰める>実装パターン1 TxオブジェクトをContextに詰める</h2><p>本節では、レイヤードアーキテクチャにおけるトランザクション処理の実装パターンとして「TxオブジェクトをContextに詰める」方法を紹介します。</p><p>package構成</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ tree ./context-pattern/
+├── domain
+│	├── repository
+│	│	└── user.go
+│	└── transaction
+│		└── tx_manager.go
+├── infra
+│	└── mysql
+│		├── repository
+│		│	└── user.go
+│		└── tx_manager.go
+├── usecase
+│	└── user.go
+└── xcontext
+└── xcontext.go
+</code></pre></div><h3 id=contextとは>Contextとは</h3><p>GoにはContextという概念があります。
+<a href=https://pkg.go.dev/context#pkg-overview>パッケージの説明</a>にもある通り、Contextの主な用途は以下3つとされています。</p><ul><li>処理の締め切りの伝達</li><li>キャンセル信号の伝達</li><li>リクエストスコープ値の伝達</li></ul><blockquote><p>Package context defines the Context type, which carries deadlines, cancellation signals, and other request-scoped values across API boundaries and between processes.</p></blockquote><p>「TxオブジェクトをContextに詰める」というこの実装パターンは、Contextにおける「リクエストスコープ値の伝達」という働きを用いて、トランザクションを管理するTxオブジェクトを各層へ伝搬することで、データベースへの直接的な依存をせずにトランザクションを呼び出す方法になります。</p><p>Contextに詰められるリクエストスコープ値の代表例は認証情報などですが、1リクエストを通じてデータ不整合を起こさないようにするという意味で、Txオブジェクトをリクエストスコープ値として扱うのもContextの考え方から大きく外れないと解釈しています。</p><p>=== 実装</p><p>実装を見ていきましょう。まずはトランザクションを呼び出すアプリケーション層です。</p><p>context-pattern/usecase/user.go</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>UserInteractor</span> <span style=color:#66d9ef>interface</span> {
+    <span style=color:#a6e22e>UpdateName</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>userID</span>, <span style=color:#a6e22e>name</span> <span style=color:#66d9ef>string</span>) <span style=color:#66d9ef>error</span>
+}
+
+<span style=color:#66d9ef>type</span> <span style=color:#a6e22e>userInteractor</span> <span style=color:#66d9ef>struct</span> {
+    <span style=color:#a6e22e>txManager</span>      <span style=color:#a6e22e>transaction</span>.<span style=color:#a6e22e>TxManager</span>
+    <span style=color:#a6e22e>userRepository</span> <span style=color:#a6e22e>repository</span>.<span style=color:#a6e22e>UserRepository</span>
+}
+
+<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>NewUserInteractor</span>(
+    <span style=color:#a6e22e>txManager</span> <span style=color:#a6e22e>transaction</span>.<span style=color:#a6e22e>TxManager</span>,
+    <span style=color:#a6e22e>userRepository</span> <span style=color:#a6e22e>repository</span>.<span style=color:#a6e22e>UserRepository</span>,
+) <span style=color:#a6e22e>UserInteractor</span> {
+    <span style=color:#66d9ef>return</span> <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>userInteractor</span>{
+        <span style=color:#a6e22e>txManager</span>,
+        <span style=color:#a6e22e>userRepository</span>,
+    }
+}
+
+<span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>i</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>userInteractor</span>) <span style=color:#a6e22e>UpdateName</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>userID</span>, <span style=color:#a6e22e>name</span> <span style=color:#66d9ef>string</span>) <span style=color:#66d9ef>error</span> {
+    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>i</span>.<span style=color:#a6e22e>txManager</span>.<span style=color:#a6e22e>Transaction</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>) <span style=color:#66d9ef>error</span> {
+        <span style=color:#a6e22e>user</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>i</span>.<span style=color:#a6e22e>userRepository</span>.<span style=color:#a6e22e>SelectByPK</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#a6e22e>userID</span>)
+        <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+            <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>err</span>
+        }
+
+        <span style=color:#a6e22e>user</span>.<span style=color:#a6e22e>Name</span> = <span style=color:#a6e22e>name</span>
+        <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>i</span>.<span style=color:#a6e22e>userRepository</span>.<span style=color:#a6e22e>Update</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#a6e22e>user</span>); <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+            <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>err</span>
+        }
+
+        <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>nil</span>
+    }); <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+        <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>err</span>
+    }
+
+    <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>nil</span>
+}
+</code></pre></div><p><code>txManager.Transaction</code>の第2引数に指定する関数はトランザクション内で実行されます。
+トランザクションの抽象を保持した<code>txManager</code>をDI（依存性の注入）することで、アプリケーション層がデータベースの関心を持たずトランザクションを呼び出せています。</p><p>次に、トランザクションの抽象を定義し、アプリケーション層とインフラストラクチャ層の中継役も担うドメイン層を見ていきましょう。こちらもデータベースの関心を持たずにトランザクションを表現できていますね。</p><p>context-pattern/domain/transaction/tx_manager.go</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>TxManager</span> <span style=color:#66d9ef>interface</span> {
+    <span style=color:#a6e22e>Transaction</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>f</span> <span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>) <span style=color:#66d9ef>error</span>) <span style=color:#66d9ef>error</span>
+}
+</code></pre></div><p>続いて、トランザクションを実装するインフラストラクチャ層を見ていきます。
+MySQLのトランザクションを開始し、その際に得られるTxオブジェクトをContextに詰めてから、トランザクション関数の引数に渡された関数を実行しています。</p><p>context-pattern/infra/mysql/tx_manager.go</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>txManager</span> <span style=color:#66d9ef>struct</span> {
+    <span style=color:#a6e22e>db</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>sqlx</span>.<span style=color:#a6e22e>DB</span>
+}
+
+<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>NewTransactionManager</span>(<span style=color:#a6e22e>db</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>sqlx</span>.<span style=color:#a6e22e>DB</span>) <span style=color:#a6e22e>transaction</span>.<span style=color:#a6e22e>TxManager</span> {
+    <span style=color:#66d9ef>return</span> <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>txManager</span>{
+        <span style=color:#a6e22e>db</span>,
+    }
+}
+
+<span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>t</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>txManager</span>) <span style=color:#a6e22e>Transaction</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>f</span> <span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>) <span style=color:#66d9ef>error</span>) <span style=color:#66d9ef>error</span> {
+    <span style=color:#a6e22e>tx</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>db</span>.<span style=color:#a6e22e>BeginTxx</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#66d9ef>nil</span>)
+    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+        <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>err</span>
+    }
+    <span style=color:#66d9ef>defer</span> <span style=color:#66d9ef>func</span>() {
+        <span style=color:#75715e>// panic -&gt; rollback
+</span><span style=color:#75715e></span>        <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>p</span> <span style=color:#f92672>:=</span> recover(); <span style=color:#a6e22e>p</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+            <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>tx</span>.<span style=color:#a6e22e>Rollback</span>(); <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+                <span style=color:#a6e22e>slog</span>.<span style=color:#a6e22e>ErrorContext</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#e6db74>&#34;failed to MySQL Rollback&#34;</span>)
+            }
+            panic(<span style=color:#a6e22e>p</span>)
+        }
+        <span style=color:#75715e>// error -&gt; rollback
+</span><span style=color:#75715e></span>        <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+            <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>e</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>tx</span>.<span style=color:#a6e22e>Rollback</span>(); <span style=color:#a6e22e>e</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+                <span style=color:#a6e22e>slog</span>.<span style=color:#a6e22e>ErrorContext</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#e6db74>&#34;failed to MySQL Rollback&#34;</span>)
+            }
+            <span style=color:#66d9ef>return</span>
+        }
+
+        <span style=color:#75715e>// success -&gt; commit
+</span><span style=color:#75715e></span>        <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>e</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>tx</span>.<span style=color:#a6e22e>Commit</span>(); <span style=color:#a6e22e>e</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+            <span style=color:#a6e22e>slog</span>.<span style=color:#a6e22e>ErrorContext</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#e6db74>&#34;failed to MySQL Commit&#34;</span>)
+        }
+    }()
+
+    <span style=color:#75715e>// NOTE: TxオブジェクトをContextにセットしてから引数の関数を実行する
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>ctx</span> = <span style=color:#a6e22e>xcontext</span>.<span style=color:#a6e22e>WithValue</span>[<span style=color:#a6e22e>xcontext</span>.<span style=color:#a6e22e>Transaction</span>](<span style=color:#a6e22e>ctx</span>, <span style=color:#a6e22e>xcontext</span>.<span style=color:#a6e22e>Transaction</span>{
+        <span style=color:#a6e22e>Tx</span>: <span style=color:#a6e22e>tx</span>,
+    })
+    <span style=color:#a6e22e>err</span> = <span style=color:#a6e22e>f</span>(<span style=color:#a6e22e>ctx</span>)
+    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+        <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>err</span>
+    }
+    <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>nil</span>
+}
+</code></pre></div><p>Tipsですが、Contextにおける値の出し入れはファントム型（型パラメタによって型を出し分ける方法）を利用することで次のように書くことができます。
+cf. <a href=https://hypirion.com/musings/spectral-contexts-in-go>https://hypirion.com/musings/spectral-contexts-in-go</a></p><p>context-pattern/xcontext/xcontext.go</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Transaction</span> <span style=color:#66d9ef>struct</span> {
+    <span style=color:#a6e22e>Tx</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>sqlx</span>.<span style=color:#a6e22e>Tx</span>
+}
+
+<span style=color:#66d9ef>type</span> <span style=color:#a6e22e>keyConstraint</span> <span style=color:#66d9ef>interface</span> {
+    <span style=color:#a6e22e>Transaction</span>
+}
+
+<span style=color:#66d9ef>type</span> <span style=color:#a6e22e>key</span>[<span style=color:#a6e22e>T</span> <span style=color:#a6e22e>keyConstraint</span>] <span style=color:#66d9ef>struct</span>{}
+
+<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>WithValue</span>[<span style=color:#a6e22e>T</span> <span style=color:#a6e22e>keyConstraint</span>](<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>val</span> <span style=color:#a6e22e>T</span>) <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span> {
+    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>WithValue</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#a6e22e>key</span>[<span style=color:#a6e22e>T</span>]{}, <span style=color:#a6e22e>val</span>)
+}
+
+<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>Value</span>[<span style=color:#a6e22e>T</span> <span style=color:#a6e22e>keyConstraint</span>](<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>) (<span style=color:#a6e22e>T</span>, <span style=color:#66d9ef>bool</span>) {
+    <span style=color:#a6e22e>val</span>, <span style=color:#a6e22e>ok</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>ctx</span>.<span style=color:#a6e22e>Value</span>(<span style=color:#a6e22e>key</span>[<span style=color:#a6e22e>T</span>]{}).(<span style=color:#a6e22e>T</span>)
+    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>val</span>, <span style=color:#a6e22e>ok</span>
+}
+</code></pre></div><p>最後に、MySQLに対してクエリを発行するインフラストラクチャ層のRepository実装です。
+Contextの中にTxオブジェクトが存在するか確認し、存在すればトランザクション内でクエリを発行しています。</p><p>context-pattern/infra/mysql/repository/user.go</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>userRepository</span> <span style=color:#66d9ef>struct</span> {
+    <span style=color:#a6e22e>db</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>sqlx</span>.<span style=color:#a6e22e>DB</span>
+}
+
+<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>NewUserRepository</span>(<span style=color:#a6e22e>db</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>sqlx</span>.<span style=color:#a6e22e>DB</span>) <span style=color:#a6e22e>repository</span>.<span style=color:#a6e22e>UserRepository</span> {
+    <span style=color:#66d9ef>return</span> <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>userRepository</span>{
+        <span style=color:#a6e22e>db</span>,
+    }
+}
+
+<span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>r</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>userRepository</span>) <span style=color:#a6e22e>Update</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>e</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>entity</span>.<span style=color:#a6e22e>User</span>) <span style=color:#66d9ef>error</span> {
+    <span style=color:#a6e22e>db</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>getMysqlDB</span>(<span style=color:#a6e22e>ctx</span>)
+    
+    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>db</span>.<span style=color:#a6e22e>ExecContext</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#e6db74>&#34;UPDATE users SET name = ? WHERE user_id = ?&#34;</span>, <span style=color:#a6e22e>e</span>.<span style=color:#a6e22e>Name</span>, <span style=color:#a6e22e>e</span>.<span style=color:#a6e22e>UserID</span>); <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+        <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>err</span>
+    }
+    <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>nil</span>
+}
+
+<span style=color:#75715e>// NOTE: ContextにTxオブジェクトが存在すればそれを返却し、存在しなければDIされたdbを返却する
+</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>r</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>userRepository</span>) <span style=color:#a6e22e>getMysqlDB</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>) <span style=color:#a6e22e>db</span> {
+    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>transaction</span>, <span style=color:#a6e22e>ok</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>xcontext</span>.<span style=color:#a6e22e>Value</span>[<span style=color:#a6e22e>xcontext</span>.<span style=color:#a6e22e>Transaction</span>](<span style=color:#a6e22e>ctx</span>); <span style=color:#a6e22e>ok</span> {
+        <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>transaction</span>.<span style=color:#a6e22e>Tx</span>
+    }
+    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>db</span>
+}
+
+<span style=color:#75715e>// NOTE: トランザクション内外で共通のデータベース操作インターフェース
+</span><span style=color:#75715e></span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>db</span> <span style=color:#66d9ef>interface</span> {
+    <span style=color:#a6e22e>ExecContext</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>query</span> <span style=color:#66d9ef>string</span>, <span style=color:#a6e22e>args</span> <span style=color:#f92672>...</span><span style=color:#a6e22e>any</span>) (<span style=color:#a6e22e>sql</span>.<span style=color:#a6e22e>Result</span>, <span style=color:#66d9ef>error</span>)
+}
+</code></pre></div><p>以上が「TxオブジェクトをContextに詰める」パターンの実装でした。
+TxオブジェクトをContext内に隠蔽しアプリケーション層とインフラストラクチャ層を疎結合を保つことで、レイヤードアーキテクチャの利点を崩さずにトランザクションを表現できています。</p><p>この方法のメリットは、各層でContextさえ受け取っていれば好きなタイミングでトランザクションの開始・Txオブジェクトの伝搬ができることです。middlewareでTxオブジェクトをContextに詰める処理を記述することで、すべてのエンドポイントでトランザクションを実現することも可能です。</p><p>一方のデメリットとして、Txオブジェクトの受け渡しがContext内部に隠蔽されていることによる見通しの悪さが挙げられます。
+コードが複雑化するにつれ、ある関数がトランザクション内で呼ばれることを期待しているのかが表面上のコード/シグニチャからは判別しづらくなる可能性があります。</p><p>そこで、Txオブジェクトの受け渡しまで抽象化して各層で扱えるようにした実装を次節で紹介します。</p><h2 id=実装パターン2-txオブジェクトを抽象化diする>実装パターン2 Txオブジェクトを抽象化・DIする</h2><p>本節では、レイヤードアーキテクチャにおけるトランザクション処理の実装パターンとして「Txオブジェクトを抽象化しDIする」方法を紹介します。QualiArtsではこちらの実装を採用しています。</p><p>また、この実装パターンと相性のいい、ReadOnlyなトランザクションとReadWriteなトランザクションの使い分けも同時に紹介しようと思います。</p><p>package構成</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>.<span style=color:#f92672>/</span><span style=color:#a6e22e>di</span><span style=color:#f92672>-</span><span style=color:#a6e22e>pattern</span><span style=color:#f92672>/</span>
+<span style=color:#960050;background-color:#1e0010>├──</span> <span style=color:#a6e22e>domain</span>
+<span style=color:#960050;background-color:#1e0010>│</span>	<span style=color:#960050;background-color:#1e0010>├──</span> <span style=color:#a6e22e>repository</span>
+<span style=color:#960050;background-color:#1e0010>│</span>	<span style=color:#960050;background-color:#1e0010>│</span>    <span style=color:#960050;background-color:#1e0010>└──</span> <span style=color:#a6e22e>user</span>.<span style=color:#66d9ef>go</span>
+<span style=color:#960050;background-color:#1e0010>│</span>	<span style=color:#960050;background-color:#1e0010>└──</span> <span style=color:#a6e22e>transaction</span>
+<span style=color:#960050;background-color:#1e0010>│</span>	     <span style=color:#960050;background-color:#1e0010>└──</span> <span style=color:#a6e22e>tx_manager</span>.<span style=color:#66d9ef>go</span>
+<span style=color:#960050;background-color:#1e0010>├──</span> <span style=color:#a6e22e>infra</span>
+<span style=color:#960050;background-color:#1e0010>│</span>	<span style=color:#960050;background-color:#1e0010>└──</span> <span style=color:#a6e22e>mysql</span>
+<span style=color:#960050;background-color:#1e0010>│</span>		<span style=color:#960050;background-color:#1e0010>├──</span> <span style=color:#a6e22e>repository</span>
+<span style=color:#960050;background-color:#1e0010>│</span>		<span style=color:#960050;background-color:#1e0010>│</span>    <span style=color:#960050;background-color:#1e0010>└──</span> <span style=color:#a6e22e>user</span>.<span style=color:#66d9ef>go</span>
+<span style=color:#960050;background-color:#1e0010>│</span>		<span style=color:#960050;background-color:#1e0010>├──</span> <span style=color:#a6e22e>tx</span>.<span style=color:#66d9ef>go</span>
+<span style=color:#960050;background-color:#1e0010>│</span>		<span style=color:#960050;background-color:#1e0010>└──</span> <span style=color:#a6e22e>tx_manager</span>.<span style=color:#66d9ef>go</span>
+<span style=color:#960050;background-color:#1e0010>└──</span> <span style=color:#a6e22e>usecase</span>
+<span style=color:#960050;background-color:#1e0010>└──</span> <span style=color:#a6e22e>user</span>.<span style=color:#66d9ef>go</span>
+</code></pre></div><p>まずはトランザクションの呼び出しを行うアプリケーション層から見ていきます。
+ReadOnly/ReadWriteなトランザクションの発行が可能な<code>txManager</code>をDIすることで、データベースへの直接的な依存をせずにトランザクションを扱うことができています。</p><p>di-pattern/usecase/user.go</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>UserInteractor</span> <span style=color:#66d9ef>interface</span> {
+    <span style=color:#a6e22e>GetUser</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>userID</span> <span style=color:#66d9ef>string</span>) (<span style=color:#f92672>*</span><span style=color:#a6e22e>entity</span>.<span style=color:#a6e22e>User</span>, <span style=color:#66d9ef>error</span>)
+    <span style=color:#a6e22e>UpdateName</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>userID</span>, <span style=color:#a6e22e>name</span> <span style=color:#66d9ef>string</span>) <span style=color:#66d9ef>error</span>
+}
+
+<span style=color:#66d9ef>type</span> <span style=color:#a6e22e>userInteractor</span> <span style=color:#66d9ef>struct</span> {
+    <span style=color:#a6e22e>txManager</span>      <span style=color:#a6e22e>transaction</span>.<span style=color:#a6e22e>TxManager</span>
+    <span style=color:#a6e22e>userRepository</span> <span style=color:#a6e22e>repository</span>.<span style=color:#a6e22e>UserRepository</span>
+}
+
+<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>NewUserInteractor</span>(
+    <span style=color:#a6e22e>txManager</span> <span style=color:#a6e22e>transaction</span>.<span style=color:#a6e22e>TxManager</span>,
+    <span style=color:#a6e22e>userRepository</span> <span style=color:#a6e22e>repository</span>.<span style=color:#a6e22e>UserRepository</span>,
+) <span style=color:#a6e22e>UserInteractor</span> {
+<span style=color:#66d9ef>return</span> <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>userInteractor</span>{
+        <span style=color:#a6e22e>txManager</span>,
+        <span style=color:#a6e22e>userRepository</span>,
+    }
+}
+
+<span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>i</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>userInteractor</span>) <span style=color:#a6e22e>GetUser</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>userID</span> <span style=color:#66d9ef>string</span>) (<span style=color:#f92672>*</span><span style=color:#a6e22e>entity</span>.<span style=color:#a6e22e>User</span>, <span style=color:#66d9ef>error</span>) {
+    <span style=color:#66d9ef>var</span> <span style=color:#a6e22e>user</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>entity</span>.<span style=color:#a6e22e>User</span>
+    
+    <span style=color:#75715e>// NOTE: ReadOnlyなトランザクション
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>i</span>.<span style=color:#a6e22e>txManager</span>.<span style=color:#a6e22e>ReadOnlyTransaction</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>tx</span> <span style=color:#a6e22e>transaction</span>.<span style=color:#a6e22e>ROTx</span>) <span style=color:#66d9ef>error</span> {
+        <span style=color:#66d9ef>var</span> <span style=color:#a6e22e>err</span> <span style=color:#66d9ef>error</span>
+        <span style=color:#a6e22e>user</span>, <span style=color:#a6e22e>err</span> = <span style=color:#a6e22e>i</span>.<span style=color:#a6e22e>userRepository</span>.<span style=color:#a6e22e>SelectByPK</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#a6e22e>tx</span>, <span style=color:#a6e22e>userID</span>)
+        <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+            <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>err</span>
+        }
+        <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>nil</span>
+    }); <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+        <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>nil</span>, <span style=color:#a6e22e>err</span>
+    }
+    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>user</span>, <span style=color:#66d9ef>nil</span>
+}
+
+<span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>i</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>userInteractor</span>) <span style=color:#a6e22e>UpdateName</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>userID</span>, <span style=color:#a6e22e>name</span> <span style=color:#66d9ef>string</span>) <span style=color:#66d9ef>error</span> {
+    <span style=color:#75715e>// NOTE: ReadWriteなトランザクション
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>i</span>.<span style=color:#a6e22e>txManager</span>.<span style=color:#a6e22e>ReadWriteTransaction</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>tx</span> <span style=color:#a6e22e>transaction</span>.<span style=color:#a6e22e>RWTx</span>) <span style=color:#66d9ef>error</span> {
+        <span style=color:#a6e22e>user</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>i</span>.<span style=color:#a6e22e>userRepository</span>.<span style=color:#a6e22e>SelectByPK</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#a6e22e>tx</span>, <span style=color:#a6e22e>userID</span>)
+        <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+            <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>err</span>
+        }
+        <span style=color:#a6e22e>user</span>.<span style=color:#a6e22e>Name</span> = <span style=color:#a6e22e>name</span>
+        <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>i</span>.<span style=color:#a6e22e>userRepository</span>.<span style=color:#a6e22e>Update</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#a6e22e>tx</span>, <span style=color:#a6e22e>user</span>); <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+            <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>err</span>
+        }
+
+        <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>nil</span>
+    }); <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+        <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>err</span>
+    }
+    <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>nil</span>
+}
+</code></pre></div><p>次に、ReadOnly/ReadWriteなトランザクションと、それぞれに対応するTxオブジェクトの抽象を定義しているドメイン層を見ていきます。
+ReadWriteなトランザクションの中でも、参照系の（ROTxを引数として受け取る）Repositoryを呼び出せるように、RWTxはROTxを満たすように設計しています。</p><p>di-pattern/domain/transaction/tx_manager.go</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#75715e>// ReadOnlyなTxオブジェクトの抽象
+</span><span style=color:#75715e></span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>ROTx</span> <span style=color:#66d9ef>interface</span> {
+    <span style=color:#a6e22e>ROTxImpl</span>()
+}
+
+<span style=color:#75715e>// ReadWriteなTxオブジェクトの抽象 (ROTxも満たす)
+</span><span style=color:#75715e></span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>RWTx</span> <span style=color:#66d9ef>interface</span> {
+    <span style=color:#a6e22e>ROTx</span>
+    <span style=color:#a6e22e>RWTxImpl</span>()
+}
+
+<span style=color:#66d9ef>type</span> <span style=color:#a6e22e>TxManager</span> <span style=color:#66d9ef>interface</span> {
+    <span style=color:#a6e22e>ReadOnlyTransaction</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>f</span> <span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>tx</span> <span style=color:#a6e22e>ROTx</span>) <span style=color:#66d9ef>error</span>) <span style=color:#66d9ef>error</span>
+    <span style=color:#a6e22e>ReadWriteTransaction</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>f</span> <span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>tx</span> <span style=color:#a6e22e>RWTx</span>) <span style=color:#66d9ef>error</span>) <span style=color:#66d9ef>error</span>
+}
+</code></pre></div><p>Txオブジェクトとトランザクションの実装はインフラストラクチャ層にあります。</p><p>まずはTxオブジェクトの実装です。
+ドメイン層で定義されたReadOnly/ReadWriteそれぞれのTxオブジェクトの抽象を実装する型（roTx/rwTx）と、抽象からそれらを逆引きできる関数（ExtractROTx/ExtractRWTx）を用意します。
+ReadWriteなトランザクションの中でもROTxを引数として受け取るRepositoryを呼び出せるよう、ExtractROTxではroTxだけでなくrwTxも取り出せることに留意してください。</p><p>ちなみに、参考実装で使用しているMySQLにはReadOnlyなトランザクションが存在しないためTxオブジェクトの実体をそれぞれ同じ型（*sqlx.Tx）で表現しています。
+Google CloudのNewSQLサービスであるSpannerなど、ReadOnlyなトランザクションが機能として存在する場合は、それに対応するTxオブジェクトをroTxにセットすることで効率的なトランザクションの使い分けを実現できます。</p><p>di-pattern/infra/mysql/tx.go</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#75715e>// ドメイン層で定義されたReadOnlyなTxオブジェクトの抽象ROTxを実装する型
+</span><span style=color:#75715e></span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>roTx</span> <span style=color:#66d9ef>struct</span> {
+    <span style=color:#75715e>// MysqlにはReadOnlyなTxオブジェクトが存在しないためrwTxと同じ*sqlx.Tx型を利用している
+</span><span style=color:#75715e></span>    <span style=color:#f92672>*</span><span style=color:#a6e22e>sqlx</span>.<span style=color:#a6e22e>Tx</span>
+}
+
+<span style=color:#75715e>// 引数の型を制限するための役割なので実装は空
+</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>t</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>roTx</span>) <span style=color:#a6e22e>ROTxImpl</span>() {}
+
+<span style=color:#75715e>// ドメイン層で定義されたReadWriteなTxオブジェクトの抽象RWTxを実装する型
+</span><span style=color:#75715e></span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>rwTx</span> <span style=color:#66d9ef>struct</span> {
+    <span style=color:#f92672>*</span><span style=color:#a6e22e>sqlx</span>.<span style=color:#a6e22e>Tx</span>
+}
+
+<span style=color:#75715e>// 引数の型を制限するための役割なので実装は空
+</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>t</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>rwTx</span>) <span style=color:#a6e22e>ROTxImpl</span>() {}
+<span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>t</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>rwTx</span>) <span style=color:#a6e22e>RWTxImpl</span>() {}
+
+<span style=color:#75715e>// rwTx/roTx共通のインターフェース
+</span><span style=color:#75715e></span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>ReadTx</span> <span style=color:#66d9ef>interface</span> {
+    <span style=color:#a6e22e>GetContext</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>dest</span> <span style=color:#66d9ef>interface</span>{}, <span style=color:#a6e22e>query</span> <span style=color:#66d9ef>string</span>, <span style=color:#a6e22e>args</span> <span style=color:#f92672>...</span><span style=color:#66d9ef>interface</span>{}) <span style=color:#66d9ef>error</span>
+}
+
+<span style=color:#75715e>// ドメイン層で定義されたReadOnlyなTxオブジェクトの抽象ROTxから実体のTxオブジェクトを取り出す
+</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>ExtractROTx</span>(<span style=color:#a6e22e>_tx</span> <span style=color:#a6e22e>transaction</span>.<span style=color:#a6e22e>ROTx</span>) (<span style=color:#a6e22e>ReadTx</span>, <span style=color:#66d9ef>error</span>) {
+    <span style=color:#66d9ef>switch</span> <span style=color:#a6e22e>tx</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>_tx</span>.(<span style=color:#66d9ef>type</span>) {
+    <span style=color:#66d9ef>case</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>roTx</span>:
+        <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>tx</span>, <span style=color:#66d9ef>nil</span>
+    <span style=color:#66d9ef>case</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>rwTx</span>:
+        <span style=color:#75715e>// NOTE: ReadWriteなトランザクションの中でも参照系の(ROTxを引数として受け取る)Repositoryを呼び出せるように、実体がrwTxの場合も許容する
+</span><span style=color:#75715e></span>        <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>tx</span>, <span style=color:#66d9ef>nil</span>
+    }
+    <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>nil</span>, <span style=color:#a6e22e>errors</span>.<span style=color:#a6e22e>New</span>(<span style=color:#e6db74>&#34;mysql ROTx is invalid&#34;</span>)
+}
+
+<span style=color:#75715e>// ドメイン層で定義されたReadWriteなTxオブジェクトの抽象RWTxから実体のTxオブジェクトを取り出す
+</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>ExtractRWTx</span>(<span style=color:#a6e22e>_tx</span> <span style=color:#a6e22e>transaction</span>.<span style=color:#a6e22e>RWTx</span>) (<span style=color:#f92672>*</span><span style=color:#a6e22e>rwTx</span>, <span style=color:#66d9ef>error</span>) {
+    <span style=color:#a6e22e>tx</span>, <span style=color:#a6e22e>ok</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>_tx</span>.(<span style=color:#f92672>*</span><span style=color:#a6e22e>rwTx</span>)
+    <span style=color:#66d9ef>if</span> !<span style=color:#a6e22e>ok</span> {
+        <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>nil</span>, <span style=color:#a6e22e>errors</span>.<span style=color:#a6e22e>New</span>(<span style=color:#e6db74>&#34;mysql RWTx is invalid&#34;</span>)
+    }
+    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>tx</span>, <span style=color:#66d9ef>nil</span>
+}
+</code></pre></div><p>次にトランザクションの実装です。
+MySQLのトランザクションを開始し、その際に得られるTxオブジェクトを上記で定義したroTx/rwTx型でラップし、それをトランザクション関数の引数で受け取った関数（usecase）に渡し、実行します。</p><p>di-pattern/infra/mysql/tx_manager.go</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>txManager</span> <span style=color:#66d9ef>struct</span> {
+    <span style=color:#a6e22e>db</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>sqlx</span>.<span style=color:#a6e22e>DB</span>
+}
+
+<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>NewTxManager</span>(<span style=color:#a6e22e>db</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>sqlx</span>.<span style=color:#a6e22e>DB</span>) <span style=color:#a6e22e>transaction</span>.<span style=color:#a6e22e>TxManager</span> {
+    <span style=color:#66d9ef>return</span> <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>txManager</span>{<span style=color:#a6e22e>db</span>}
+}
+
+<span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>t</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>txManager</span>) <span style=color:#a6e22e>ReadWriteTransaction</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>f</span> <span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>transaction</span>.<span style=color:#a6e22e>RWTx</span>) <span style=color:#66d9ef>error</span>) <span style=color:#66d9ef>error</span> {
+    <span style=color:#a6e22e>tx</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>db</span>.<span style=color:#a6e22e>BeginTxx</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#66d9ef>nil</span>)
+    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+        <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>err</span>
+    }
+    <span style=color:#66d9ef>defer</span> <span style=color:#66d9ef>func</span>() {
+        <span style=color:#75715e>// panic -&gt; rollback
+</span><span style=color:#75715e></span>        <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>p</span> <span style=color:#f92672>:=</span> recover(); <span style=color:#a6e22e>p</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+            <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>tx</span>.<span style=color:#a6e22e>Rollback</span>(); <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+                <span style=color:#a6e22e>slog</span>.<span style=color:#a6e22e>ErrorContext</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#e6db74>&#34;failed to MySQL Rollback&#34;</span>)
+            }
+            panic(<span style=color:#a6e22e>p</span>)
+        }
+        <span style=color:#75715e>// error -&gt; rollback
+</span><span style=color:#75715e></span>        <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+            <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>e</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>tx</span>.<span style=color:#a6e22e>Rollback</span>(); <span style=color:#a6e22e>e</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+                <span style=color:#a6e22e>slog</span>.<span style=color:#a6e22e>ErrorContext</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#e6db74>&#34;failed to MySQL Rollback&#34;</span>)
+            }
+            <span style=color:#66d9ef>return</span>
+        }
+        <span style=color:#75715e>// success -&gt; commit
+</span><span style=color:#75715e></span>        <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>e</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>tx</span>.<span style=color:#a6e22e>Commit</span>(); <span style=color:#a6e22e>e</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+            <span style=color:#a6e22e>slog</span>.<span style=color:#a6e22e>ErrorContext</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#e6db74>&#34;failed to MySQL Commit&#34;</span>)
+        }
+    }()
+
+    <span style=color:#75715e>// NOTE: ReadWriteTransactionオブジェクトを関数に渡す
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>err</span> = <span style=color:#a6e22e>f</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>rwTx</span>{<span style=color:#a6e22e>tx</span>})
+    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+        <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>err</span>
+    }
+    <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>nil</span>
+}
+
+<span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>t</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>txManager</span>) <span style=color:#a6e22e>ReadOnlyTransaction</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>f</span> <span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>transaction</span>.<span style=color:#a6e22e>ROTx</span>) <span style=color:#66d9ef>error</span>) <span style=color:#66d9ef>error</span> {
+    <span style=color:#a6e22e>tx</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>db</span>.<span style=color:#a6e22e>BeginTxx</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#66d9ef>nil</span>)
+    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+        <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>err</span>
+    }
+    <span style=color:#66d9ef>defer</span> <span style=color:#66d9ef>func</span>() {
+    <span style=color:#75715e>// panic -&gt; rollback
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>p</span> <span style=color:#f92672>:=</span> recover(); <span style=color:#a6e22e>p</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+        <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>tx</span>.<span style=color:#a6e22e>Rollback</span>(); <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+            <span style=color:#a6e22e>slog</span>.<span style=color:#a6e22e>ErrorContext</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#e6db74>&#34;failed to MySQL Rollback&#34;</span>)
+        }
+        panic(<span style=color:#a6e22e>p</span>)
+    }
+    <span style=color:#75715e>// error -&gt; rollback
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+        <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>e</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>tx</span>.<span style=color:#a6e22e>Rollback</span>(); <span style=color:#a6e22e>e</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+            <span style=color:#a6e22e>slog</span>.<span style=color:#a6e22e>ErrorContext</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#e6db74>&#34;failed to MySQL Rollback&#34;</span>)
+        }
+        <span style=color:#66d9ef>return</span>
+    }
+    <span style=color:#75715e>// success -&gt; commit
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>e</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>tx</span>.<span style=color:#a6e22e>Commit</span>(); <span style=color:#a6e22e>e</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+        <span style=color:#a6e22e>slog</span>.<span style=color:#a6e22e>ErrorContext</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#e6db74>&#34;failed to MySQL Commit&#34;</span>)
+    }
+    }()
+
+    <span style=color:#75715e>// NOTE: ReadOnlyTransactionオブジェクトを関数に渡す
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>err</span> = <span style=color:#a6e22e>f</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>roTx</span>{<span style=color:#a6e22e>tx</span>})
+    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+        <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>err</span>
+    }
+    <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>nil</span>
+}
+</code></pre></div><p>最後にRepositoryの実装です。
+引数からTxオブジェクトを取り出し、トランザクション内でクエリを発行します。</p><p>di-pattern/infra/mysql/repository/user.go</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>userRepository</span> <span style=color:#66d9ef>struct</span> {}
+
+<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>NewUserRepository</span>() <span style=color:#a6e22e>repository</span>.<span style=color:#a6e22e>UserRepository</span> {
+    <span style=color:#66d9ef>return</span> <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>userRepository</span>{}
+}
+
+<span style=color:#66d9ef>type</span> <span style=color:#a6e22e>User</span> <span style=color:#66d9ef>struct</span> {
+    <span style=color:#a6e22e>UserID</span> <span style=color:#66d9ef>string</span> <span style=color:#e6db74>`db:&#34;user_id&#34;`</span>
+    <span style=color:#a6e22e>Name</span>   <span style=color:#66d9ef>string</span> <span style=color:#e6db74>`db:&#34;name&#34;`</span>
+}
+
+<span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>u</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>User</span>) <span style=color:#a6e22e>toEntity</span>() <span style=color:#f92672>*</span><span style=color:#a6e22e>entity</span>.<span style=color:#a6e22e>User</span> {
+    <span style=color:#66d9ef>return</span> <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>entity</span>.<span style=color:#a6e22e>User</span>{
+        <span style=color:#a6e22e>UserID</span>: <span style=color:#a6e22e>u</span>.<span style=color:#a6e22e>UserID</span>,
+        <span style=color:#a6e22e>Name</span>:   <span style=color:#a6e22e>u</span>.<span style=color:#a6e22e>Name</span>,
+    }
+}
+
+<span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>r</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>userRepository</span>) <span style=color:#a6e22e>SelectByPK</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>_tx</span> <span style=color:#a6e22e>transaction</span>.<span style=color:#a6e22e>ROTx</span>, <span style=color:#a6e22e>userID</span> <span style=color:#66d9ef>string</span>) (<span style=color:#f92672>*</span><span style=color:#a6e22e>entity</span>.<span style=color:#a6e22e>User</span>, <span style=color:#66d9ef>error</span>) {
+    <span style=color:#a6e22e>tx</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>mysql</span>.<span style=color:#a6e22e>ExtractROTx</span>(<span style=color:#a6e22e>_tx</span>)
+    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+        <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>nil</span>, <span style=color:#a6e22e>err</span>
+    }
+
+	<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>user</span> <span style=color:#a6e22e>User</span>
+	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>tx</span>.<span style=color:#a6e22e>GetContext</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>user</span>, <span style=color:#e6db74>&#34;SELECT * FROM users WHERE user_id = ?&#34;</span>, <span style=color:#a6e22e>userID</span>); <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+		<span style=color:#66d9ef>return</span> <span style=color:#66d9ef>nil</span>, <span style=color:#a6e22e>err</span>
+	}
+	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>user</span>.<span style=color:#a6e22e>toEntity</span>(), <span style=color:#66d9ef>nil</span>
+}
+
+<span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>r</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>userRepository</span>) <span style=color:#a6e22e>Update</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>_tx</span> <span style=color:#a6e22e>transaction</span>.<span style=color:#a6e22e>RWTx</span>, <span style=color:#a6e22e>e</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>entity</span>.<span style=color:#a6e22e>User</span>) <span style=color:#66d9ef>error</span> {
+    <span style=color:#a6e22e>tx</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>mysql</span>.<span style=color:#a6e22e>ExtractRWTx</span>(<span style=color:#a6e22e>_tx</span>)
+    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>err</span>
+    }
+
+    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>tx</span>.<span style=color:#a6e22e>ExecContext</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#e6db74>&#34;UPDATE users SET name = ? WHERE user_id = ?&#34;</span>, <span style=color:#a6e22e>e</span>.<span style=color:#a6e22e>Name</span>, <span style=color:#a6e22e>e</span>.<span style=color:#a6e22e>UserID</span>); <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+        <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>err</span>
+    }
+    <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>nil</span>
+}
+</code></pre></div><p>以上がレイヤードアーキテクチャにおけるトランザクション実装パターン「Txオブジェクトを抽象化しアプリケーション層にDIする」方法でした。
+トランザクション関数とTxオブジェクトを抽象化してドメイン層に置くことで、直接的なデータベースへの依存をせずにReadOnly/ReadWriteなトランザクションのハンドリングをアプリケーション層で実現しています。</p><p>この方法のメリットは、Txオブジェクトを抽象化して各層で扱うことで、関数のシグニチャを見ただけで内部でどのようなデータベースアクセスを行うかどうかを判別できる点です（すべてのRepositoryでTxオブジェクトを受け取る前提）。
+また、RepositoryのシグニチャでTxオブジェクトの抽象を受け取ることを明示的に宣言することで、予期せぬトランザクション外でのデータベースアクセスを防止できるのも利点の1つです。</p><p>デメリットを強いてあげると、トランザクション内/外で実行するRepositoryのシグニチャが異なる（Txオブジェクトを受け取るかどうか）という点です。プロジェクト内でRepository呼び出しは必ずトランザクション内で行うという合意が取れていればそこまでデメリットにならない気がしています。</p><h2 id=おわりに>おわりに</h2><p>レイヤードアーキテクチャにおけるトランザクション実装パターンを2つ紹介させていただきました。
+1つ目はTxオブジェクトをContextに持たせて隠蔽する実装パターンで、Context内でTxオブジェクトの伝搬が完結することが特徴でした。
+2つ目はTxオブジェクトを抽象化して各層に受け渡す実装パターンで、シグニチャを見ただけでその関数がどのようなトランザクション内での実行を期待しているかわかることが特徴でした。
+プロジェクトの思想に応じて、それぞれの実装を参考にしていただければ幸いです。</p></div><div class=pagination><a href=/posts/init-vtuber/ class="left arrow">&#8592;</a>
+<a href=# class=top>Top</a></div></main><footer><span>&copy; <time datetime="2023-12-16 03:47:25.933058909 +0000 UTC m=+0.065563660">2023</time> karamaru. Made with <a href=https://gohugo.io>Hugo</a> using the <a href=https://github.com/EmielH/tale-hugo/>Tale</a> theme.</span></footer></body></html>
