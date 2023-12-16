@@ -3,7 +3,7 @@ title: "レイヤードアーキテクチャでトランザクションをエレ
 date: 2023-12-16T12:14:44+09:00
 ---
 
-この記事は技術書典『[SGE Go Tech Book Vol.04](https://creator.game.cyberagent.co.jp/?p=10211)』で自分が書いた章を書き直したものです。
+この記事は技術書典で弊社から出した本『[SGE Go Tech Book Vol.04](https://creator.game.cyberagent.co.jp/?p=10211)』で自分が書いた章を書き直したものです。
 
 レイヤードアーキテクチャにおけるトランザクションの実装（主に抽象化）の方法について、2つの例を紹介します。
 
