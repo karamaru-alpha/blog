@@ -8,7 +8,7 @@ date: 2023-12-27T04:47:09+09:00
 
 前回の"VTuberになる"に続き、今回は"ボカロPになる"という夢に入門してみたいと思います！
 
-有給を使って、土~月曜日で初音ミクの購入~曲の作成~PVの作成までやってみました。
+有給を使って、土~月曜日で初音ミクの購入~曲の作成~MVの作成までやってみました。
 
 
 <!--more-->
@@ -24,8 +24,7 @@ date: 2023-12-27T04:47:09+09:00
 {{< youtube AXdXxHb4U34 >}}
 
 
-
-やっと初音ミクお迎えしました！パッケージかわいいい
+ヨドバシカメラ秋葉原店に行ってやっと初音ミクお迎えしました！パッケージかわいいい
 
 [初音ミクNT](https://www.google.com/search?q=%E5%88%9D%E9%9F%B3%E3%83%9F%E3%82%AFNT&sca_esv=593850889&sxsrf=AM9HkKlE7MDOua4yOfL0t0b_VbegsdDzRg:1703631722889&ei=aluLZaz6NcbvseMP396byA8&ved=0ahUKEwis167dmq6DAxXGd2wGHV_vBvkQ4dUDCBA&uact=5&oq=%E5%88%9D%E9%9F%B3%E3%83%9F%E3%82%AFNT&gs_lp=Egxnd3Mtd2l6LXNlcnAaAhgCIg7liJ3pn7Pjg5_jgq9OVDIFEAAYgAQyBRAAGIAEMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIFEAAYgARIqwtQmgJYjQpwAXgBkAEAmAGSAaABwAWqAQMwLjW4AQPIAQD4AQHCAgoQABhHGNYEGLADwgIKECMYgAQYigUYJ8ICChAAGIAEGIoFGEPCAgQQIxgnwgIREAAYgAQYigUYsQMYgwEYiwPCAg4QABiABBixAxiDARiLA8ICDRAAGIAEGIoFGEMYiwPCAggQABiABBiLA8ICChAAGIAEGAQYsQPCAg0QABiABBgEGLEDGIMBwgIHEAAYgAQYBOIDBBgAIEGIBgGQBgo&sclient=gws-wiz-serp)という比較的新しいバージョンもあるのですが、細かい調教前提で比較的難しいとのことで今回は[初音ミクV4X](https://www.google.com/search?q=%E5%88%9D%E9%9F%B3%E3%83%9F%E3%82%AFv4x&sourceid=chrome&ie=UTF-8)を選択しました。
 
