@@ -1,5 +1,5 @@
 ---
-title: "音楽初心者だけど23歳のうちにボカロPに入門したい！"
+title: "音楽初心者だけどボカロPに入門したい！"
 date: 2023-12-27T04:47:09+09:00
 ---
 
@@ -13,7 +13,7 @@ date: 2023-12-27T04:47:09+09:00
 
 <!--more-->
 
-(VTuberになるブログはこちら: https://karamaru-alpha.com/posts/init-vtuber/)
+("VTuberになる"ブログはこちら: https://karamaru-alpha.com/posts/init-vtuber/)
 
 ## 成果物
 
@@ -24,9 +24,9 @@ date: 2023-12-27T04:47:09+09:00
 {{< youtube AXdXxHb4U34 >}}
 
 
-ヨドバシカメラ秋葉原店に行ってやっと初音ミクお迎えしました！パッケージかわいいい
+ヨドバシカメラ秋葉原店に行ってやっと初音ミクをお迎えしました！パッケージかわいいい
 
-[初音ミクNT](https://www.google.com/search?q=%E5%88%9D%E9%9F%B3%E3%83%9F%E3%82%AFNT&sca_esv=593850889&sxsrf=AM9HkKlE7MDOua4yOfL0t0b_VbegsdDzRg:1703631722889&ei=aluLZaz6NcbvseMP396byA8&ved=0ahUKEwis167dmq6DAxXGd2wGHV_vBvkQ4dUDCBA&uact=5&oq=%E5%88%9D%E9%9F%B3%E3%83%9F%E3%82%AFNT&gs_lp=Egxnd3Mtd2l6LXNlcnAaAhgCIg7liJ3pn7Pjg5_jgq9OVDIFEAAYgAQyBRAAGIAEMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIFEAAYgARIqwtQmgJYjQpwAXgBkAEAmAGSAaABwAWqAQMwLjW4AQPIAQD4AQHCAgoQABhHGNYEGLADwgIKECMYgAQYigUYJ8ICChAAGIAEGIoFGEPCAgQQIxgnwgIREAAYgAQYigUYsQMYgwEYiwPCAg4QABiABBixAxiDARiLA8ICDRAAGIAEGIoFGEMYiwPCAggQABiABBiLA8ICChAAGIAEGAQYsQPCAg0QABiABBgEGLEDGIMBwgIHEAAYgAQYBOIDBBgAIEGIBgGQBgo&sclient=gws-wiz-serp)という比較的新しいバージョンもあるのですが、細かい調教前提で比較的難しいとのことで今回は[初音ミクV4X](https://www.google.com/search?q=%E5%88%9D%E9%9F%B3%E3%83%9F%E3%82%AFv4x&sourceid=chrome&ie=UTF-8)を選択しました。
+[初音ミクNT](https://www.google.com/search?q=%E5%88%9D%E9%9F%B3%E3%83%9F%E3%82%AFNT&sca_esv=593850889&sxsrf=AM9HkKlE7MDOua4yOfL0t0b_VbegsdDzRg:1703631722889&ei=aluLZaz6NcbvseMP396byA8&ved=0ahUKEwis167dmq6DAxXGd2wGHV_vBvkQ4dUDCBA&uact=5&oq=%E5%88%9D%E9%9F%B3%E3%83%9F%E3%82%AFNT&gs_lp=Egxnd3Mtd2l6LXNlcnAaAhgCIg7liJ3pn7Pjg5_jgq9OVDIFEAAYgAQyBRAAGIAEMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIFEAAYgARIqwtQmgJYjQpwAXgBkAEAmAGSAaABwAWqAQMwLjW4AQPIAQD4AQHCAgoQABhHGNYEGLADwgIKECMYgAQYigUYJ8ICChAAGIAEGIoFGEPCAgQQIxgnwgIREAAYgAQYigUYsQMYgwEYiwPCAg4QABiABBixAxiDARiLA8ICDRAAGIAEGIoFGEMYiwPCAggQABiABBiLA8ICChAAGIAEGAQYsQPCAg0QABiABBgEGLEDGIMBwgIHEAAYgAQYBOIDBBgAIEGIBgGQBgo&sclient=gws-wiz-serp)という比較的新しいバージョンもあるのですが、細かい調教が前提となっており比較的難しいとのことで、今回は[初音ミクV4X](https://www.google.com/search?q=%E5%88%9D%E9%9F%B3%E3%83%9F%E3%82%AFv4x&sourceid=chrome&ie=UTF-8)を選択しました。
 
 
 ![buy.png](./buy.png)
@@ -37,7 +37,7 @@ date: 2023-12-27T04:47:09+09:00
 2. 【実践】定番のコードについて学び、コード進行を作成し、4小説の曲を作る
 
 
-## 1.【勉強】コード進行における音楽理論について大まかに学ぶ
+## 1.【座学】コード進行における音楽理論について大まかに学ぶ
 
 作曲何もわからないので、まずは作曲の基礎であるコード進行の理論を学びます。
 教材はおざしんミュージックさんのYoutubeプレイリスト「[誰でもわかるコード進行・音楽理論講座](https://www.youtube.com/playlist?list=PLeHRa-xAEiYRpSdsxpdmr9SQqEw5jw-jX)」の基本編1~15回にしたいと思います。
