@@ -8,6 +8,8 @@ date: 2023-12-27T04:47:09+09:00
 
 前回の"VTuberになる"に続き、今回は"ボカロPになる"という夢に入門してみたいと思います！
 
+有給を使って、土~月曜日で初音ミクの購入~曲の作成~PVの作成までやってみました。
+
 
 <!--more-->
 
@@ -353,7 +355,8 @@ ayaseさん進行をCメジャースケールにすると以下のようにな�
 
 ### 完成
 
-わーい！完成しました！
+iMovieでMVを作成すれば完成です！
+イラストには著作権フリーの[ノーコピーライトガール](https://fromtheasia.com/illustration/nocopyrightgirl)を使用させていただきました。
 
 https://www.youtube.com/shorts/AXdXxHb4U34
 
