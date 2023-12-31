@@ -9,9 +9,9 @@ name = "karamaru"
 
 [menu]
   [[menu.main]]
-    identifier = "Github"
-    name = "Github"
-    title = "Github"
+    identifier = "GitHub"
+    name = "GitHub"
+    title = "GitHub"
     url = "https://github.com/karamaru-alpha"
     weight = 1
   [[menu.main]]
