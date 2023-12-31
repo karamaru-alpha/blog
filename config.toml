@@ -20,6 +20,12 @@ name = "karamaru"
     title = "github"
     url = "https://github.com/karamaru-alpha"
     weight = 1
+  [[menu.main]]
+    identifier = "rss"
+    name = "rss"
+    title = "rss"
+    url = "https://karamaru-alpha.com/index.xml"
+    weight = 1
 
 [Params]
 toc = true
