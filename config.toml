@@ -9,9 +9,9 @@ name = "karamaru"
 
 [menu]
   [[menu.main]]
-    identifier = "github"
-    name = "github"
-    title = "github"
+    identifier = "Github"
+    name = "Github"
+    title = "Github"
     url = "https://github.com/karamaru-alpha"
     weight = 1
   [[menu.main]]
@@ -21,9 +21,9 @@ name = "karamaru"
     url = "https://x.com/karamarooon"
     weight = 2
   [[menu.main]]
-    identifier = "rss"
-    name = "rss"
-    title = "rss"
+    identifier = "RSS"
+    name = "RSS"
+    title = "RSS"
     url = "https://karamaru-alpha.com/index.xml"
     weight = 3
 
