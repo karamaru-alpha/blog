@@ -4,7 +4,7 @@ date: 2024-02-25T16:42:42+09:00
 ---
 
 
-golangci-lintに以下自作linterを導入させたましたーー！嬉しい！！🎉
+golangci-lintに以下自作linterを導入させましたーー！嬉しい！！🎉
 
 <!--more-->
 
