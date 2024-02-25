@@ -4,12 +4,11 @@ date: 2024-02-25T16:42:42+09:00
 ---
 
 
-golangci-lintに以下自作linterを導入させたーー！嬉しい！！🎉
-
-https://github.com/karamaru-alpha/copyloopvar
-
+golangci-lintに以下自作linterを導入させたましたーー！嬉しい！！🎉
 
 <!--more-->
+
+https://github.com/karamaru-alpha/copyloopvar
 
 ### どんなlinter？
 
