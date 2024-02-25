@@ -1,6 +1,6 @@
 ---
 title: "golangci-lintに自作linterをcontributeしました！🎉"
-date: 2024-02-25T16:42:42+09:00
+date: 2024-02-24T16:42:42+09:00
 ---
 
 
@@ -12,7 +12,7 @@ https://github.com/karamaru-alpha/copyloopvar
 
 ### どんなlinter？
 
-1.22から不要になったループ変数のコピーを警告するLinterを作成しました。(厳密には1.21で`GOEXPERIMENT=loopvar`を指定する時も不要になる)
+Go1.22から不要になったループ変数のコピーを警告するLinterを作成しました。(厳密には1.21で`GOEXPERIMENT=loopvar`を指定する時も不要になる)
 
 cf. [Fixing For Loops in Go 1.22](https://go.dev/blog/loopvar-preview)
 
