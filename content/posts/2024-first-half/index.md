@@ -16,6 +16,11 @@ date: 2024-02-25T22:30:35+09:00
 
 会社で頑張るのはもちろん、その中で(ないしそれ以外で)得られた知識をまとめてどっかに登壇したいなー！！
 
+## 有名OSSへの貢献 ✅
+
+golangci-lintに自作linterをcontributeしました！  
+cf. https://karamaru-alpha.com/posts/golangci-lint-contribute
+
 ## ボカロ曲を作る
 
 以下記事で入門はしてみたものの、ちゃんとイントロからサビまで自力でボカロ曲を作ってみたことはないので、今年こそは作ってみたい！！
@@ -26,9 +31,6 @@ cf. https://karamaru-alpha.com/posts/init-vocaloid
 
 先月雪ミクに行くために札幌・小樽に訪問したのですが、空気が綺麗で閑静な街に一目惚れしてしまいました。。。⛄️
 
-また北海道(できれば函館)に行って友達を作れたらいいな！！
+また北海道(できれば函館)に行って友達を作れたらいいなー！
 
-## 有名OSSへの貢献 ✅
-
-golangci-lintに自作linterをcontributeしました！  
-cf. https://karamaru-alpha.com/posts/golangci-lint-contribute
+![img.png](./img.png)
