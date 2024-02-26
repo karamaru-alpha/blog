@@ -18,7 +18,8 @@ date: 2024-02-25T22:30:35+09:00
 
 ## 有名OSSへの貢献 ✅
 
-golangci-lintに自作linterをcontributeしました！  
+golangci-lintに自作linterをcontributeしました！🎉
+
 cf. https://karamaru-alpha.com/posts/golangci-lint-contribute
 
 ## ボカロ曲を作る
