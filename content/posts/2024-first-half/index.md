@@ -43,3 +43,10 @@ cf. https://karamaru-alpha.com/posts/init-vocaloid
 だから近々でまた北海道(できれば函館とか)に行って友達を作れたらいいなー！
 
 ![img.png](./img.png)
+
+## ボカロDJイベントにいっぱい行く！
+
+今年の1,2月から[VOCALROCK MANIA](https://www.vocalockmania.com/)や[Digital STARS](https://digitalstars.club/)などボカロDJイベントに参加するようになりましたが、知らないボカロ曲が知れたり、ファンの熱量を実感できたりでハマっています。
+もっと行きたいです！
+
+![mania.png](./mania.png)
