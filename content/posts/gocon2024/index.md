@@ -171,10 +171,9 @@ Goのセマンティクス変更を後押しした面白い議論の1つなの�
 賢ぶっても仕方がないので正直に話しますが、この例は「[GopherCon2019 Understanding Allocations: the Stack and the Heap](https://www.youtube.com/watch?v=ZMZpH4yT7M0)」から持ってきたものです。
 こちらの発表はエスケープ解析の理解を深める上でとても参考になるので、興味のある方はぜひみてみてください。
 
-3つめは[Goディレクティブを用いた引数がエスケープしないfmt.Printlnを作成する方法](https://speakerdeck.com/qualiarts/xiang-jie-fixing-for-loops-in-go-1-dot-22-zi-zuo-linterwogolangci-linthekontoribiyutositahua?slide=80)です。
-こちらは登壇で省略した部分なのです。
-ディレクティブ`go:noescape`と`go:linkname`を使うことで、`fmt.Println`でループ変数のアドレスを出力するにもかかわらず、全てのイテレーションで同一のアドレスを出力させることができるという紹介です。
-変わり種なので省きましたが試み自体は面白いと思っているので、こちらもぜひご参照ください。
+3つめは[Goディレクティブを用いて引数をエスケープさせないfmt.Printlnを作成する方法](https://speakerdeck.com/qualiarts/xiang-jie-fixing-for-loops-in-go-1-dot-22-zi-zuo-linterwogolangci-linthekontoribiyutositahua?slide=80)です。
+こちらは登壇で省略した部分で、 ディレクティブ`go:noescape`と`go:linkname`を使うことで、引数をエスケープさせない`fmt.Println`を作るという試みです。
+変わり種なので省きましたが、取り組み自体は面白いと思っているので、こちらもぜひご参照ください。
 
 4つめは[アセンブリベースでのスタック割り当ての挙動を見てみる](https://speakerdeck.com/qualiarts/xiang-jie-fixing-for-loops-in-go-1-dot-22-zi-zuo-linterwogolangci-linthekontoribiyutositahua?slide=58)です。
 こちらも発表で省略した部分です。変数がスタック割り当てになる時、実際に同じアドレスが使いまわされる挙動を確認してみよう！という趣旨のコーナーになっています。
