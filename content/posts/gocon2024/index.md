@@ -140,7 +140,7 @@ Goconに来るような人にとっては常識だろうと思い、発表では
 
 推しポイントはやはり[Goクイズ](https://speakerdeck.com/qualiarts/xiang-jie-fixing-for-loops-in-go-1-dot-22-zi-zuo-linterwogolangci-linthekontoribiyutositahua?slide=6)です。
 リリースノートの一歩先で、直感に反するようなループの挙動についてGo1.22以前と以降でそれぞれ問題を作ったのでぜひ解いてみてください。
-自己紹介より前に話したかった、有識者ほど引っかかる推しの導入です。
+自己紹介より前に話したかった、有識者ほど引っかかるお気に入りの導入です。
 
 発表で伝えられなくて最も惜しいと思ったのは[discussionにおけるC#チームの意見](https://speakerdeck.com/qualiarts/xiang-jie-fixing-for-loops-in-go-1-dot-22-zi-zuo-linterwogolangci-linthekontoribiyutositahua?slide=29)です。
 C#5.0でGo1.22と似たアップデートがあったのをご存知でしょうか？
