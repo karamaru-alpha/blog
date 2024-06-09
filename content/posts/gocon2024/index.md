@@ -15,7 +15,7 @@ date: 2024-06-09T10:42:42+09:00
 [Go Conference 2024](https://gocon.jp/2024/) に登壇してきました！
 
 - [gocon.jp - 詳解 "Fixing For Loops in Go 1.22" / 自作linterをgolangci-lintへコントリビュートした話](https://gocon.jp/2024/sessions/14/)
-- [speakerdeck - スライド全文](https://speakerdeck.com/qualiarts/xiang-jie-fixing-for-loops-in-go-1-dot-22-zi-zuo-linterwogolangci-linthekontoribiyutositahua)
+- [speakerdeck.com - スライド全文](https://speakerdeck.com/qualiarts/xiang-jie-fixing-for-loops-in-go-1-dot-22-zi-zuo-linterwogolangci-linthekontoribiyutositahua)
 
 
 {{< x src="https://twitter.com/karamaru_alpha/status/1799330747482054831?ref_src=twsrc%5Etfw" >}}
@@ -192,7 +192,7 @@ Goのセマンティクス変更を後押しした面白い議論の1つなの�
 
 以上が要約と推しポイントです。1つでも気になった部分があれば、ぜひスライドをご覧くださいmm
 
-[speakerdeck - スライド全文](https://speakerdeck.com/qualiarts/xiang-jie-fixing-for-loops-in-go-1-dot-22-zi-zuo-linterwogolangci-linthekontoribiyutositahua)
+[speakerdeck.com - スライド全文](https://speakerdeck.com/qualiarts/xiang-jie-fixing-for-loops-in-go-1-dot-22-zi-zuo-linterwogolangci-linthekontoribiyutositahua)
 
 ## おわりに
 
