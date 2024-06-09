@@ -167,7 +167,7 @@ Goのセマンティクス変更を後押しした面白い議論の1つなの�
 本セッションの根幹部分でしたね。
 一見引数のプリントするだけの処理でもレキシカルスコープを外れる可能性について示唆した[Goクイズ](https://speakerdeck.com/qualiarts/xiang-jie-fixing-for-loops-in-go-1-dot-22-zi-zuo-linterwogolangci-linthekontoribiyutositahua?slide=75)もぜひご覧ください。
 
-2つ目は標準パッケージから見るエスケープ対策です。`io.Reader`を参考に、変数をヒープに乗せないための面白い工夫を紹介しました。
+2つ目は[標準パッケージから見るエスケープ対策](https://speakerdeck.com/qualiarts/xiang-jie-fixing-for-loops-in-go-1-dot-22-zi-zuo-linterwogolangci-linthekontoribiyutositahua?slide=52)です。`io.Reader`を参考に、変数をヒープに乗せないための面白い工夫を紹介しました。
 賢ぶっても仕方がないので正直に話しますが、この例は「[GopherCon2019 Understanding Allocations: the Stack and the Heap](https://www.youtube.com/watch?v=ZMZpH4yT7M0)」から持ってきたものです。
 こちらの発表はエスケープ解析の理解を深める上でとても参考になるので、興味のある方はぜひみてみてください。
 
