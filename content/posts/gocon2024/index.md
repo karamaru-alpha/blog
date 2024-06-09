@@ -139,7 +139,7 @@ CfPが通ったのを知った時は「ずっと見ていたgoconに登壇でき
 Goconに来るような人にとっては常識だろうと思い、発表では全カットとなった部分です。
 
 推しポイントはやはり[Goクイズ](https://speakerdeck.com/qualiarts/xiang-jie-fixing-for-loops-in-go-1-dot-22-zi-zuo-linterwogolangci-linthekontoribiyutositahua?slide=6)です。
-直感に反するようなループの挙動についてGo1.22以前と以降でそれぞれ問題を作ったので、ぜひ解いてみてください。
+リリースノートの一歩先で、直感に反するようなループの挙動についてGo1.22以前と以降でそれぞれ問題を作ったのでぜひ解いてみてください。
 自己紹介より前に話したかった、有識者ほど引っかかる推しの導入です。
 
 発表で伝えられなくて最も惜しいと思ったのは[discussionにおけるC#チームの意見](https://speakerdeck.com/qualiarts/xiang-jie-fixing-for-loops-in-go-1-dot-22-zi-zuo-linterwogolangci-linthekontoribiyutositahua?slide=29)です。
