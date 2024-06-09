@@ -60,6 +60,7 @@ golangci-lintへのコントリビューションもCfPのタイトルに入れ�
 初めての登壇且つコントリビューションを含むということで「ChallengeSession」として応募しました。
 publicなセッション紹介には出ていませんが、備考欄で熱い気持ちを書いた記憶があります。
 
+[gocon.jp - 詳解 "Fixing For Loops in Go 1.22" / 自作linterをgolangci-lintへコントリビュートした話](https://gocon.jp/2024/sessions/14/)
 
 ## CfPを提出してから登壇に至るまで
 
