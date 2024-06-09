@@ -145,7 +145,7 @@ Goconに来るような人にとっては常識だろうと思い、発表では
 発表で伝えられなくて最も惜しいと思ったのは[discussionにおけるC#チームの意見](https://speakerdeck.com/qualiarts/xiang-jie-fixing-for-loops-in-go-1-dot-22-zi-zuo-linterwogolangci-linthekontoribiyutositahua?slide=29)です。
 C#5.0でGo1.22と似たアップデートがあったのを知っていますか？
 また、C#ではfor文とfor-each文でループ変数のインスタンス割り当ての挙動が異なることを知っていますか？
-Goのセマンティクス変更を後押しした面白い議論の1つです。
+Goのセマンティクス変更を後押しした面白い議論の1つなので、ぜひご覧ください。
 
 
 #### 3章: コンパイラの内部実装を読み解く
