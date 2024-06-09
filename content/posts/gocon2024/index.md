@@ -180,7 +180,7 @@ Goのセマンティクス変更を後押しした面白い議論の1つなの�
 
 #### 5章: 周辺ツールとkaramaru-alpha/copyloopvar、静的解析について
 
-5章では公式から提供されたツール(`gcflags loopvar`, `bisect`)の紹介と、僕が作成したGo1.22から不要になったループ変数の再宣言を検知するリンターcopyloopvarの紹介をしました。
+5章では公式から提供されたツール(`gcflags loopvar`, `bisect`)の紹介と、僕が作成したGo1.22から不要になったループ変数の再宣言を検知するリンター[copyloopvarの紹介](https://speakerdeck.com/qualiarts/xiang-jie-fixing-for-loops-in-go-1-dot-22-zi-zuo-linterwogolangci-linthekontoribiyutositahua?slide=83)をしました。
 
 本番では30秒で終わらせた部分ですね。笑
 
