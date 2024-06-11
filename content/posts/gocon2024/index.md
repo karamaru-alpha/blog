@@ -73,7 +73,7 @@ CfPが通ったのを知った時は「ずっと見ていたgoconに登壇でき
 幸い、ループについてのプロポーザルやドキュメント、大まかなコードの変更箇所は知っていたので、これを追っていけば自ずとわかるだろうと高を括っていました。これが大きな間違いでしたorz
 
 具体的には下記あたりで、for-loopについての議論やプロポーザル、実装箇所やFAQを見ることができます。
-登壇スライドは1章~5章の構成なのですが、これらのソースは1章~3章にあたります。
+登壇スライドは1章~5章の構成なのですが、これらのソースは1章~2章にあたります。
 - https://github.com/golang/go/discussions/56010
 - https://github.com/golang/go/issues/60078
 - https://go.googlesource.com/proposal/+/master/design/60078-loopvar.md
