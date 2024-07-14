@@ -12,13 +12,15 @@ GoConnect#1(@サイボウズさん)でLTしてきました。
 ## 雑談
 
 今までの外部登壇や社内勉強会の発表資料(の中でも載せられるもの)をSpeakerDeckにあげました👏
-誰かに刺さるといいなあ...！
 
 - [GoConference2024 - 詳解 “Fixing For Loops in Go 1.22” / 自作linterをgolangci-lintへコントリビュートした話](https://speakerdeck.com/karamaru/xiang-jie-fixing-for-loops-in-go-1-dot-22-zi-zuo-linterwogolangci-linthekontoribiyutositahua)
 - [GoConnect#1 - モックライブラリ"mocka"](https://speakerdeck.com/karamaru/bokunokangaetasaikiyounomotukuraiburari)
 - [社内勉強会 - 独自言語をRustを使ってwasmバイナリに変換する](https://speakerdeck.com/karamaru/zi-zuo-yan-yu-worustdewasmnikonpairusuru)
 - [社内勉強会 - zshの起動速度を300ms->20msにしたりした](https://speakerdeck.com/karamaru/zsh-star-dan-desukutotupuhuan-jing-zui-su-womu-zhi-site)
 - [社内勉強会 - 対isuconツール"isumaru"作った](https://speakerdeck.com/karamaru/dui-isuconmetorikusuturu-isumaruzuo-tuta)
+
+
+誰かに刺さるといいなー！
 
 ## 要約
 
