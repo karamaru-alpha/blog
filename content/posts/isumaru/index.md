@@ -23,6 +23,9 @@ https://github.com/karamaru-alpha/isumaru
 - [slp](https://github.com/tkuchiki/slp)
 - [fgprof](https://github.com/felixge/fgprof)
 
+
+https://speakerdeck.com/karamaru/dui-isuconmetorikusuturu-isumaruzuo-tuta
+
 {{< slide src="https://docs.google.com/presentation/d/e/2PACX-1vQ-WXQgHnqKUdxvrHlNY-ORnqB8fBwo2b4ecJjPH7qFTuqUSKexev6CYpWjvKIJHd0pD7L6jSzQlIFM/embed?start=false&loop=false&delayms=3000" >}}
 
 昨年のisucon優勝チームnarusejun様を参考にさせていただきましたmm
