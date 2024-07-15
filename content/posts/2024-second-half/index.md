@@ -40,7 +40,8 @@ VRChat経由でハマったのであればなぜUnityじゃないんだという
 
 [@shmdevelop](https://x.com/shmdevelop)さんの[#hundred_days_ar_challenge](https://x.com/search?q=%23hundred_days_ar_challenge&src=hashtag_click)とうチャレンジをご存知ですか？
 swift*ARで100種類の表現を毎日作るという施策で、[#hundred_days_msl_challenge](https://x.com/search?q=%23hundred_days_msl_challenge&src=hashtag_click)や[#30_days_visionOS](https://x.com/search?q=%2330_days_visionOS&src=hashtag_click)なども行っています。
-https://github.com/satoshi0212/AR_100Days
+
+cf. https://github.com/satoshi0212/AR_100Days
 
 大人の自由研究、かっこいい。
 好きなことに打ち込めるというのは、人として推せる側面の一つです。
