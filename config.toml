@@ -30,7 +30,7 @@ name = "karamaru"
     identifier = "LinkedIn"
     name = "LinkedIn"
     title = "LinkedIn"
-    url = "www.linkedin.com/in/karamaru"
+    url = "https://www.linkedin.com/in/karamaru"
     weight = 4
   [[menu.main]]
     identifier = "RSS"
