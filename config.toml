@@ -26,6 +26,12 @@ name = "karamaru"
     title = "RSS"
     url = "https://karamaru-alpha.com/index.xml"
     weight = 3
+  [[menu.main]]
+    identifier = "SpeackerDeck"
+    name = "SpeackerDeck"
+    title = "SpeackerDeck"
+    url = "https://speakerdeck.com/karamaru"
+    weight = 4
 
 [Params]
 toc = true
