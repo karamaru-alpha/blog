@@ -21,17 +21,23 @@ name = "karamaru"
     url = "https://x.com/karamaru_alpha"
     weight = 2
   [[menu.main]]
-    identifier = "RSS"
-    name = "RSS"
-    title = "RSS"
-    url = "https://karamaru-alpha.com/index.xml"
-    weight = 3
-  [[menu.main]]
     identifier = "SpeackerDeck"
     name = "SpeackerDeck"
     title = "SpeackerDeck"
     url = "https://speakerdeck.com/karamaru"
+    weight = 3
+  [[menu.main]]
+    identifier = "LinkedIn"
+    name = "LinkedIn"
+    title = "LinkedIn"
+    url = "www.linkedin.com/in/karamaru"
     weight = 4
+  [[menu.main]]
+    identifier = "RSS"
+    name = "RSS"
+    title = "RSS"
+    url = "https://karamaru-alpha.com/index.xml"
+    weight = 5
 
 [Params]
 toc = true
