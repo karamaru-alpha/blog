@@ -1,5 +1,5 @@
 ---
-title: "Dependabotで安全なAutoMergeを実現するためのコツ"
+title: "DependabotのAutoMergeでCIを通したい！"
 date: 2024-08-09T00:16:21+09:00
 ---
 
