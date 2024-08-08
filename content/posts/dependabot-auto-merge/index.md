@@ -10,8 +10,8 @@ Githubの仕様に戸惑ったので備忘録的に書きます。
 
 ## 先に結論
 
-1. dependabotでpatchバージョンは自動マージする
-2. 有効なCI全てのpassをmerge条件にする
+1. dependabotでpatchバージョンは自動マージしたい
+2. 有効なCI全てのpassをmerge条件にしたい
 
 
 ## 1. dependabotでpatchバージョンは自動マージする
@@ -19,11 +19,11 @@ Githubの仕様に戸惑ったので備忘録的に書きます。
 
 [セマンティックバージョニング](https://semver.org/lang/ja/)によると、patchバージョンのリリースは後方互換を保つ軽微なバグ修正などで行われるべきとされています。
 
-dependabotのPRを目視するのは新機能が追加された時(minor)や後方互換性が保たれなくなった時(major)のみにしたいとします。
-そこで、dependabotが上げるPRの最大差分がpatchバージョンならAutoMergeさせるようにしました。
+dependabotのPRを目視するのは新機能が追加された時(minor)や後方互換性が保たれなくなった時(major)のみにしたいと思ったので、dependabotが上げるPRの最大差分がpatchバージョンならAutoMergeさせるようにしました。
 
 手順は公式が用意してくれているのでスーパーイージーですね。
-https://docs.github.com/ja/code-security/dependabot/working-with-dependabot/automating-dependabot-with-github-actions#common-dependabot-automations
+
+cf.https://docs.github.com/ja/code-security/dependabot/working-with-dependabot/automating-dependabot-with-github-actions#common-dependabot-automations
 
 ```yaml
 name: Dependabot auto-merge
@@ -54,18 +54,14 @@ jobs:
 
 ## 2. 有効なCI全てのpassをmerge条件にする
 
-全てのライブラリがセマンティックバージョニングを採用しているわけではないため、このままなんのCIも通さずにmergeさせるのは避けたいところですね。
+全てのライブラリがセマンティックバージョニングを採用しているわけではないため、このままCIを通さずにmergeさせるのは避けたいところですね。 ちなみに、`gh pr merge --auto`はマージ条件を満たしたらmergeするよ！というコマンドで、これを利用していきたいわけです。
 
-`gh pr merge --auto`はマージ条件を満たしたらmergeするよ！というコマンドで、これを利用していきたいわけです。
-
-さて、CIをmerge条件にするにはブランチプロテクションの「???」のところにCI(Job名)を指定する必要があります。
+さて、CIをmerge条件にするにはブランチプロテクションの以下「???」のところにJob名を指定する必要があります。
 
 ![img.png](img.png)
 
 
-ここで問題となってくるのが、merge条件のステータスチェックです。
-
-例えばGoとJsのモノレポがあったとして、それぞれlinterを走らせるworkflow/jobがあるとします。 そして、以下`go-lint`と`ja-lint`をマージ要件として設定します。
+ここで問題となってくるのが、ステータスチェックの挙動です。例えばGoとJsのモノレポがあったとして、それぞれlinterを走らせるworkflow/jobがあるとします。 そして、以下`go-lint`と`ja-lint`をマージ要件として設定します。
 
 Q. この状態でGoのライブラリpatchアップデートを行うdependabotのPRが生まれた時、そのPRは自動でマージされるでしょうか？
 
@@ -115,7 +111,7 @@ cf. https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/co
 
 cf. [モノレポで不要なGithub Actions実行を最小にしつつマージブロック機能(マージ前必須チェックステータス)を使う方法の検討](https://zenn.dev/bigwheel/articles/05accc6323de18)
 
-記事に倣い、私も**Job名統一法**を選択しました。APIのポーリングとかはVM台もかかりますしね。
+記事に倣い、私も**Job名統一法**を選択しました。APIのポーリングとかはVM代もかかりますしね。
 
 `Require status checks to pass before merging`でCIを設定したい場合Job名を指定します。
 複数マッチした場合は全て成功である必要があり、1つもマッチしない場合は落ちます。
