@@ -3,7 +3,7 @@ title: "golangci-lintで有効な全てのlinterの実行時間を計測する�
 date: 2024-08-09T00:16:21+09:00
 ---
 
-私はこの方法で30mかかっていたCIを5mにしました。まじです。あと彼女もできました。嘘です。
+私はこの方法で30mかかっていたCIを5mにしました。ほんとです。あと彼女もできました。嘘です。
 
 <!--more-->
 
@@ -14,7 +14,7 @@ date: 2024-08-09T00:16:21+09:00
 
 ## 1. verboseオプションで実行時間Top10のstage一覧をみる
 
-多くの場合はこちらの方法で事足りる気がします。
+有名な方法ですね。 パフォーマンス起因の調査の場合、多くのケースでこの方法で事足りる気がします。
 
 実行時`--verbose`もしくは`-v`をつけることでより詳細な実行結果が閲覧できます。
 ```sh
@@ -22,8 +22,7 @@ golangci-lint run --verbose
 ```
 cf. https://golangci-lint.run/usage/configuration/#command-line-options
 
-
-この出力結果の中に、実行時間がかかっているstageのTop10が出るということです。
+この出力結果の中に、実行時間がかかっているstageのTop10が出るということですね。
 以下画像だと[gosec](https://github.com/securego/gosec)が最も重いLinterですね。次点で[gocritic](https://github.com/go-critic/go-critic)。
 
 CI自体の時間は30mですが、golangci-lintは並行実行に対応しているので時間が大きく出ていますね。
@@ -51,11 +50,11 @@ gosecのパフォーマンスの話は結構前のものなのでもう治って
 
 ## 2. コード改変して有効な全てのlinterの実行時間を計測する
 
-ここからは物好きな人向けですね。
+さて、ここからは物好きな人向けですね。
 
-そもそもverboseオプションをつけて実行した時に実行時間Top10が出てくる仕組みはどこにあるんでしょうか？
+verboseオプションをつけて実行した時に実行時間Top10が出てくる仕組みはどこにあるんでしょうか？
 
-答えは[pkg/goanalysis/runners.go](https://github.com/golangci/golangci-lint/blob/a9ea7d32dc8eb641d67d720f9a5415247ab3bc1b/pkg/goanalysis/runners.go#L36)あたりで、固定値10を引数に、実行時間を出力してそうなコードが見つかります。
+答えは[pkg/goanalysis/runners.go](https://github.com/golangci/golangci-lint/blob/a9ea7d32dc8eb641d67d720f9a5415247ab3bc1b/pkg/goanalysis/runners.go#L36)あたりで、固定値10を引数に実行時間の出力を予約してそうなコードが見つかります。
 ```go
 const stagesToPrint = 10
 defer sw.PrintTopStages(stagesToPrint)
@@ -126,5 +125,6 @@ func (s *Stopwatch) sprintTopStages(n int) string {
   - https://github.com/pipe-cd/pipecd/pull/4628
 
 
-[GOGCを調整したり](https://golangci-lint.run/product/performance/)並行数を変えたり、細かいところを変える前にルールとキャッシュの見直しをお勧めします。
+[GOGCを調整したり](https://golangci-lint.run/product/performance/)並行数を変えたり細かいところを変える前に、ルールとキャッシュの見直しをお勧めします。
+
 それでは、楽しいlintライフを！
