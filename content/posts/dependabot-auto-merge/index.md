@@ -1,5 +1,5 @@
 ---
-title: "DependabotでCIのpassを条件にAutoMergeさせる"
+title: "DependabotのAutoMergeで必要十分なCIをmerge条件にする"
 date: 2024-08-09T00:16:21+09:00
 ---
 
