@@ -23,7 +23,7 @@ dependabotのPRを目視するのは新機能が追加された時(minor)や後�
 
 手順は公式が用意してくれているのでスーパーイージーですね。
 
-cf.https://docs.github.com/ja/code-security/dependabot/working-with-dependabot/automating-dependabot-with-github-actions#common-dependabot-automations
+cf. https://docs.github.com/ja/code-security/dependabot/working-with-dependabot/automating-dependabot-with-github-actions#common-dependabot-automations
 
 ```yaml
 name: Dependabot auto-merge
