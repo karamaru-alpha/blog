@@ -10,11 +10,11 @@ Githubの仕様に戸惑ったので備忘録的に書きます。
 
 ## 先に結論
 
-1. dependabotでpatchバージョンは自動マージしたい
+1. dependabotでpatchバージョンの更新は自動マージしたい
 2. 有効なCI全てのpassをmerge条件にしたい
 
 
-## 1. dependabotでpatchバージョンは自動マージする
+## 1. dependabotでpatchバージョンの更新は自動マージする
 
 
 [セマンティックバージョニング](https://semver.org/lang/ja/)によると、patchバージョンのリリースは後方互換を保つ軽微なバグ修正などで行われるべきとされています。
