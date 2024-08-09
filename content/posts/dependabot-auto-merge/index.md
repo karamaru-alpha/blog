@@ -111,7 +111,8 @@ cf. https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/co
 
 cf. [モノレポで不要なGithub Actions実行を最小にしつつマージブロック機能(マージ前必須チェックステータス)を使う方法の検討](https://zenn.dev/bigwheel/articles/05accc6323de18)
 
-記事に倣い、私も**Job名統一法**を選択しました。APIのポーリングとかはVM代もかかりますしね。
+記事に倣い、私も**Job名統一法**を選択しました。
+APIのポーリングはVM代もかかりますし、全てのworkflowのfilterをjob側に付けるのも記法が大きくブレるので今回は見送りました。
 
 `Require status checks to pass before merging`でCIを設定したい場合Job名を指定します。
 複数マッチした場合は全て成功である必要があり、1つもマッチしない場合は落ちます。
