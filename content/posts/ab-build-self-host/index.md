@@ -9,7 +9,7 @@ date: 2024-08-09T00:16:21+09:00
 
 ## 先に結論
 
-- Jenkins*MacPro から GithubActions*EC2 にしたよ
+- Jenkins✖︎MacPro から GithubActions✖️EC2 にしたよ
 
 ## 従来の構成(Jenkins*MacPro)
 
