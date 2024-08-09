@@ -47,6 +47,8 @@ ECSなどにJenkinsControllerとしてWebUIを、物理PCにJenkinsAgentを入�
 特定のVMをセルフホステットランナーにする方法は[公式から案内](https://docs.github.com/ja/actions/hosting-your-own-runners/managing-self-hosted-runners/configuring-the-self-hosted-runner-application-as-a-service)があります。
 systemdのserviceとして登録することで、VM起動時にrunnerとして認識してくれるようになります。便利ですね。
 
+![runner.png](runner.png)
+
 ![arch.png](arch.png)
 
 本当であれば安価なスポットインスタンスを使用したいところでしたが、市場にリソースが余ってないと起動できないことや、インスタンスサイズを動的に変更できないなどのデメリットから見送り(オンデマンドVM)となりました。
