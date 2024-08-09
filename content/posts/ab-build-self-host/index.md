@@ -9,7 +9,7 @@ date: 2024-08-09T00:16:21+09:00
 
 ## 先に結論
 
-- Jenkins*MacProからGithubActions*EC2にしたよ
+- Jenkins*MacPro から GithubActions*EC2 にしたよ
 
 ## 従来の構成(Jenkins*MacPro)
 
@@ -47,11 +47,12 @@ ECSなどにJenkinsControllerとしてWebUIを、物理PCにJenkinsAgentを入�
 特定のVMをセルフホステットランナーにする方法は[公式から案内](https://docs.github.com/ja/actions/hosting-your-own-runners/managing-self-hosted-runners/configuring-the-self-hosted-runner-application-as-a-service)があります。
 systemdのserviceとして登録することで、VM起動時にrunnerとして認識してくれるようになります。便利ですね。
 
+また、EC2は停止時にコンピュート課金を取られないので、必要な時にだけ起動させる様にしています。
+本当であれば安価なスポットインスタンスを使用したいところでしたが、市場にリソースが余ってないと起動できないことや、インスタンスサイズを動的に変更できないなどのデメリットから見送り(オンデマンドVM)となりました。
+
 ![runner.png](runner.png)
 
 ![arch.png](arch.png)
-
-本当であれば安価なスポットインスタンスを使用したいところでしたが、市場にリソースが余ってないと起動できないことや、インスタンスサイズを動的に変更できないなどのデメリットから見送り(オンデマンドVM)となりました。
 
 
 この構成にすることのメリットは以下です
@@ -61,13 +62,12 @@ systemdのserviceとして登録することで、VM起動時にrunnerとして�
 - タスクの実行をyaml(GitOps)で管理できる
 - sshやRDP接続を許可することで物理マシンに遜色ないランナーへのデバッグを行うことができる
 
-
 さて、GithubアカウントがあればActions画面からDispatch可能です。
 
 ![actions.png](actions.png)
 
 
-一方で、全ての実行者がGithubアカウントを持っていないケースも存在すると思います。弊プロジェクトもその例にもれなかった、UIは別途自作する必要がありました。
+一方で、全ての実行者がGithubアカウントを持っていないケースも存在すると思います。弊プロジェクトもその例にもれなかったため、UIは別途自作する必要がありました。
 SlackAppか管理画面に統合するかで迷ったのですが、視認性や取り回しやすさから今回は管理画面に統合することにしました。ここの選択は好みだと思います。
 
 GithubWorkflowIDを渡せばUIができるようにComponent化 && アカウントがなくてもLogやArtifact(成果物)を一定閲覧できるようにしました。
