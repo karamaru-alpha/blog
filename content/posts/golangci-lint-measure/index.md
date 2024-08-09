@@ -22,7 +22,7 @@ golangci-lint run --verbose
 ```
 cf. https://golangci-lint.run/usage/configuration/#command-line-options
 
-この出力結果の中に、実行時間がかかっているstageのTop10が出るということですね。
+この出力結果の中に、実行時間がかかっているstageのTop10が出ます。
 以下画像だと[gosec](https://github.com/securego/gosec)が最も重いLinterですね。次点で[gocritic](https://github.com/go-critic/go-critic)。
 
 CI自体の時間は30mですが、golangci-lintは並行実行に対応しているので時間が大きく出ていますね。
@@ -30,7 +30,7 @@ CI自体の時間は30mですが、golangci-lintは並行実行に対応して�
 ![before.png](before.png)
 
 
-ここまで分かればあとは対象のlinterのうちどのルールが遅いのかを調べて改善するだけですね。
+ここまで分かればあとは対象のlinterのうちどのルールが遅いのかを調べて改善するだけです！
 
 今回の例だと運良くgosecのG602が遅いということが見つけられたので、これをignoreすることでCIの時間を30mから5mまで短縮することができました。(すごい！)
 ```yaml
