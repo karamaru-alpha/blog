@@ -63,7 +63,7 @@ mockaについて
 
 https://speakerdeck.com/karamaru/bokunokangaetasaikiyounomotukuraiburari
 
-## 関連資料
+## 関連リンク
 
 - https://github.com/karamaru-alpha/mocka
 - https://gotalk.connpass.com/event/322547/

@@ -22,6 +22,4 @@ https://github.com/karamaru-alpha/dotfiles
 
 ## スライド
 
-https://speakerdeck.com/karamaru/zsh-star-dan-desukutotupuhuan-jing-zui-su-womu-zhi-site
-
-{{< slide src="https://docs.google.com/presentation/d/e/2PACX-1vS4PDovGN3dy13uPBpiRKIo6HzX8LvoDNC7T4ZCnt6Pz067F2N0VRjho1tRcJSyyrgj5CxCSMkv0F2Z/embed?start=false&loop=false&delayms=3000" >}}
+{{< slide src="https://speakerdeck.com/player/6e1b81c59e1244ad8271368814f39429" >}}
