@@ -38,6 +38,7 @@ https://github.com/karamaru-alpha/canvas
 けどviewerまで作った段階で、結構写経だけだからアドカレとしては退屈かもな〜思って、担当日前日で題材変更を決意しました。
 (この資料自体は素晴らしいんですけどね！）
 
+残骸↓
 https://github.com/karamaru-alpha/rim
 
 
