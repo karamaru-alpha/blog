@@ -3,11 +3,11 @@ title: "p5.jsとtone.jsで作るドラムパターンビジュアライザー"
 date: 2024-12-23T00:12:48+09:00
 ---
 
-[QualiArts Advent Calender 2024](https://qiita.com/advent-calendar/2024/qualiarts)の23日目担当です！
-
 MIDIファイルから読み込んだドラムパターンをビジュアライズしました。
 
 <!--more-->
+
+[QualiArts Advent Calender 2024](https://qiita.com/advent-calendar/2024/qualiarts)の23日目担当です！
 
 ## 先に結論
 
