@@ -15,7 +15,7 @@ MIDIファイルから読み込んだドラムパターンをビジュアライ�
 MIDIファイルからドラムやキック、シンバルの音を判別して、いい感じに表示してくれるんだ！
 
 
-{{< x src="https://x.com/karamaru_alpha/status/1871030185786785908" >}}
+{{< x src="https://twitter.com/karamaru_alpha/status/1871030185786785908?ref_src=twsrc%5Etfw" >}}
 
 {{< youtube YLoN1-oWz9A >}}
 
