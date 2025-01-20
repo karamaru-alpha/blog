@@ -1,0 +1,42 @@
+---
+title: "自動生成の話をしよう @ Gopher's Gathering"
+date: 2025-01-20T00:16:21+09:00
+---
+
+Gopher's Gathering（＠Lineヤフーさん）で登壇してきました。
+protobufやcueを例に、自動生成の可能性について話しました。
+
+<!--more-->
+
+## 発表内容
+
+{{< slide src="https://speakerdeck.com/player/0ccf0d597b1e4b0fb41ad06ee0016bf3" >}}
+
+- ProtocPluginを用いて定型化できるもの全てを生成しているよ（RPCはもちろん、SQL定義やDB操作I/Fとその実装、キャッシュ、CLI、環境変数、ランキング、デバッグコマンド、ログなど）
+- gRPC採用出なくても自動生成はできる（GraphQLやyamlなど。本発表ではcue実装を取り上げた。）
+- 何を自動生成するのか？何から自動生成するのか？を選ぶのはプロジェクトやメンバーの性格次第で選択するべき。そこに美学がある。
+
+
+## 雑談
+
+ゲームならではの最適化を魅せられたかなと思います。
+ここまで自動生成しててすごいって少しでも思ってもらえたら嬉しいなー！
+
+本当はGo1.24の機能について話そうとしてたんだけど納得できる資料が作れなくて、、、別の機会に調査時間とって発表したいです><
+
+イベントではいろんな人と話せて楽しかったです！
+過去登壇資料を見ていて気になっていた人に会えたり、逆に資料見てます！って言われたり（嬉しかった）、初対面の人と深夜までお酒を飲んだり、最高の福岡旅行でした。
+
+運営者は学生さんらしいですですね、活動的ですごい、運営お疲れ様でした👏
+総じていいイベントでした。
+
+![engin.jpg](engin.jpg)
+
+![line.jpg](line.jpg)
+
+![ramen.jpg](ramen.jpg)
+
+## 関連リンク
+
+- https://speakerdeck.com/karamaru/zi-dong-sheng-cheng-nohua-wosiyou-protobuf-cue-1ci-sosunomei-xue
+- https://connpass.com/event/329963/
