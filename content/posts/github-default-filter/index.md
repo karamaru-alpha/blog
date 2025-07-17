@@ -108,9 +108,7 @@ observer.observe(document.documentElement, {
 document.addEventListener("DOMContentLoaded", updateAll);
 ```
 
-「draft:false」を後から消した場合にフィルターがデフォルト値に強制的に戻されるようなこともなく、しっかりデフォルトフィルターの役割を果たしてくれています！
-
-素敵 👏
+後からフィルターを操作した場合にデフォルト値に強制的に戻されるようなこともなくいい感じです。素敵 👏
 
 ## 終わりに
 
