@@ -17,7 +17,7 @@ Arc Boosts で js を仕込んで書き換える。
 
 GitHub の PR/Issue 検索窓のフィルター、使ってますか！
 
-僕は「created:2025-05-09..2025-05-16」構文が一番好きです ☺️
+僕は「created:YYYY-MM-DD..YYYY-MM-DD」構文が一番好きです ☺️
 
 cf. [Filtering and searching issues and pull requests](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/filtering-and-searching-issues-and-pull-requests)
 
