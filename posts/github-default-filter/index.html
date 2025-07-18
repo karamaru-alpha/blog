@@ -7,8 +7,12 @@
   <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>url</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>URL</span>(<span style=color:#a6e22e>href</span>, window.<span style=color:#a6e22e>location</span>.<span style=color:#a6e22e>origin</span>);
   <span style=color:#66d9ef>if</span> (<span style=color:#f92672>!</span><span style=color:#a6e22e>url</span>.<span style=color:#a6e22e>pathname</span>.<span style=color:#a6e22e>endsWith</span>(<span style=color:#e6db74>&#34;/pulls&#34;</span>)) <span style=color:#66d9ef>return</span>;
 
-  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>query</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>url</span>.<span style=color:#a6e22e>searchParams</span>.<span style=color:#a6e22e>get</span>(<span style=color:#e6db74>&#34;q&#34;</span>)<span style=color:#f92672>?</span>.<span style=color:#a6e22e>split</span>(<span style=color:#e6db74>&#34; &#34;</span>);
+  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>pageParam</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>url</span>.<span style=color:#a6e22e>searchParams</span>.<span style=color:#a6e22e>get</span>(<span style=color:#e6db74>&#34;page&#34;</span>);
+  <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>pageParam</span>) {
+    <span style=color:#66d9ef>return</span>;
+  }
 
+  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>query</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>url</span>.<span style=color:#a6e22e>searchParams</span>.<span style=color:#a6e22e>get</span>(<span style=color:#e6db74>&#34;q&#34;</span>)<span style=color:#f92672>?</span>.<span style=color:#a6e22e>split</span>(<span style=color:#e6db74>&#34; &#34;</span>);
   <span style=color:#66d9ef>if</span> (<span style=color:#f92672>!</span><span style=color:#a6e22e>query</span>) {
     <span style=color:#a6e22e>url</span>.<span style=color:#a6e22e>searchParams</span>.<span style=color:#a6e22e>set</span>(<span style=color:#e6db74>&#34;q&#34;</span>, <span style=color:#a6e22e>DEFAULT_FILTERS</span>.<span style=color:#a6e22e>join</span>(<span style=color:#e6db74>&#34; &#34;</span>));
     <span style=color:#a6e22e>element</span>.<span style=color:#a6e22e>setAttribute</span>(<span style=color:#e6db74>&#34;href&#34;</span>, <span style=color:#a6e22e>url</span>.<span style=color:#a6e22e>href</span>);
@@ -57,4 +61,4 @@
 
 document.<span style=color:#a6e22e>addEventListener</span>(<span style=color:#e6db74>&#34;DOMContentLoaded&#34;</span>, <span style=color:#a6e22e>updateAll</span>);
 </code></pre></div><p>後からフィルターを操作した場合にデフォルト値に強制的に戻されるようなこともなくいい感じです。素敵 👏</p><h2 id=終わりに>終わりに</h2><p>全部冒頭に貼った issue に書いてあることなんですけど、プチ感動したので書いてみました。</p><p>こういうのでいいんだよ。こういうので。。。！</p></div><div class=pagination><a href=/posts/talk-about-code-generation/ class="left arrow">&#8592;</a>
-<a href=# class=top>Top</a></div></main><footer><span>&copy; <time datetime="2025-07-17 13:41:02.354157628 +0000 UTC m=+0.134862038">2025</time> karamaru. Made with <a href=https://gohugo.io>Hugo</a> using the <a href=https://github.com/EmielH/tale-hugo/>Tale</a> theme.</span></footer></body></html>
+<a href=# class=top>Top</a></div></main><footer><span>&copy; <time datetime="2025-07-18 03:37:50.330222434 +0000 UTC m=+0.138002197">2025</time> karamaru. Made with <a href=https://gohugo.io>Hugo</a> using the <a href=https://github.com/EmielH/tale-hugo/>Tale</a> theme.</span></footer></body></html>
