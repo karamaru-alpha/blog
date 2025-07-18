@@ -59,8 +59,12 @@ const updateAnchor = (element) => {
   const url = new URL(href, window.location.origin);
   if (!url.pathname.endsWith("/pulls")) return;
 
-  const query = url.searchParams.get("q")?.split(" ");
+  const pageParam = url.searchParams.get("page");
+  if (pageParam) {
+    return;
+  }
 
+  const query = url.searchParams.get("q")?.split(" ");
   if (!query) {
     url.searchParams.set("q", DEFAULT_FILTERS.join(" "));
     element.setAttribute("href", url.href);
