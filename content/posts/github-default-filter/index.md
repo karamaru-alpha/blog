@@ -71,7 +71,8 @@ const updateAnchor = (element) => {
     return;
   }
 
-  if (!query.includes("is:open") || query.includes("draft:false")) return;
+  if (query.length > 0) return;
+
   query.push("draft:false");
   url.searchParams.set("q", query.join(" "));
   element.setAttribute("href", url.href);
