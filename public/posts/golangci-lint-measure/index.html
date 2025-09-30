@@ -1,235 +1,54 @@
-<!DOCTYPE html>
-<html lang="ja">
-    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
-    
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>golangci-lintで有効な全てのlinterの実行時間を計測する方法 &middot; からまるのブログ</title>
-
-    
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/fonts.css">
-    
-    <link rel="icon" href="/favicon.ico"/>
-    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/images/ren.png">
-
-    
-    <link href="" rel="alternate" type="application/rss+xml" title="からまるのブログ" />
-    <meta property="og:url" content="http://localhost:1313/posts/golangci-lint-measure/">
-  <meta property="og:site_name" content="からまるのブログ">
-  <meta property="og:title" content="golangci-lintで有効な全てのlinterの実行時間を計測する方法">
-  <meta property="og:description" content="この方法を使って30mのCIを5mにしました。">
-  <meta property="og:locale" content="ja">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2024-08-09T00:16:21+09:00">
-    <meta property="article:modified_time" content="2024-08-09T00:16:21+09:00">
-
-    
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="golangci-lintで有効な全てのlinterの実行時間を計測する方法">
-  <meta name="twitter:description" content="この方法を使って30mのCIを5mにしました。">
-
-
-    <script src="/js/darkmode.js"></script>
-</head>
-
-    <body>
-        		<nav class="nav">
-			<div class="nav-container">
-				<a href="/">
-					
-						<h2 class="nav-title">からまるのブログ</h2>
-					
-				</a>
-				<ul>
-    
-    
-    <li>
-        <a href="https://github.com/karamaru-alpha" target="_blank" rel="noopener noreferrer">
-            
-            <span>GitHub</span>
-            
-        </a>
-    </li>
-    
-    <li>
-        <a href="https://x.com/karamaru_alpha" target="_blank" rel="noopener noreferrer">
-            
-            <span>X</span>
-            
-        </a>
-    </li>
-    
-    <li>
-        <a href="https://speakerdeck.com/karamaru" target="_blank" rel="noopener noreferrer">
-            
-            <span>SpeackerDeck</span>
-            
-        </a>
-    </li>
-    
-    <li>
-        <a href="https://sizu.me/karamaru_alpha" target="_blank" rel="noopener noreferrer">
-            
-            <span>SizuIn</span>
-            
-        </a>
-    </li>
-    
-    <li>
-        <a href="https://www.linkedin.com/in/karamaru" target="_blank" rel="noopener noreferrer">
-            
-            <span>LinkedIn</span>
-            
-        </a>
-    </li>
-    
-    <li>
-        <a href="https://karamaru-alpha.com/index.xml" target="_blank" rel="noopener noreferrer">
-            
-            <span>RSS</span>
-            
-        </a>
-    </li>
-    
-</ul>
-
-			</div>
-		</nav>
-
-        <div id="darkModeToggle" onclick="toggleDarkMode()">
-  &#9680; 
-</div>
-
-        
-
-<main>
-	
-
-
-        <div class="post">
-		<div class="post-info">
-    <time datetime="2024-08-09 00:16:21 &#43;0900 JST">2024/08/09</time>
-</div>
-
-		<h1 class="post-title">golangci-lintで有効な全てのlinterの実行時間を計測する方法</h1>
-<div class="post-line"></div>
-
-		
-
-		<p>この方法を使って30mのCIを5mにしました。</p>
-<h2 id="先に結論">先に結論</h2>
-<ol>
-<li>verboseオプションで実行時間Top10のstage一覧をみる</li>
-<li>コード改変して有効な全てのlinterの実行時間を計測する</li>
-</ol>
-<h2 id="1-verboseオプションで実行時間top10のstage一覧をみる">1. verboseオプションで実行時間Top10のstage一覧をみる</h2>
-<p>有名な方法ですね。 パフォーマンス起因の調査の場合、多くのケースでこの方法で事足りる気がします。</p>
-<p>実行時<code>--verbose</code>もしくは<code>-v</code>をつけることでより詳細な実行結果が閲覧できます。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>golangci-lint run --verbose
-</span></span></code></pre></div><p>cf. <a href="https://golangci-lint.run/usage/configuration/#command-line-options">https://golangci-lint.run/usage/configuration/#command-line-options</a></p>
-<p>この出力結果の中に、実行時間がかかっているstageのTop10が出ます。
-以下画像だと<a href="https://github.com/securego/gosec">gosec</a>が最も重いLinterですね。次点で<a href="https://github.com/go-critic/go-critic">gocritic</a>。</p>
-<p>CI自体の時間は30mですが、golangci-lintは並行実行に対応しているので時間が大きく出ていますね。</p>
-<p><img src="before.png" alt="before.png"></p>
-<p>ここまで分かればあとは対象のlinterのうちどのルールが遅いのかを調べて改善するだけです！</p>
-<p>今回の例だと運良くgosecのG602が遅いということが見つけられたので、これをignoreすることでCIの時間を30mから5mまで短縮することができました。(すごい！)</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">linters-settings</span>:
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">gosec</span>:
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">excludes</span>:
-</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">G602</span>
-</span></span></code></pre></div><p>cf. <a href="https://github.com/golangci/golangci-lint/issues/4039">https://github.com/golangci/golangci-lint/issues/4039</a>
-cf. <a href="https://github.com/securego/gosec/issues/1007">https://github.com/securego/gosec/issues/1007</a></p>
-<p><img src="after.png" alt="after.png"></p>
-<p>gosecのパフォーマンスの話は結構前のものなのでもう治ってるかもですね。
-けど、遅いlinterを特定する手順自体は参考になるんじゃないんでしょうか。</p>
-<h2 id="2-コード改変して有効な全てのlinterの実行時間を計測する">2. コード改変して有効な全てのlinterの実行時間を計測する</h2>
-<p>さて、ここからは物好きな人向けですね。</p>
-<p>verboseオプションをつけて実行した時に実行時間Top10が出てくる仕組みはどこにあるんでしょうか？</p>
-<p>答えは<a href="https://github.com/golangci/golangci-lint/blob/a9ea7d32dc8eb641d67d720f9a5415247ab3bc1b/pkg/goanalysis/runners.go#L36">pkg/goanalysis/runners.go</a>あたりで、固定値10を引数に実行時間の出力を予約してそうなコードが見つかります。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">stagesToPrint</span> = <span style="color:#ae81ff">10</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">sw</span>.<span style="color:#a6e22e">PrintTopStages</span>(<span style="color:#a6e22e">stagesToPrint</span>)
-</span></span></code></pre></div><p>そして実際にstageを実行時間順にsortした後出力するのは<a href="https://github.com/golangci/golangci-lint/blob/a9ea7d32dc8eb641d67d720f9a5415247ab3bc1b/pkg/timeutils/stopwatch.go">pkg/timeutils/stopwatch.go</a>です。
-引数のnが<code>stagesToPrint=10</code>ですね。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">s</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Stopwatch</span>) <span style="color:#a6e22e">sprintTopStages</span>(<span style="color:#a6e22e">n</span> <span style="color:#66d9ef">int</span>) <span style="color:#66d9ef">string</span> {}
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> len(<span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">stages</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">noStagesText</span>
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">stageDurations</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">stageDurationsSorted</span>()
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">stagesStrings</span> []<span style="color:#66d9ef">string</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; len(<span style="color:#a6e22e">stageDurations</span>) <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">n</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">s</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">stageDurations</span>[<span style="color:#a6e22e">i</span>]
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">stagesStrings</span> = append(<span style="color:#a6e22e">stagesStrings</span>, <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%s: %s&#34;</span>, <span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">name</span>, <span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">d</span>))
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;top %d stages: %s&#34;</span>, <span style="color:#a6e22e">n</span>, <span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">Join</span>(<span style="color:#a6e22e">stagesStrings</span>, <span style="color:#e6db74">&#34;, &#34;</span>))
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>そうなんです、ここまでくればもうおわかりですね。</p>
-<p>golangci-lintのコードを落としてきて以下のようにコードを変更した後、<code>make build</code>をすれば全ての有効なstageの実行時間を出力させるgolangci-lintバイナリを作ることができるんです👏</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">s</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Stopwatch</span>) <span style="color:#a6e22e">sprintTopStages</span>(<span style="color:#a6e22e">n</span> <span style="color:#66d9ef">int</span>) <span style="color:#66d9ef">string</span> {
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> len(<span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">stages</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">noStagesText</span>
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">stageDurations</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">stageDurationsSorted</span>()
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// ==================== 以下デバッグ</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">type</span> <span style="color:#a6e22e">stageDurationDetail</span> <span style="color:#66d9ef">struct</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">name</span> <span style="color:#66d9ef">string</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">ms</span>   <span style="color:#66d9ef">int</span>
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">details</span> <span style="color:#f92672">:=</span> make([]<span style="color:#a6e22e">stageDurationDetail</span>, <span style="color:#ae81ff">0</span>, len(<span style="color:#a6e22e">stageDurations</span>))
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">v</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">stageDurations</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">details</span> = append(<span style="color:#a6e22e">details</span>, <span style="color:#a6e22e">stageDurationDetail</span>{
-</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">name</span>: <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">name</span>,
-</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">ms</span>:   int(<span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">d</span>.<span style="color:#a6e22e">Milliseconds</span>()),
-</span></span><span style="display:flex;"><span>		})
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	panic(<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%+v&#34;</span>, <span style="color:#a6e22e">details</span>))
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// ==================== デバッグおしまい</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">stagesStrings</span> []<span style="color:#66d9ef">string</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; len(<span style="color:#a6e22e">stageDurations</span>) <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">n</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">s</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">stageDurations</span>[<span style="color:#a6e22e">i</span>]
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">stagesStrings</span> = append(<span style="color:#a6e22e">stagesStrings</span>, <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%s: %s&#34;</span>, <span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">name</span>, <span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">d</span>))
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;top %d stages: %s&#34;</span>, <span style="color:#a6e22e">n</span>, <span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">Join</span>(<span style="color:#a6e22e">stagesStrings</span>, <span style="color:#e6db74">&#34;, &#34;</span>))
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>誰がここまで見たいねん！と思う気もしますが、気が迷った時に覗いてみてください🙆</p>
-<p><img src="img.png" alt="img.png"></p>
-<h2 id="終わりに">終わりに</h2>
-<p>色々書きましたがgolangci-lintの基本は以下だと思っています。</p>
-<ul>
-<li>disable-allして必要なものだけenableする</li>
-<li>適宜結果をキャッシュする(ローカルをdocker起動している場合はGOCACHE/GOLANGCI_LINT_CACHEの設定に注意)
-<ul>
-<li><a href="https://github.com/pipe-cd/pipecd/pull/4628">https://github.com/pipe-cd/pipecd/pull/4628</a></li>
-</ul>
-</li>
-</ul>
-<p><a href="https://golangci-lint.run/product/performance/">GOGCを調整したり</a>並行数を変えたり細かいところを変える前に、ルールとキャッシュの見直しをお勧めします。</p>
-<p>それでは、楽しいlintライフを！</p>
-
-		
-	</div>
-
-	<div class="pagination">
-		<a href="/posts/mocka/" class="left arrow">&#8592;</a>
-		<a href="/posts/dependabot-auto-merge/" class="right arrow">&#8594;</a>
-
-		<a href="#" class="top">Top</a>
-	</div>
-</main>
-
-
-        		<footer>
-			
-			<span>
-			&copy; <time datetime="2025-09-30 23:36:42.567795 &#43;0900 JST m=&#43;0.044249751">2025</time> . Made with <a href='https://gohugo.io'>Hugo</a> using the <a href='https://github.com/EmielH/tale-hugo/'>Tale</a> theme.
-			</span>
-		</footer>
-
-    </body>
-</html>
+<!doctype html><html lang=ja><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>golangci-lintで有効な全てのlinterの実行時間を計測する方法 &#183; からまるのブログ</title><link rel=stylesheet href=/css/style.css><link rel=stylesheet href=/css/fonts.css><link rel=icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/images/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/images/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/images/ren.png><link href rel=alternate type=application/rss+xml title=からまるのブログ><meta property="og:url" content="https://karamaru-alpha.com/posts/golangci-lint-measure/"><meta property="og:site_name" content="からまるのブログ"><meta property="og:title" content="golangci-lintで有効な全てのlinterの実行時間を計測する方法"><meta property="og:description" content="この方法を使って30mのCIを5mにしました。"><meta property="og:locale" content="ja"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2024-08-09T00:16:21+09:00"><meta property="article:modified_time" content="2024-08-09T00:16:21+09:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="golangci-lintで有効な全てのlinterの実行時間を計測する方法"><meta name=twitter:description content="この方法を使って30mのCIを5mにしました。"><script src=/js/darkmode.js></script></head><body><nav class=nav><div class=nav-container><a href=/><h2 class=nav-title>からまるのブログ</h2></a><ul><li><a href=https://github.com/karamaru-alpha target=_blank rel="noopener noreferrer"><span>GitHub</span></a></li><li><a href=https://x.com/karamaru_alpha target=_blank rel="noopener noreferrer"><span>X</span></a></li><li><a href=https://speakerdeck.com/karamaru target=_blank rel="noopener noreferrer"><span>SpeackerDeck</span></a></li><li><a href=https://sizu.me/karamaru_alpha target=_blank rel="noopener noreferrer"><span>SizuIn</span></a></li><li><a href=https://www.linkedin.com/in/karamaru target=_blank rel="noopener noreferrer"><span>LinkedIn</span></a></li><li><a href=https://karamaru-alpha.com/index.xml target=_blank rel="noopener noreferrer"><span>RSS</span></a></li></ul></div></nav><div id=darkModeToggle onclick=toggleDarkMode()>&#9680;</div><main><div class=post><div class=post-info><span></span><br><span>&nbsp;</span><time datetime="2024-08-09 00:16:21 +0900 JST">2024/08/09</time></div><h1 class=post-title>golangci-lintで有効な全てのlinterの実行時間を計測する方法</h1><div class=post-line></div><p>この方法を使って30mのCIを5mにしました。</p><h2 id=先に結論>先に結論</h2><ol><li>verboseオプションで実行時間Top10のstage一覧をみる</li><li>コード改変して有効な全てのlinterの実行時間を計測する</li></ol><h2 id=1-verboseオプションで実行時間top10のstage一覧をみる>1. verboseオプションで実行時間Top10のstage一覧をみる</h2><p>有名な方法ですね。 パフォーマンス起因の調査の場合、多くのケースでこの方法で事足りる気がします。</p><p>実行時<code>--verbose</code>もしくは<code>-v</code>をつけることでより詳細な実行結果が閲覧できます。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>golangci-lint run --verbose
+</span></span></code></pre></div><p>cf. <a href=https://golangci-lint.run/usage/configuration/#command-line-options>https://golangci-lint.run/usage/configuration/#command-line-options</a></p><p>この出力結果の中に、実行時間がかかっているstageのTop10が出ます。
+以下画像だと<a href=https://github.com/securego/gosec>gosec</a>が最も重いLinterですね。次点で<a href=https://github.com/go-critic/go-critic>gocritic</a>。</p><p>CI自体の時間は30mですが、golangci-lintは並行実行に対応しているので時間が大きく出ていますね。</p><p><img src=before.png alt=before.png></p><p>ここまで分かればあとは対象のlinterのうちどのルールが遅いのかを調べて改善するだけです！</p><p>今回の例だと運良くgosecのG602が遅いということが見つけられたので、これをignoreすることでCIの時間を30mから5mまで短縮することができました。(すごい！)</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#f92672>linters-settings</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>gosec</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>excludes</span>:
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>G602</span>
+</span></span></code></pre></div><p>cf. <a href=https://github.com/golangci/golangci-lint/issues/4039>https://github.com/golangci/golangci-lint/issues/4039</a>
+cf. <a href=https://github.com/securego/gosec/issues/1007>https://github.com/securego/gosec/issues/1007</a></p><p><img src=after.png alt=after.png></p><p>gosecのパフォーマンスの話は結構前のものなのでもう治ってるかもですね。
+けど、遅いlinterを特定する手順自体は参考になるんじゃないんでしょうか。</p><h2 id=2-コード改変して有効な全てのlinterの実行時間を計測する>2. コード改変して有効な全てのlinterの実行時間を計測する</h2><p>さて、ここからは物好きな人向けですね。</p><p>verboseオプションをつけて実行した時に実行時間Top10が出てくる仕組みはどこにあるんでしょうか？</p><p>答えは<a href=https://github.com/golangci/golangci-lint/blob/a9ea7d32dc8eb641d67d720f9a5415247ab3bc1b/pkg/goanalysis/runners.go#L36>pkg/goanalysis/runners.go</a>あたりで、固定値10を引数に実行時間の出力を予約してそうなコードが見つかります。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>stagesToPrint</span> = <span style=color:#ae81ff>10</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>defer</span> <span style=color:#a6e22e>sw</span>.<span style=color:#a6e22e>PrintTopStages</span>(<span style=color:#a6e22e>stagesToPrint</span>)
+</span></span></code></pre></div><p>そして実際にstageを実行時間順にsortした後出力するのは<a href=https://github.com/golangci/golangci-lint/blob/a9ea7d32dc8eb641d67d720f9a5415247ab3bc1b/pkg/timeutils/stopwatch.go>pkg/timeutils/stopwatch.go</a>です。
+引数のnが<code>stagesToPrint=10</code>ですね。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>s</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Stopwatch</span>) <span style=color:#a6e22e>sprintTopStages</span>(<span style=color:#a6e22e>n</span> <span style=color:#66d9ef>int</span>) <span style=color:#66d9ef>string</span> {}
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> len(<span style=color:#a6e22e>s</span>.<span style=color:#a6e22e>stages</span>) <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span> {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>noStagesText</span>
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>stageDurations</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>s</span>.<span style=color:#a6e22e>stageDurationsSorted</span>()
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>var</span> <span style=color:#a6e22e>stagesStrings</span> []<span style=color:#66d9ef>string</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>0</span>; <span style=color:#a6e22e>i</span> &lt; len(<span style=color:#a6e22e>stageDurations</span>) <span style=color:#f92672>&amp;&amp;</span> <span style=color:#a6e22e>i</span> &lt; <span style=color:#a6e22e>n</span>; <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span> {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>s</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>stageDurations</span>[<span style=color:#a6e22e>i</span>]
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>stagesStrings</span> = append(<span style=color:#a6e22e>stagesStrings</span>, <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sprintf</span>(<span style=color:#e6db74>&#34;%s: %s&#34;</span>, <span style=color:#a6e22e>s</span>.<span style=color:#a6e22e>name</span>, <span style=color:#a6e22e>s</span>.<span style=color:#a6e22e>d</span>))
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sprintf</span>(<span style=color:#e6db74>&#34;top %d stages: %s&#34;</span>, <span style=color:#a6e22e>n</span>, <span style=color:#a6e22e>strings</span>.<span style=color:#a6e22e>Join</span>(<span style=color:#a6e22e>stagesStrings</span>, <span style=color:#e6db74>&#34;, &#34;</span>))
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>そうなんです、ここまでくればもうおわかりですね。</p><p>golangci-lintのコードを落としてきて以下のようにコードを変更した後、<code>make build</code>をすれば全ての有効なstageの実行時間を出力させるgolangci-lintバイナリを作ることができるんです👏</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>s</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Stopwatch</span>) <span style=color:#a6e22e>sprintTopStages</span>(<span style=color:#a6e22e>n</span> <span style=color:#66d9ef>int</span>) <span style=color:#66d9ef>string</span> {
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> len(<span style=color:#a6e22e>s</span>.<span style=color:#a6e22e>stages</span>) <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span> {
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>noStagesText</span>
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>stageDurations</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>s</span>.<span style=color:#a6e22e>stageDurationsSorted</span>()
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// ==================== 以下デバッグ</span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>type</span> <span style=color:#a6e22e>stageDurationDetail</span> <span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>name</span> <span style=color:#66d9ef>string</span>
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>ms</span>   <span style=color:#66d9ef>int</span>
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>details</span> <span style=color:#f92672>:=</span> make([]<span style=color:#a6e22e>stageDurationDetail</span>, <span style=color:#ae81ff>0</span>, len(<span style=color:#a6e22e>stageDurations</span>))
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>for</span> <span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>v</span> <span style=color:#f92672>:=</span> <span style=color:#66d9ef>range</span> <span style=color:#a6e22e>stageDurations</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>details</span> = append(<span style=color:#a6e22e>details</span>, <span style=color:#a6e22e>stageDurationDetail</span>{
+</span></span><span style=display:flex><span>			<span style=color:#a6e22e>name</span>: <span style=color:#a6e22e>v</span>.<span style=color:#a6e22e>name</span>,
+</span></span><span style=display:flex><span>			<span style=color:#a6e22e>ms</span>:   int(<span style=color:#a6e22e>v</span>.<span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>Milliseconds</span>()),
+</span></span><span style=display:flex><span>		})
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	panic(<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sprintf</span>(<span style=color:#e6db74>&#34;%+v&#34;</span>, <span style=color:#a6e22e>details</span>))
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// ==================== デバッグおしまい</span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>stagesStrings</span> []<span style=color:#66d9ef>string</span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>0</span>; <span style=color:#a6e22e>i</span> &lt; len(<span style=color:#a6e22e>stageDurations</span>) <span style=color:#f92672>&amp;&amp;</span> <span style=color:#a6e22e>i</span> &lt; <span style=color:#a6e22e>n</span>; <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>s</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>stageDurations</span>[<span style=color:#a6e22e>i</span>]
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>stagesStrings</span> = append(<span style=color:#a6e22e>stagesStrings</span>, <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sprintf</span>(<span style=color:#e6db74>&#34;%s: %s&#34;</span>, <span style=color:#a6e22e>s</span>.<span style=color:#a6e22e>name</span>, <span style=color:#a6e22e>s</span>.<span style=color:#a6e22e>d</span>))
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sprintf</span>(<span style=color:#e6db74>&#34;top %d stages: %s&#34;</span>, <span style=color:#a6e22e>n</span>, <span style=color:#a6e22e>strings</span>.<span style=color:#a6e22e>Join</span>(<span style=color:#a6e22e>stagesStrings</span>, <span style=color:#e6db74>&#34;, &#34;</span>))
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>誰がここまで見たいねん！と思う気もしますが、気が迷った時に覗いてみてください🙆</p><p><img src=img.png alt=img.png></p><h2 id=終わりに>終わりに</h2><p>色々書きましたがgolangci-lintの基本は以下だと思っています。</p><ul><li>disable-allして必要なものだけenableする</li><li>適宜結果をキャッシュする(ローカルをdocker起動している場合はGOCACHE/GOLANGCI_LINT_CACHEの設定に注意)<ul><li><a href=https://github.com/pipe-cd/pipecd/pull/4628>https://github.com/pipe-cd/pipecd/pull/4628</a></li></ul></li></ul><p><a href=https://golangci-lint.run/product/performance/>GOGCを調整したり</a>並行数を変えたり細かいところを変える前に、ルールとキャッシュの見直しをお勧めします。</p><p>それでは、楽しいlintライフを！</p></div><div class=pagination><a href=/posts/mocka/ class="left arrow">&#8592;</a>
+<a href=/posts/dependabot-auto-merge/ class="right arrow">&#8594;</a>
+<a href=# class=top>Top</a></div></main><footer><span>&copy; <time datetime="2025-09-30 23:42:37.459585 +0900 JST m=+0.036142085">2025</time> . Made with <a href=https://gohugo.io>Hugo</a> using the <a href=https://github.com/EmielH/tale-hugo/>Tale</a> theme.</span></footer></body></html>
