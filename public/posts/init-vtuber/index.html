@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>生成AIを用いて2日でVTuberモデルを作成しアバターで会議に出るまで &middot; からまるのブログ</title>
+
+    
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/fonts.css">
+    
+    <link rel="icon" href="/favicon.ico"/>
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/ren.png">
+
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="からまるのブログ" />
+    <meta property="og:url" content="http://localhost:1313/posts/init-vtuber/">
+  <meta property="og:site_name" content="からまるのブログ">
+  <meta property="og:title" content="生成AIを用いて2日でVTuberモデルを作成しアバターで会議に出るまで">
+  <meta property="og:description" content="絵を描いたことないバックエンドエンジニアが、生成AIの力を借りながらVTuberモデルを作成し、MacBookPro単体でアバターでZoomやハドルに出るまでの全てを書きました。 “アバター作りたいけど絵描けないしなんか大変そう…“と思ってる人に参考にしてもらえれば幸いです。 2徹しました。">
+  <meta property="og:locale" content="ja">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2023-12-13T03:00:36+09:00">
+    <meta property="article:modified_time" content="2023-12-13T03:00:36+09:00">
+
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="生成AIを用いて2日でVTuberモデルを作成しアバターで会議に出るまで">
+  <meta name="twitter:description" content="絵を描いたことないバックエンドエンジニアが、生成AIの力を借りながらVTuberモデルを作成し、MacBookPro単体でアバターでZoomやハドルに出るまでの全てを書きました。 “アバター作りたいけど絵描けないしなんか大変そう…“と思ってる人に参考にしてもらえれば幸いです。 2徹しました。">
+
+
+    <script src="/js/darkmode.js"></script>
+</head>
+
+    <body>
+        		<nav class="nav">
+			<div class="nav-container">
+				<a href="/">
+					
+						<h2 class="nav-title">からまるのブログ</h2>
+					
+				</a>
+				<ul>
+    
+    
+    <li>
+        <a href="https://github.com/karamaru-alpha" target="_blank" rel="noopener noreferrer">
+            
+            <span>GitHub</span>
+            
+        </a>
+    </li>
+    
+    <li>
+        <a href="https://x.com/karamaru_alpha" target="_blank" rel="noopener noreferrer">
+            
+            <span>X</span>
+            
+        </a>
+    </li>
+    
+    <li>
+        <a href="https://speakerdeck.com/karamaru" target="_blank" rel="noopener noreferrer">
+            
+            <span>SpeackerDeck</span>
+            
+        </a>
+    </li>
+    
+    <li>
+        <a href="https://sizu.me/karamaru_alpha" target="_blank" rel="noopener noreferrer">
+            
+            <span>SizuIn</span>
+            
+        </a>
+    </li>
+    
+    <li>
+        <a href="https://www.linkedin.com/in/karamaru" target="_blank" rel="noopener noreferrer">
+            
+            <span>LinkedIn</span>
+            
+        </a>
+    </li>
+    
+    <li>
+        <a href="https://karamaru-alpha.com/index.xml" target="_blank" rel="noopener noreferrer">
+            
+            <span>RSS</span>
+            
+        </a>
+    </li>
+    
+</ul>
+
+			</div>
+		</nav>
+
+        <div id="darkModeToggle" onclick="toggleDarkMode()">
+  &#9680; 
+</div>
+
+        
+
+<main>
+	
+
+
+        <div class="post">
+		<div class="post-info">
+    <time datetime="2023-12-13 03:00:36 &#43;0900 JST">2023/12/13</time>
+</div>
+
+		<h1 class="post-title">生成AIを用いて2日でVTuberモデルを作成しアバターで会議に出るまで</h1>
+<div class="post-line"></div>
+
+		
+
+		<p>絵を描いたことないバックエンドエンジニアが、生成AIの力を借りながらVTuberモデルを作成し、MacBookPro単体でアバターでZoomやハドルに出るまでの全てを書きました。
+&ldquo;アバター作りたいけど絵描けないしなんか大変そう&hellip;&ldquo;と思ってる人に参考にしてもらえれば幸いです。
+2徹しました。</p>
+<p><a href="https://qiita.com/advent-calendar/2023/qualiarts">QualiArts Advent Calendar 2023</a> の13日目の記事になります。</p>
+<h2 id="先に結論">先に結論</h2>
+<h3 id="完成物">完成物</h3>
+<p>こちらが今回作成したアバターです。</p>
+<p>名前はらんまるくんっていいます。白髪で幼い感じがとっても可愛いね！！！🍼</p>
+<p>※音が出ます ※HoneyWorksの曲が流れます ※懐かしい ※髪も揺れるの可愛い</p>
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+      <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/MEpo6aMXMLY?autoplay=0&amp;controls=1&amp;end=0&amp;loop=0&amp;mute=0&amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"></iframe>
+    </div>
+
+<h3 id="使用技術">使用技術</h3>
+<p>結局原画以外全部人力でしたorz</p>
+<ul>
+<li>原画: <strong><a href="https://nijijourney.com/ja/">にじジャーニー</a>による生成AIの画像</strong>を使用</li>
+<li>レイヤー分け・書き足し: <a href="https://photoshop.adobe.com/discover">Photoshop</a>で自力</li>
+<li>モデリング: <a href="https://www.live2d.com/">Live2D</a>で自力</li>
+<li>配信: <a href="https://store.steampowered.com/app/1325860/VTube_Studio/?l=japanese">VTube Studio</a>+<a href="https://obsproject.com/ja">OBS Studio</a>でアバターをZoomやハドルに表示</li>
+</ul>
+<p>以下、詳細な作成手順や、それに至るまでの経緯を書いていきます。</p>
+<h2 id="計画フェーズ">計画フェーズ</h2>
+<p>(tl;dr: 絵だけ生成AIを用いて作成し、それ以降のレイヤー分け・Live2Dモデリングは自力でする)</p>
+<h3 id="要件定義">要件定義</h3>
+<p>今回は以下を満たすアバターを作ることを目標にしました。</p>
+<ul>
+<li><strong>完全オリジナルキャラ</strong>であること</li>
+<li><strong>MacBookPro単体で動作</strong>すること</li>
+<li><strong>Zoomやハドルでアバターを表示</strong>できること</li>
+<li>商用利用できること</li>
+<li>お金があまりかからないこと</li>
+</ul>
+<h3 id="2dアバターの作り方を調べる">2Dアバターの作り方を調べる</h3>
+<p>&ldquo;<strong>完全自作の可愛いアバターで会議がしたい🔥</strong>&ldquo;と突発的に思ったのですが、よく考えたら<strong>2Dアバターの作り方</strong>を知らなかったので、まずはそれから調べることにしました。以下手順が大枠のセオリーらしいです。</p>
+<ol>
+<li>アバターの<strong>絵を書く</strong></li>
+<li>絵を<strong>レイヤー分け</strong>する
+<ul>
+<li>前髪・横髪・後ろ髪など、動くパーツのレイヤーを分ける(それぞれ別名保存する的な)</li>
+<li>乾物ひものさんの解説がとてもわかりやすいです。動画では前髪・横髪だけで12パーツに分けてますね..とりあえず大変そう cf. <a href="https://www.youtube.com/watch?v=8LqS6sIziRQ&amp;t=578s">【保存版！】プロが高可動域Live2Dモデルの作り方を1から教えます！【①ラフ・線画・パーツ分け編</a></li>
+</ul>
+</li>
+<li>レイヤー分けした絵を<strong>Live2Dでモデリング</strong>する
+<ul>
+<li>人間の動きと各レイヤー(髪の毛とか)の動きをマッピングする作業</li>
+</ul>
+</li>
+<li>配信アプリでZoomやハドル、Youtubeにアバターを表示する</li>
+</ol>
+<h3 id="ショートカットできないか模索する">ショートカットできないか模索する</h3>
+<p>なるほど、僕は絵も描いたことないしモデリングもしたことないので、今のところ上記ステップ全て出来ないと気づきましたorz</p>
+<p>なるべく作業コストを減らしてアバターを作成する方法を模索します。</p>
+<h4 id="マネージドサービスに任せる案---見送り">マネージドサービスに任せる案 -&gt; 見送り</h4>
+<p>まず筆頭に考えられるのはアバターの作成と配信を一括で行える以下のようなサービスの利用です。</p>
+<ul>
+<li><a href="https://reality.app/">REALITY</a>
+<ul>
+<li>パーツ組み合わせ(miiみたいな)アバターで配信できるアプリ</li>
+<li>OBS連携でZoomなどでも活用できるアバターを作成できる</li>
+</ul>
+</li>
+<li><a href="https://www.live.iriam.com/">IRIAM</a>
+<ul>
+<li>1枚絵から自動でモデリングまでしてくれる配信アプリ</li>
+<li>配信はアプリ内で完結しており、Zoomなどには転用できなさそう?</li>
+</ul>
+</li>
+</ul>
+<p>&ldquo;<strong>完全自作アバター×Zoom配信</strong>&ldquo;という条件で考えると、どちらも要件には合っていなさそうで今回は採用を見送りました。<strong>出来たとしてもそれはそれで凄すぎ・簡単すぎてつまらないので逆に使わなかったと思います</strong>。</p>
+<h4 id="レイヤー分けモデリングをaiに任せる案---見送り">レイヤー分け・モデリングをAIに任せる案 -&gt; 見送り</h4>
+<p>次に、AIを用いて作業コストを削減する案を考えます。</p>
+<p>原画は言わずもがな生成AIに任せるとして、レイヤー分け・モデリングもAIに任せられる技術がないか調査しましたが、MacBook単体で動作するという要件や参考文献の多さを鑑みると少し厳しそうでした。</p>
+<ul>
+<li><a href="https://github.com/pkhungurn/talking-head-anime-3-demo">talking-head-anime-3</a>
+<ul>
+<li>1枚絵から自動でモデリングまでしてくれる技術</li>
+<li>つよつよGPUが必須でMacBookProでは動かないため見送り</li>
+</ul>
+</li>
+<li><a href="https://github.com/magic-research/magic-animate">MagicAnimate</a>
+<ul>
+<li><strong>ByteDance製の動きを指定して静止画を動かす技術</strong></li>
+<li>2023/12/04(執筆1週間前)リリースで参考文献がなさすぎたため今回は見送ったが、生成AI界隈は結構盛り上がっててこれが発展すればLive2Dモデリングとかいらなくなるんだろうなーと思ってる</li>
+</ul>
+</li>
+<li><a href="https://github.com/mattyamonaca/layerdivider">layerdivider</a>
+<ul>
+<li>色素ベースで絵のレイヤー分けしてくれるツール</li>
+<li>色ベースのみでレイヤー分けされてしまうので見送り</li>
+<li>cf. <a href="https://zenn.dev/aics/articles/833e6601130780">AIを使わずに一枚絵をレイヤー分けできないか試みた話</a></li>
+</ul>
+</li>
+</ul>
+<p>正直探せば他にもありそう。</p>
+<h4 id="原画だけ生成aiに任せる案---採用">原画だけ生成AIに任せる案 -&gt; 採用</h4>
+<p>上記調査から、<strong>原画だけ生成AIに任せてあとは自力で頑張る</strong>ことにしました。</p>
+<p>ほぼショートカットできてないじゃん！と言われればそれまでですが、今話題のVTuberの作り方を1から手を動かして学べるのはそれはそれで楽しいので良しとします🙆</p>
+<p>さて、どの生成AIを用いるかという話ですが、今回は以下理由から<a href="https://nijijourney.com/ja/">にじジャーニー</a>を選択しました。</p>
+<ul>
+<li><strong>Midjourney</strong>を踏襲した<strong>アニメ・ゲーム調イラスト特化の画像生成AI</strong> -&gt; VTuberに向いてる！</li>
+<li>有料プラン加入時に生成した画像は<strong>商用利用可能</strong> -&gt; 将来配信とかできるかも！</li>
+<li>月10ドルで比較的安い</li>
+<li>Discord上で動作し扱いやすい</li>
+<li>絵柄が好き</li>
+<li>絵柄がとても好き</li>
+</ul>
+<p>商用利用できて可愛い絵が手に入るなら、10ドルは安いものですね。詳細な使い方や&quot;呪文&quot;については後述します。</p>
+<p>お待たせしました、これから<strong>作業フェーズ</strong>の解説に入ります。目次は以下です。</p>
+<ul>
+<li><strong>原画生成編</strong>: にじジャーニーを用いてアバターの原画を作成する</li>
+<li><strong>レイヤー分け・書き足し編</strong>: Photoshopを用いて原画のレイヤー分け・書き足しをする</li>
+<li><strong>Live2Dモデリング編</strong>: Live2Dを用いてレイヤー分けした絵をモデリングする</li>
+<li><strong>配信編</strong>: VTube StudioとOBS Studioを用いて、Zoomやハドルにアバターを表示する</li>
+</ul>
+<h2 id="作業フェーズ---原画作成編">作業フェーズ - 原画作成編</h2>
+<h3 id="にじジャーニーの機能説明">にじジャーニーの機能説明</h3>
+<p><a href="https://nijijourney.com/ja/">にじジャーニー</a>という生成AIを用いて、アバターの原画を作成していきます。</p>
+<p>10ドルだけ払って有料会員になることでdiscordで使用可能になります。<code>/imagine</code>コマンドにキャラの特徴を指定する<strong>プロンプト</strong>(呪文)を入れて実行することで画像を生成してくれます。実際に生成した画面はこんな感じです。</p>
+<p><img src="./nijijourney1.png" alt="nijijourney1"></p>
+<p>モンスターガール可愛いですね。</p>
+<p><code>a girl ... simple background</code>までがプロンプトパートになっていて、女の子(<code>a girl</code>)+モンスター(<code>monster energy</code>)を先頭におくことでモンスターガールを誕生させています。</p>
+<p>後ろに続く長いプロンプトはキャラの立ち方や構図・背景などを指定するいわゆる&quot;呪文&quot;と言われる部分です。VTuberモデルなら直立で正面を向いており、背景もシンプルなものが好ましいでしょう。呪文系は結構まとめサイトが多いので各自チェックしてみてください。 cf.<a href="https://hikari-aiart.com/stablediffusion-pronpt-pose/">【Stable Diffusion】 ポーズや構図に関するプロンプト（呪文一覧）</a></p>
+<p>また、にじジャーニーには<strong>特定の絵に対して類似の絵を出力する機能</strong>(上記<code>U1</code><del><code>U4</code>ボタン)や、<strong>特定の絵を高画質に出力する機能</strong>(上記<code>V1</code></del><code>V4</code>)があり、これらを駆使して画像生成していく形になります。</p>
+<h3 id="画像生成をいっぱいしてみる">画像生成をいっぱいしてみる</h3>
+<p>他に、雪っぽい女の子・ビビッドな女の子を出力した例を以下に挙げます。</p>
+<p><img src="./nijijourney2.png" alt="nijijourney2">
+<img src="./nijijourney3.png" alt="nijijourney3"></p>
+<p>可愛い。</p>
+<p>このようにプロンプトを変えるだけで絵柄が変わるのがとても便利である一方で、意外と思った通りのキャラを生成させるのって難しいんですよね。
+英語でニュアンスも伝えづらいし、、、、と思って日本語をいれてみたところ</p>
+<p><img src="./nijijourney4.png" alt="nijijourney4"></p>
+<p><strong>いや全然日本語対応してる！！！笑</strong></p>
+<p>なんか長々呪文を描いていた時間はなんだったんでしょう。構図も特に何も言わなくても普通にいいし。呪文おすすめサイトとか忘れてください。鏡音可愛い。</p>
+<h3 id="vtuberモデルの原画を生成する">VTuberモデルの原画を生成する</h3>
+<p>話を戻して、今回は<strong>VTuberモデルの原画として&quot;白髪で幼い男の子&quot;を生成</strong>します。
+結論<code>可愛い男の子, 白い髪, 八重歯, アホ毛, 水色の瞳, 白背景, 直立, 上半身</code>というプロンプトで20回ぐらいガチャして、類似の絵を出力する機能も駆使し、以下の画像の生成に成功しました。</p>
+<p><img src="./nijijourney5.png" alt="nijijourney5"></p>
+<p>八重歯の設定は見事になくなっているけど、破綻のない絵柄でとても可愛いので今回はこの絵をベースにVTuberモデルを作成していくことにします💪</p>
+<h2 id="作業フェーズ---レイヤー分け書き足し編">作業フェーズ - レイヤー分け・書き足し編</h2>
+<p>このフェーズは、上記生成AIを用いて出来た<strong>原画に対して、Photoshopを用いてレイヤー分け・書き足しをする</strong>工程になります。</p>
+<p>Photoshopには10日程度の無料トライアル期間があるので、有料Adobe会員でない方はそちらを利用できるかと思います。</p>
+<h3 id="レイヤー分け書き足しが必要な理由">レイヤー分け・書き足しが必要な理由</h3>
+<p><strong>なぜ原画にレイヤー分けが必要かというと、Live2Dモデリングした際のパーツごとの前後関係や揺れの独立を担保するため</strong>です。
+例えば髪の毛は、前髪や横髪は顔の輪郭の前に出ている一方で、後ろ髪は輪郭の後ろに配置する必要があるため、最低限&quot;前髪&quot;と&quot;後ろ髪&quot;はレイヤーが別れている必要があります。
+もっと言うと、髪の毛の揺れは前髪中央の髪・横髪、アホ毛で別々に設定する必要があるので、&ldquo;前髪&quot;の中にも&quot;前髪中央の髪&quot;と&quot;横髪&quot;と&quot;アホ毛&quot;でレイヤーを分ける必要があるのです。</p>
+<p>また、<strong>キャラが動いた時にその後ろに本来あるべきものを書き足す作業が必要</strong>になります。例えば、横髪が揺れて動いた時、本来であれば輪郭の肌や後ろ髪が見えるべきですが、原画の時点でそこは書かれていないため、別途レイヤーごとに書き足す必要があります。</p>
+<p>レイヤー分けの仕方についてはLive2Dの公式チュートリアルがとてもわかりやすいので、そちらも参考にしてください。</p>
+<p>cf. <a href="https://docs.live2d.com/cubism-editor-tutorials/psd/">基本チュートリアル - イラストの加工</a></p>
+<h3 id="実際にレイヤー分け書き足しを行う">実際にレイヤー分け・書き足しを行う</h3>
+<p>絵を描いたことのない僕のような素人は、この作業が一番きついです。いくら原画があるとはいえ、パーツごとのレイヤー分け・動いた時に見えうる箇所の書き足し・AI由来の細かい絵の破綻の修正を行うのは結構大変で、12時間以上はかかりました。</p>
+<p>以下は&quot;髪の毛&quot;部分を実際にレイヤー分け・書き足ししたものです。&ldquo;前髪&rdquo;・&ldquo;左前髪&rdquo;・&ldquo;右前髪&rdquo;・&ldquo;アホ毛&rdquo;・&ldquo;後ろ髪&quot;で5レイヤーに分けました。
+レイヤー分けは以外と簡単で原画から消しゴムで消して分類していくだけなのですが、 <strong>レイヤー分けした後の書き足し作業がとても大変</strong>です。</p>
+<p>後ろ髪の中央部分や前髪の重なる部分、どこまでを横前髪とするのかの区切る部分も全て書き足しで、見えない部分の目玉や口内も書き足す必要があります。</p>
+<p>さらに、<strong>余計な髪飾りを消したり</strong>、髪の毛が被っていた部分を補完したりといった作業が必要になるので結構大変orz</p>
+<p>詳細に見れば多少破綻している箇所もあるのでしょうが、今回は遠目からみて違和感なければokです。</p>
+<p>今回は少ないレイヤー数　だったのでなんとかなった感はありますorz</p>
+<p><img src="./photoshop-hair.png" alt="photoshop-hair"></p>
+<p>最終的に計20レイヤーを作成し、各種パーツ分け・書き足しを行いました。</p>
+<ul>
+<li>髪
+<ul>
+<li>前髪</li>
+<li>左右前髪</li>
+<li>アホ毛</li>
+<li>後ろ髪</li>
+</ul>
+</li>
+<li>目
+<ul>
+<li>左右目玉</li>
+<li>左右まつ毛</li>
+<li>左右白目</li>
+<li>左右眉毛</li>
+</ul>
+</li>
+<li>口
+<ul>
+<li>上唇</li>
+<li>下唇</li>
+<li>口内</li>
+</ul>
+</li>
+<li>鼻</li>
+<li>首</li>
+<li>胴体</li>
+</ul>
+<p>以下がそのレイヤー分けの一例です。
+<img src="./photoshop-other.png" alt="photoshop-other"></p>
+<p>全てのレイヤー分け・書き足しを終えたらpsdファイルに保存し、いよいよ<strong>Live2Dモデリング</strong>に入ります🔥</p>
+<h2 id="作業フェーズ---live2dモデリング編">作業フェーズ - Live2Dモデリング編</h2>
+<p>このフェーズは、上記レイヤー分け・書き足しを行った<strong>psdファイルをLive2Dでモデリングし実際に動かせる状態にする</strong>工程になります。</p>
+<p>Live2Dは有料ソフトですが、40日程度の無料トライアル期間があるので、今回はそれを活用しました。</p>
+<p>モデリングについては公式のチュートリアルが全てで、基本的に以下をやれば3時間程度で眉毛の上下・まばたき・口の開閉・顔の向き検知を行うことが出来ます。</p>
+<ul>
+<li><a href="https://docs.live2d.com/cubism-editor-tutorials/expression/">基本チュートリアル - 表情の動き付け</a></li>
+<li><a href="https://docs.live2d.com/cubism-editor-tutorials/deformer/">基本チュートリアル - 体の動き付け</a></li>
+<li><a href="https://docs.live2d.com/cubism-editor-tutorials/xy/">基本チュートリアル - 顔のXYの動き付け</a></li>
+</ul>
+<p>目玉が白目から、口内が唇からはみ出さないように要素を内包させる<strong>クリッピング</strong>や、動きに合わせて変形させる<strong>デフォーマ</strong>といった機能を学ぶことが出来ます。</p>
+<p>画面としてはこんな感じです。例えば前髪なら、前髪レイヤー(&ldquo;髪 前&rdquo;)に対して、髪の毛が揺れた時の変形設定をしたデフォーマ(&ldquo;前髪の揺れ&rdquo;)が親として内包し、さらにそれを顔が傾いた時の変形設定をしたデフォーマ(&ldquo;前髪の曲面&rdquo;)で内包することで、前髪の揺れと顔の傾きに対応した動きを実現しています。</p>
+<p>自分の子が動く姿は可愛いですね☺️
+<img src="./live2d1.png" alt="live2d1.png"></p>
+<p>また発展として、<strong>物理演算を用いて髪の毛を慣性で揺らす</strong>ことも可能です。可愛いのでやること推奨です！！🔥</p>
+<ul>
+<li><a href="https://docs.live2d.com/cubism-editor-tutorials/physical-calculation-settings/">組み込み用チュートリアル - 物理演算設定</a></li>
+</ul>
+<p>画面としてはこんな感じで、振り子の要素で慣性による髪の毛の揺れを表現しています。今回は後ろ髪・各種前髪・アホ毛に物理演算をそれぞれ設定しました。
+<img src="./live2d2.png" alt="live2d2.png"></p>
+<p>各動きに対応したLive2D上の設定が終わったら適宜書き出しを行い、いよいよ<strong>配信設定</strong>です👏</p>
+<h2 id="作業フェーズ---配信編">作業フェーズ - 配信編</h2>
+<h3 id="顔の動きとモデルを同期させる">顔の動きとモデルを同期させる</h3>
+<p>Live2Dモデルを動作させるサービスは色々あるみたいですが、Macでは<a href="https://store.steampowered.com/app/1325860/VTube_Studio/?l=japanese">VTube Studio</a>がおすすめのようです。</p>
+<p>VTube Studioがキャラクターを管理するディレクトリ配下に、先ほどLive2Dで出力したモデルデータ・物理演算データを配置することで以下のようにVTuberモデルを表示することが出来ます👏
+<img src="./vtubestudio1.png" alt="vtubestudio1.png"></p>
+<p>次に、<strong>設定-&gt;カメラからMacデフォルトのカメラを選択することで、ついに顔の動きとモデルの動きが同期されるように</strong>なります！自動生成の絵に命が吹き込まれる瞬間、、、尊い👏</p>
+<p>また、目を閉じる感度や口を開く感度などの微調整もここで設定出来ます。(あと背景も)</p>
+<p><img src="./vtubestudio2.png" alt="vtubestudio2.png"></p>
+<p>やったー！自分で生成したオリジナルキャラが、自分の顔の動きと同期して動いてる！！！商用利用可能という免罪符付きで！！！！！</p>
+<p>正直ここまでやったらもう満足感はありますが、せっかくなので会議に出るところまでやってみます。</p>
+<h3 id="zoomやハドルで配信する">Zoomやハドルで配信する</h3>
+<p>さて、このモデルをZoomやハドルで配信するにはどうすればいいのでしょうか。</p>
+<p>VTube Studioには&quot;バーチャルWebカメラ&quot;という仮想カメラを建てる機能が備わっているのですが、この機能はMacOSには対応していないため非活性となっていますorz</p>
+<p><img src="./vtubestudio3.png" alt="vtubestudio3.png"></p>
+<p>よって、<strong><a href="https://obsproject.com/ja">OBS Studio</a>を用いてVTube Studioの画面をキャプチャし、OBS Studioの仮想カメラをZoomやハドルに表示する</strong>ことで、アバターを配信することでMacでアバター配信を実現します。</p>
+<p>画面はこんな感じ。VTubeStudio無料版だと左下で変な奴がうろちょろしているので配信にはうつさないように画角設定しましょう。</p>
+<p><img src="./obsstudio.png" alt="obsstudio.png"></p>
+<p>上記OBSの&rdquo;<strong>仮想カメラ起動</strong>&ldquo;を選択することで、Zoomやハドルのカメラ設定でOBSの画面を選択することができるようになります🔥</p>
+<p>これであなたもバーチャル社会人の仲間入りです👏👏👏</p>
+<p>Zoom
+<img src="./zoom.png" alt="zoom.png"></p>
+<p>ハドル
+<img src="./slack.png" alt="slack.png"></p>
+<h2 id="終わりに">終わりに</h2>
+<p>いかがだったでしょうか？
+本記事では、絵が描けない人でも生成AIを用いることでアバターを作成し、Zoomやハドルで使用するまでの工程を解説しました。 工数自体は少なくありませんが(自分は16時間ぐらいかかったし)、手間をかけて完全オリジナルキャラを動かす楽しさもまたひとしおですよね。&ldquo;アバター作りたいけど絵描けないしなんか大変そう&hellip;&ldquo;と思ってる人に参考になれば幸いです。</p>
+<p>今後Youtubeで配信するとかあれば推しになってください！！！！！！！</p>
+
+		
+	</div>
+
+	<div class="pagination">
+		<a href="/posts/useful-tarminal-tool/" class="left arrow">&#8592;</a>
+		<a href="/posts/layered-tx/" class="right arrow">&#8594;</a>
+
+		<a href="#" class="top">Top</a>
+	</div>
+</main>
+
+
+        		<footer>
+			
+			<span>
+			&copy; <time datetime="2025-09-30 23:36:42.576049 &#43;0900 JST m=&#43;0.052503710">2025</time> . Made with <a href='https://gohugo.io'>Hugo</a> using the <a href='https://github.com/EmielH/tale-hugo/'>Tale</a> theme.
+			</span>
+		</footer>
+
+    </body>
+</html>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>からまるのブログ</title>
+    <link>http://localhost:1313/</link>
+    <description>Recent content on からまるのブログ</description>
+    <generator>Hugo</generator>
+    <language>ja</language>
+    <lastBuildDate>Thu, 17 Jul 2025 00:12:48 +0900</lastBuildDate>
+    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【GitHub】PR一覧画面でフィルターのデフォルト値を設定したい！</title>
+      <link>http://localhost:1313/posts/github-default-filter/</link>
+      <pubDate>Thu, 17 Jul 2025 00:12:48 +0900</pubDate>
+      <guid>http://localhost:1313/posts/github-default-filter/</guid>
+      <description>&lt;p&gt;「is:pr is:open」に追加して「draft:false」とかをデフォルトでつけたい！&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>自動生成の話をしよう @ Gopher&#39;s Gathering</title>
+      <link>http://localhost:1313/posts/talk-about-code-generation/</link>
+      <pubDate>Mon, 20 Jan 2025 00:16:21 +0900</pubDate>
+      <guid>http://localhost:1313/posts/talk-about-code-generation/</guid>
+      <description>&lt;p&gt;Gopher&amp;rsquo;s Gathering（＠Lineヤフーさん）で登壇してきました。&#xA;protobufやcueを例に、自動生成の可能性について話しました。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>p5.jsとtone.jsで作るドラムパターンビジュアライザー</title>
+      <link>http://localhost:1313/posts/drum-visualizer/</link>
+      <pubDate>Mon, 23 Dec 2024 00:12:48 +0900</pubDate>
+      <guid>http://localhost:1313/posts/drum-visualizer/</guid>
+      <description>&lt;p&gt;MIDIファイルから読み込んだドラムパターンをビジュアライズしました。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>uniqueパッケージから学ぶinterningと弱参照 @ Asakusa.go</title>
+      <link>http://localhost:1313/posts/unique-package/</link>
+      <pubDate>Sun, 15 Sep 2024 02:56:17 +0900</pubDate>
+      <guid>http://localhost:1313/posts/unique-package/</guid>
+      <description>&lt;p&gt;Asakusa.go#3(@ドクターズプライムさん)で登壇してきました！&#xA;Go1.23で追加されたuniqueパッケージの内部実装をたどりながら、Goの言語特性や既に存在していた最適化について、新しく導入された弱参照について調べました。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>【Unity】アセットバンドルビルド環境を脱JenkinsしてGithubActionsセルフホステッドランナーにした話</title>
+      <link>http://localhost:1313/posts/ab-build-self-host/</link>
+      <pubDate>Fri, 09 Aug 2024 00:16:21 +0900</pubDate>
+      <guid>http://localhost:1313/posts/ab-build-self-host/</guid>
+      <description>&lt;p&gt;ゲーム業界で伝統的に使われているABビルド*Jenkins構成を使わないために頑張った話&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>DependabotのAutoMergeで必要十分なCIをmerge条件にする</title>
+      <link>http://localhost:1313/posts/dependabot-auto-merge/</link>
+      <pubDate>Fri, 09 Aug 2024 00:16:21 +0900</pubDate>
+      <guid>http://localhost:1313/posts/dependabot-auto-merge/</guid>
+      <description>&lt;p&gt;Githubの仕様に戸惑ったので備忘録的に書きます。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>golangci-lintで有効な全てのlinterの実行時間を計測する方法</title>
+      <link>http://localhost:1313/posts/golangci-lint-measure/</link>
+      <pubDate>Fri, 09 Aug 2024 00:16:21 +0900</pubDate>
+      <guid>http://localhost:1313/posts/golangci-lint-measure/</guid>
+      <description>&lt;p&gt;この方法を使って30mのCIを5mにしました。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>ぼくのかんがえたさいきょうのもっくらいぶらり！</title>
+      <link>http://localhost:1313/posts/mocka/</link>
+      <pubDate>Sat, 13 Jul 2024 13:56:17 +0900</pubDate>
+      <guid>http://localhost:1313/posts/mocka/</guid>
+      <description>&lt;p&gt;GoConnect#1(@サイボウズさん)でLTしてきました。&#xA;いくつかの既存モックライブラリの概観と、徹夜で作った自作モックライブラリの紹介をしました。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Go Conference 2024 に登壇しました！</title>
+      <link>http://localhost:1313/posts/gocon2024/</link>
+      <pubDate>Sun, 09 Jun 2024 10:42:42 +0900</pubDate>
+      <guid>http://localhost:1313/posts/gocon2024/</guid>
+      <description>&lt;p&gt;2024/06/08に開催された Go Conference 2024 に登壇してきました！&lt;/p&gt;&#xA;&lt;p&gt;初めて外部登壇した感想や採択から発表に至るまでの準備、セッションで話しきれなかったことについて書きたいと思います！&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>俺が考える最速のZsh×モニターなし開発環境</title>
+      <link>http://localhost:1313/posts/zsh-faster/</link>
+      <pubDate>Tue, 16 Apr 2024 13:56:17 +0900</pubDate>
+      <guid>http://localhost:1313/posts/zsh-faster/</guid>
+      <description>&lt;p&gt;開発環境を一新しました。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>2024年前半にやりたいこと</title>
+      <link>http://localhost:1313/posts/2024-first-half/</link>
+      <pubDate>Fri, 01 Mar 2024 02:30:35 +0900</pubDate>
+      <guid>http://localhost:1313/posts/2024-first-half/</guid>
+      <description>&lt;p&gt;2024/06/30までに自分がやりたいことをまとめてみました。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>golangci-lintに自作linterをcontributeしました！🎉</title>
+      <link>http://localhost:1313/posts/golangci-lint-contribute/</link>
+      <pubDate>Sat, 24 Feb 2024 16:42:42 +0900</pubDate>
+      <guid>http://localhost:1313/posts/golangci-lint-contribute/</guid>
+      <description>&lt;p&gt;golangci-lintに以下自作linterを導入させましたーー！嬉しい！！🎉&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>音楽初心者だけどボカロPに入門したい！</title>
+      <link>http://localhost:1313/posts/init-vocaloid/</link>
+      <pubDate>Wed, 27 Dec 2023 04:47:09 +0900</pubDate>
+      <guid>http://localhost:1313/posts/init-vocaloid/</guid>
+      <description>&lt;p&gt;23歳のうちに夢をかなえるシリーズです！&lt;/p&gt;&#xA;&lt;p&gt;前回の&amp;quot;VTuberになる&amp;quot;に続き、今回は&amp;quot;ボカロPになる&amp;quot;という夢に入門してみたいと思います！&lt;/p&gt;&#xA;&lt;p&gt;有給を使って、土&lt;del&gt;月曜日で初音ミクの購入&lt;/del&gt;曲の作成~MVの作成までやってみました。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>レイヤードアーキテクチャでトランザクションをエレガントに抽象化する方法2選</title>
+      <link>http://localhost:1313/posts/layered-tx/</link>
+      <pubDate>Sat, 16 Dec 2023 12:14:44 +0900</pubDate>
+      <guid>http://localhost:1313/posts/layered-tx/</guid>
+      <description>&lt;p&gt;この記事は技術書典で弊社から出した本『SGE Go Tech Book Vol.04』で自分が書いた章を書き直したものです。&lt;/p&gt;&#xA;&lt;p&gt;レイヤードアーキテクチャにおけるトランザクションの実装（主に抽象化）の方法について、2つの例を紹介します。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>生成AIを用いて2日でVTuberモデルを作成しアバターで会議に出るまで</title>
+      <link>http://localhost:1313/posts/init-vtuber/</link>
+      <pubDate>Wed, 13 Dec 2023 03:00:36 +0900</pubDate>
+      <guid>http://localhost:1313/posts/init-vtuber/</guid>
+      <description>&lt;p&gt;絵を描いたことないバックエンドエンジニアが、生成AIの力を借りながらVTuberモデルを作成し、MacBookPro単体でアバターでZoomやハドルに出るまでの全てを書きました。&#xA;&amp;ldquo;アバター作りたいけど絵描けないしなんか大変そう&amp;hellip;&amp;ldquo;と思ってる人に参考にしてもらえれば幸いです。&#xA;2徹しました。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>個人的優勝ターミナルツール3選(warp/z/peco)</title>
+      <link>http://localhost:1313/posts/useful-tarminal-tool/</link>
+      <pubDate>Fri, 17 Nov 2023 01:44:19 +0900</pubDate>
+      <guid>http://localhost:1313/posts/useful-tarminal-tool/</guid>
+      <description>&lt;p&gt;業務効率爆上がりな主観的おすすめターミナルツール3選を推す記事です🔥&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>対isuconメトリクスツールisumaru作った</title>
+      <link>http://localhost:1313/posts/isumaru/</link>
+      <pubDate>Mon, 02 Oct 2023 00:12:48 +0900</pubDate>
+      <guid>http://localhost:1313/posts/isumaru/</guid>
+      <description>&lt;p&gt;対isuconメトリクスツール&amp;quot;isumaru&amp;quot;作りました。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>wasmプラグインの作成/呼び出しを多言語でできるExtismを試す</title>
+      <link>http://localhost:1313/posts/try-extism/</link>
+      <pubDate>Sat, 01 Apr 2023 17:06:45 +0900</pubDate>
+      <guid>http://localhost:1313/posts/try-extism/</guid>
+      <description>&lt;p&gt;先日はWASM I/Oがありましたね。&#xA;中でも、wasmプラグインの作成/呼び出しを言語跨ぎでできるExtismが気になったので試してみました。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>自作言語をwasm変換するコンパイラをrustで作った</title>
+      <link>http://localhost:1313/posts/create-wasm-compiler/</link>
+      <pubDate>Wed, 01 Mar 2023 05:25:00 +0900</pubDate>
+      <guid>http://localhost:1313/posts/create-wasm-compiler/</guid>
+      <description>&lt;p&gt;rust/wasmに入門するために、自作言語をwasmバイナリにマッピングするコンパイラを作りました。&lt;/p&gt;&#xA;&lt;p&gt;機能は限定的で、四則演算を関数としてexportし、wasmで呼び出すまでを実装しています。&lt;/p&gt;&#xA;&lt;p&gt;どちらも初めて1ヶ月程度の知識なので細かい点はご容赦くださいmm&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>貯金に適した口座の使い分けを考えてみる</title>
+      <link>http://localhost:1313/posts/consider-saving-strategy/</link>
+      <pubDate>Sun, 08 Jan 2023 00:16:21 +0900</pubDate>
+      <guid>http://localhost:1313/posts/consider-saving-strategy/</guid>
+      <description>&lt;p&gt;新社会人になって8ヶ月経ちました。からまるです。&lt;/p&gt;&#xA;&lt;p&gt;最近、意図せず口座からお金がなくなっていっています。「貯金とは毎月のお賃金×経過月数」というのは幻で、学生に比べ多くの給料を貰え行動範囲がぐっと広がる新社会人が素直にお金を貯められる訳がありませんでした。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>hello world!</title>
+      <link>http://localhost:1313/posts/hello-world/</link>
+      <pubDate>Mon, 02 Jan 2023 22:47:33 +0900</pubDate>
+      <guid>http://localhost:1313/posts/hello-world/</guid>
+      <description>&lt;p&gt;独自ドメインのブログってなんかかっこいいですよねーー！&#xA;だから初めてみました。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
