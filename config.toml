@@ -47,4 +47,4 @@ name = "karamaru"
 
 [Params]
 toc = true
-images = ["images/karamaru.png"]
+images = ["images/karamaru.jpg"]
