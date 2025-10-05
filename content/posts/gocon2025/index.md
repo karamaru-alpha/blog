@@ -196,7 +196,7 @@ func main() {
 
 技術って好奇心を満たせるのもいいけど、今回みたいに**国を超えてお話できるきっかけ**にもなるから素敵だなって思いました。
 
-発表資料を見て少しでもいいなと思ったら、**ぜひ[スポンサー](https://github.com/sponsors/ovechkin-dmimage.png)してあげてください**！自分も微力ながらさせていただきまいｓた 👏
+発表資料を見て少しでもいいなと思ったら、**ぜひ[スポンサー](https://github.com/sponsors/ovechkin-dm)してあげてください**！自分も微力ながらさせていただきまいｓた 👏
 
 {{< figure src="ovechkin2.jpg" class="center" width="300" >}}
 
