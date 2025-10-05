@@ -189,7 +189,7 @@ func main() {
 
 いきなり押しかけた上、自分の物分かりもすごく悪かったのだけれど、根気強く・やさしく教えてくれた作者様には感謝してもしきれません。本当にありがとうございました！😭
 
-{{< figure src="ovechkin1.jpg" class="center" width="200" >}}
+{{< figure src="ovechkin1.jpg" class="center" width="300" >}}
 
 作者さんの温かい協力もあり、全ての仕組みがわかった時本当に気持ちよかったなあ。
 やっぱり**知らないことを知るのが楽しい！**
@@ -198,9 +198,9 @@ func main() {
 
 発表資料を見て少しでもいいなと思ったら、**ぜひ[スポンサー](https://github.com/sponsors/ovechkin-dmimage.png)してあげてください**！自分も微力ながらさせていただきまいｓた 👏
 
-{{< figure src="sponsor.jpg" class="center" width="400" >}}
+{{< figure src="ovechkin2.jpg" class="center" width="300" >}}
 
-{{< figure src="ovechkin2.jpg" class="center" width="200" >}}
+{{< figure src="sponsor.jpg" class="center" width="400" >}}
 
 ## 当日
 
@@ -223,6 +223,8 @@ func main() {
 また、企画・会場の確保・web サイトの構築・スポンサー連携・CfP 選考など、素敵な場所を提供してくれた運営の皆様も本当にありがとうございました！おかげで楽しむことができました mm
 
 {{< figure src="card.jpg" class="center" width="300" >}}
+
+↑ [r-906 さんの T シャツ](https://booth.pm/ja/items/7211545?srsltid=AfmBOooNYGh9TN1gneTcU0v8WDG5r8u-uIonbXNH6RzMh2f2iKDofJhc)。可愛い。
 
 ## セッションの要約・推しポイント・話しきれなかったこと
 
