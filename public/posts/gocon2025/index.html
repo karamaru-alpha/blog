@@ -170,8 +170,8 @@
 <li>動的メソッド生成を行う go-dyno の仕組み</li>
 </ol>
 <p>テーマの選定理由は、<strong><a href="https://github.com/ovechkin-dm/mockio">mockio</a> というモックライブラリの設計思想が好きすぎた</strong>からです。</p>
-<p><strong>モックライブラリについて調べるのは昔から好き</strong>で、外部登壇や社内勉強会で<a href="https://speakerdeck.com/karamaru/motukuraiburariapurotibi-jiao">設計比較</a>を行ったり、簡易的な<a href="https://github.com/karamaru-alpha/mocka">自作</a>を行ったりしていました(ぜひ見てみてね！)。
-欲しいのはモックオブジェクトなのか、スタブなのか？振る舞いの指定にどこまで型安全性を求めるのか？コード生成は許容するか？対象 I/F の指定方法は？などなど、選定に様々な観点があって奥深いんですよね！</p>
+<p><strong>モックライブラリについて調べるのは昔から好き</strong>で、外部登壇や社内勉強会で<a href="https://speakerdeck.com/karamaru/motukuraiburariapurotibi-jiao">設計比較</a>を行ったり、簡易的な<a href="https://github.com/karamaru-alpha/mocka">自作</a>を行ったりしていました。</p>
+<p>欲しいのはモックオブジェクトなのか、スタブなのか？振る舞いの指定にどこまで型安全性を求めるのか？コード生成は許容するか？対象 I/F の指定方法は？などなど、選定に様々な観点があって奥深いんですよね！</p>
 <p>そんな中、 <strong>モックオブジェクトの事前生成を必要とせず、generics で型安全に振る舞いを指定できる</strong>mockio を見つけて、設計思想に強く感動した記憶があります 👏 当時は star 数も 2 桁でした。</p>
 <details>
   <summary></summary>
@@ -246,8 +246,8 @@
 <blockquote class="twitter-tweet"><a href=https://twitter.com/karamaru_alpha/status/1908879347445817487?ref_src&#61;twsrc%5Etfw></a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 <h2 id="苦戦した-go-dyno-内部実装調査">苦戦した go-dyno 内部実装調査</h2>
-<p>go-dyno がどのようにメソッドを動的に生み出しているのかの調査がとても大変だったー 😭</p>
-<p>詳しくは発表資料参照なのですが、go-dyno は「メソッドの振る舞いは動的に切り替えられない」 → 「関数の振る舞いは動的に切り替えられる」 → 「<strong>メソッドから関数を呼び出して引数はメソッドのやつを覗き見しよう！</strong> 」という作戦のライブラリです。</p>
+<p><strong>go-dyno がどのようにメソッドの振る舞いを動的に指定できているのか</strong>の調査がとても大変だったー 😭</p>
+<p>詳しくは発表資料参照なのですが、go-dyno は「メソッドの振る舞いは本来動的に切り替えられない」 → 「関数の振る舞いは動的に切り替えられる」 → 「<strong>メソッドから関数を呼び出して引数はメソッドのやつを覗き見しよう！</strong> 」という作戦のライブラリです。</p>
 <p>このライブラリの仕組みを理解するには、前提知識として少なくとも以下が必要になります。
 全て自分も馴染みが薄い部分だったので非常に理解に時間がかかりました 😭</p>
 <ul>
@@ -256,6 +256,7 @@
 <li>メソッドテーブルの仕組み</li>
 <li>CPU（レジスタ）とメモリ（スタック）による引数伝搬</li>
 <li>スタックフレームの積まれ方と内部構造</li>
+<li>関数とメソッドの違い</li>
 </ul>
 <p>上記知識は<strong>全てスライドに Tips として紹介</strong>しました。
 このセッション自体、ライブラリの紹介というよりは、「道中で現れる <strong>Go の深い部分を覗き見させる</strong>」ことが目標だったので、ぜひ見てくれると嬉しいです！</p>
@@ -270,20 +271,20 @@
 </figure>
 
 <h2 id="作者との思い出">作者との思い出</h2>
-<p>ということで、<strong><a href="https://github.com/ovechkin-dm">mockio/go-dyno 作者の ovechkin さん</a>に直接連絡して質問</strong>することにしました。GitHub に SNS リンクがなかったので見つけるのに少し骨が折れましたが、無事特定することに成功しました。オランダに住んでいる人のようです。</p>
+<p>ということで、<strong><a href="https://github.com/ovechkin-dm">mockio/go-dyno 作者の ovechkin さん</a>に直接連絡して質問</strong>することにしました。GitHub に SNS リンクがなかったのですが、特定することに成功しました。オランダに住んでいる人のようです。</p>
 <p>追い詰められた人間って怖いですね。（思い返せば GoogleCloudNext の参加者の写真に写っていた PC のアドレスバーから<a href="https://x.com/karamaru_alpha/status/1832987457476006015">Go チームがブースで出題していたサイトを特定した</a>過去もありました。）</p>
 <p>「コード生成をせずにモック処理を行える<strong>あなたのライブラリが好き</strong>だ。内部処理をこのように理解してるんだけど、ここだけ理解できないから質問してもいいかな？」みたいな感じでダメ元連絡しました。すると、1 日も立たず返信を返してくれて、内部処理について教えてくださいました。</p>
 <p>主に関数とメソッドで引数を共有するトリックについて、引数のレジスタ・スタック割り当てを利用していること、スタックが連続した時の offset が 16 バイトになることを丁寧に教えてくれました（16 バイトの部分は OS や Go バージョンにより異なりビルドタグで制御される）。</p>
-<p>お話する過程で、スタックフレームの構造や、関数とメソッドの違いなどについての理解が大きく深まりました。
-自分の物分かりが悪かったのだけれど、根気強く教えてくれて本当にありがとうございました！😭</p>
+<p>お話する過程で、スタックフレームの構造や、関数とメソッドの違いなどについての理解が大きく深まりました。</p>
 <p>連続するスタックフレームのオフセットについて<a href="https://github.com/karamaru-alpha/playground/pull/1">例示を僕のリポジトリにコミット</a>してくれたり、登壇を応援してくれたり、本当に優しい人だった&hellip;🥰</p>
+<p>いきなり押しかけた上、自分の物分かりもすごく悪かったのだけれど、根気強く・やさしく教えてくれた作者様には感謝してもしきれません。本当にありがとうございました！😭</p>
 <figure class="center"><img src="/posts/gocon2025/ovechkin1.jpg" width="200">
 </figure>
 
 <p>作者さんの温かい協力もあり、全ての仕組みがわかった時本当に気持ちよかったなあ。
 やっぱり<strong>知らないことを知るのが楽しい！</strong></p>
 <p>技術って好奇心を満たせるのもいいけど、今回みたいに<strong>国を超えてお話できるきっかけ</strong>にもなるから素敵だなって思いました。</p>
-<p>発表資料を見て少しでもいいなと思ったら、ぜひ<a href="https://github.com/sponsors/ovechkin-dmimage.png">スポンサー</a>してあげてください！自分もしました 👏</p>
+<p>発表資料を見て少しでもいいなと思ったら、<strong>ぜひ<a href="https://github.com/sponsors/ovechkin-dmimage.png">スポンサー</a>してあげてください</strong>！自分も微力ながらさせていただきまいｓた 👏</p>
 <figure class="center"><img src="/posts/gocon2025/sponsor.jpg" width="400">
 </figure>
 
@@ -292,7 +293,7 @@
 
 <h2 id="当日">当日</h2>
 <p>4 部屋ぶち抜きでの発表だったので人が多くてとても緊張しました。待機中に震えている時、スタッフの人に頑張って！的なことを言って貰えて非常に勇気をもらったことを覚えています ☺️</p>
-<p>物量が多くて早口進行にはなりましたが、「このライブラリのここがかっこいいでしょ！」という熱量だったり、「Go の中身ってこうなってるんだね！」みたいな驚きを自分なりに共有できたかなと思います。</p>
+<p>物量が多くて早口進行にはなりましたが、<strong>「このライブラリのこのトリックがかっこいいでしょ！」という熱量</strong>だったり、<strong>「Go の中身ってこうなってるんだね！」みたいな驚き</strong>を自分なりに共有できたかなと思います。</p>
 <p>少しでも刺さってくれる人がいたら嬉しいなー！</p>
 <p>ちなみに、スライドの準備でほぼ 2 轍状態でした 😇</p>
 <figure class="center"><img src="/posts/gocon2025/karamaru.jpg" width="400">
@@ -311,7 +312,7 @@
 <p>発表ではスキップした部分です。</p>
 <p>Go を始めてまもない頃、uber-go/mock(当時は golang/mock か)がどのように動作しているのか理解できなかった記憶があります。何これ魔法？みたいな。急に<code>EXPECT~</code>とか<code>モックオブジェクトで差し替え~</code>とか言われても分からない！みたいな。</p>
 <p>なので発表資料では、そもそもモックってどういうことだっけ？という話から、既存モックライブラリの内部実装を自作してイメージするところまで解説しています。</p>
-<p>昔の自分に届け！</p>
+<p><strong>昔の自分に届け！</strong></p>
 <p><figure class="center"><img src="/posts/gocon2025/slide1-1.jpg" width="500">
 </figure>
 
@@ -323,7 +324,7 @@
 <p>発表でも触れる予定だった、上記で紹介したモックライブラリ比較の社内勉強会資料です。</p>
 <p>主に型安全性や、コード生成の有無、モックオブジェクト or スタブなどの観点から、存在するモックライブラリの設計比較を確認できます。</p>
 <p><a href="https://gist.github.com/maratori/8772fe158ff705ca543a0620863977c2">Comparison of golang mocking libraries</a>という gist も非常によくまとめられているので、併せてご確認ください。</p>
-<p>実務で使うモックライブラリを選定したい人に届け！</p>
+<p><strong>実務で使うモックライブラリを選定したい人に届け！</strong></p>
 <div style="position: relative; padding-bottom: 50%; padding-top: 65px; overflow: hidden;">
 <iframe src=https://speakerdeck.com/player/251af6678ddb4ab191bfafb3f0df969f style="width: 100%; height: 100%; position: absolute; top: 0; left: 0;" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
 </div>
@@ -337,7 +338,7 @@
 Go のアップデートタイミングさえ気遣えばすぐに壊れることは防げますから、ハックしていることを理由に実用性が低いと断定できるわけではなさそうです。</p>
 <blockquote>
 <p>Golang ABI &hellip; we are confident that any necessary adjustments can be made with minimal disruption to the library&rsquo;s functionality.</p></blockquote>
-<p>実務で使えるほどの信頼性があるのか？と問われると △ ですが、そんなことはかっこいいからどうでもいいのです！👏</p>
+<p>実務で使えるほどの信頼性があるのか？と問われると即答はできませんが、そんなことは<strong>かっこいいからどうでもいいのです</strong>！👏</p>
 <figure class="center"><img src="/posts/gocon2025/slide2-1.jpg" width="500">
 </figure>
 
@@ -345,20 +346,20 @@ Go のアップデートタイミングさえ気遣えばすぐに壊れるこ�
 <h3 id="3-go-dyno-によるメタプログラミング">3. go-dyno によるメタプログラミング</h3>
 <p>発表の大部分を使った部分です。</p>
 <p>本来禁止されているメソッドの動的振る舞い指定に対して、 go-dyno がどのようにそれを実現しているのかを解説しました。メソッドをアセンブリで静的に記述し、そこから<code>reflect.MakeFunc</code>で振る舞いを指定した関数を呼び出し、引数はメソッド呼び出し時のものをハックして共有するという話でしたね。</p>
-<p>特に補足はないのですが、やはり Tips パートが個人的にお気に入りの部分です ☺️</p>
+<p>特に補足はないのですが、やはり <strong>Tips パート</strong>が個人的にお気に入りの部分です ☺️</p>
 <p><strong>このセッションの目的</strong>は、mockio/go-dyno の設計を伝えることの他に、それを理解するために必要な <strong>Go で使う基盤系の知識を図解して共有すること</strong>にありました。</p>
 <p>メソッドって Go でどう管理されてる？レジスタとスタックの違いは？アセンブリってどう書く？関数とメソッドの違いは？スタックフレームの構造は？引数の受け渡しってどうやる？&hellip;
 これらを <strong>Tips パート（タイトル赤線のスライド）として紹介</strong>しました。</p>
 <p>モックについて興味がない人にも学びがある発表になれてたらいいなー！</p>
-<p>あと、go-dyno の図解は結構頑張りました！難しい題材だったから上手く伝えられたか不安だけど、なんかすごそう！という雰囲気だけ感じて貰えたらいいなぁ ☁️</p>
-<p>特にクライマックスの、<strong>レジスタとスタックの中身をハックして引数を覗き見するトリック</strong>について、すごそう感が伝わると嬉しい 🔥</p>
+<p>あと、go-dyno の図解は結構頑張りました！難しい題材だったから上手く解説できたか不安だけど、かっこよさが伝わったらいいな ☁️</p>
+<p>特にクライマックスの、<strong>レジスタとスタックの中身をハックして引数を覗き見するトリック</strong>について、すごそう感が伝わると嬉しいです 🔥</p>
 <figure class="center"><img src="/posts/gocon2025/slide3-1.jpg" width="500">
 </figure>
 
 <p>cf. <a href="https://speakerdeck.com/karamaru/mockio-go-dynodexue-bumetapuroguramingu?slide=25">speackerdeck.com - #3 go-dyno によるメタプログラミング</a></p>
 <h2 id="終わりに">終わりに</h2>
 <p>発表もスタッフも本当に楽しかった！</p>
-<p>思えば、<a href="https://karamaru-alpha.com/posts/gocon2024/">Go Conference 2024</a> が人生初登壇で、それからよく外部登壇するようになって、友達が増えたりしたんだっけ。
+<p>思えば<a href="https://karamaru-alpha.com/posts/gocon2024/">Go Conference 2024</a> が人生初登壇で、それからよく外部登壇するようになって、友達が増えたりしたんだっけ。
 カンファレンスは難しいことが知れて面白いし、例え分からくてもこの技術が好きなんだろうなって熱量に触れるだけで楽しいですよね！</p>
 <p>全ての運営者・登壇者・ワークショップホスト・参加者に感謝して、ブログを締めたいと思います。</p>
 <p>いつか VTuber になって技術的な配信をしたいなーー！</p>
@@ -377,7 +378,7 @@ Go のアップデートタイミングさえ気遣えばすぐに壊れるこ�
         		<footer>
 			
 			<span>
-			&copy; <time datetime="2025-10-05 18:29:07.955958 &#43;0900 JST m=&#43;19094.050268293">2025</time> . Made with <a href='https://gohugo.io'>Hugo</a> using the <a href='https://github.com/EmielH/tale-hugo/'>Tale</a> theme.
+			&copy; <time datetime="2025-10-05 18:38:21.454897 &#43;0900 JST m=&#43;19647.553707751">2025</time> . Made with <a href='https://gohugo.io'>Hugo</a> using the <a href='https://github.com/EmielH/tale-hugo/'>Tale</a> theme.
 			</span>
 		</footer>
 
