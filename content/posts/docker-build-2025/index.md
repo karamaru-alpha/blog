@@ -145,7 +145,7 @@ cf. https://docs.docker.com/build/cache/optimize/#order-your-layers
 `package.json`ファイルは変更されたが`pnpm-lock`ファイルが変更されない(依存関係が変わらない)場合に、依存のダウンロードをスキップして`store`ディレクトリの`cache`を用いることができます。
 
 ```diff {style=emacs, class="small-font75"}
-+ COPY pnpm-lock.yaml target=pnpm-lock.yaml .
++ COPY pnpm-lock.yaml .
 + RUN pnpm fetch --frozen-lockfile
 + COPY package.json .
 + RUN pnpm install --offline --frozen-lockfile
