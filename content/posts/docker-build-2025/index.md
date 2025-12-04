@@ -14,7 +14,7 @@ docker の最新記法や、GitHubActions でのビルドチューニングに�
 
 [QualiArts Advent Calendar 2025](https://qiita.com/advent-calendar/2025/qualiarts) の 4 日目の記事です！
 
-最近 Go のビルド周りを改善するのが趣味で、情報が結構散らばっていて困った経験があるのでまとめます！
+最近 Go のビルド周りを改善するのが趣味で、情報が結構散らばっていて困った経験があるのでまとめます。
 
 皆様の docker-build 改善のきっかけになれるような記事を目指します！どれか刺され！🔥
 
@@ -380,7 +380,7 @@ compression-level=3 – zstd には 22 段階の圧縮レベルがあります�
 
 私の所属するプロジェクトのとある image では、この**圧縮方法の変更だけで 20%サイズが削減**されました 🚀
 
-{{< figure src="cache-mount.jpg" class="left" width="300" >}}
+{{< figure src="zstd1.jpg" class="left" width="300" >}}
 
 また、ArtifactRegisty の画面から中間レイヤーが OCI 準拠で zstd されていることを確認できました。
 
