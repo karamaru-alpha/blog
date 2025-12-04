@@ -167,6 +167,36 @@ pre code > span {
     vertical-align: text-top;
     padding: 0;
     margin: 0; }
+  .post figure.left {
+    text-align: left;
+    margin-left: 0;
+    margin-right: auto; }
+    .post figure.left img {
+      margin-left: 0;
+      margin-right: auto; }
+  .post figure.center {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto; }
+    .post figure.center img {
+      margin-left: auto;
+      margin-right: auto; }
+  .post figure.right {
+    text-align: right;
+    margin-left: auto;
+    margin-right: 0; }
+    .post figure.right img {
+      margin-left: auto;
+      margin-right: 0; }
+  .post figure.inline {
+    display: inline-block;
+    margin: 0 0.5rem 0.5rem 0; }
+    .post figure.inline img {
+      margin: 0; }
+  .post .small-font75 pre code {
+    font-size: 75% !important; }
+  .post .small-font50 pre code {
+    font-size: 50% !important; }
 
 .highlight .hll {
   background-color: #ffc; }

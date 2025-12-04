@@ -48,3 +48,8 @@ name = "karamaru"
 [Params]
 toc = true
 images = ["images/karamaru.jpg"]
+
+[markup]
+  [markup.tableOfContents]
+    endLevel = 3
+    startLevel = 2

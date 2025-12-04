@@ -173,9 +173,10 @@
 <p><strong>モックライブラリについて調べるのは昔から好き</strong>で、外部登壇や社内勉強会で<a href="https://speakerdeck.com/karamaru/motukuraiburariapurotibi-jiao">設計比較</a>を行ったり、簡易的な<a href="https://github.com/karamaru-alpha/mocka">自作</a>を行ったりしていました。</p>
 <p>欲しいのはモックオブジェクトなのか、スタブなのか？振る舞いの指定にどこまで型安全性を求めるのか？コード生成は許容するか？対象 I/F の指定方法は？などなど、選定に様々な観点があって奥深いんですよね！</p>
 <p>そんな中、 <strong>モックオブジェクトの事前生成を必要とせず、generics で型安全に振る舞いを指定できる</strong>mockio を見つけて、設計思想に強く感動した記憶があります 👏 当時は star 数も 2 桁でした。</p>
+
 <details>
-  <summary></summary>
-  <p><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// main.go</span>
+  <summary>mockio_sample.go</summary>
+  <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// main.go</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Calculator</span> <span style="color:#66d9ef">interface</span> {
@@ -204,14 +205,14 @@
 </span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">assert</span>.<span style="color:#a6e22e">Equal</span>(<span style="color:#a6e22e">t</span>, <span style="color:#ae81ff">2</span>, <span style="color:#a6e22e">Foo</span>(<span style="color:#a6e22e">mockCalculator</span>))
 </span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">mock</span>.<span style="color:#a6e22e">Verify</span>(<span style="color:#a6e22e">mockCalculator</span>, <span style="color:#a6e22e">mock</span>.<span style="color:#a6e22e">Times</span>(<span style="color:#ae81ff">1</span>)).<span style="color:#a6e22e">Increment</span>(<span style="color:#ae81ff">1</span>)
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div></p>
-</details>
+</span></span></code></pre></div></details>
 
 <p>何度見ても美しいインターフェースだ&hellip;！<a href="https://github.com/bytedance/mockey">bytedance/mockey</a>みたいにモンキーパッチで無理やりランタイムでモックする手法ならあったけど、型安全性まで generics で保証されている！</p>
 <p>ふんわり中身を見てみると、<strong><a href="https://github.com/ovechkin-dm/go-dyno">go-dyno</a>というライブラリが構造体・メソッドの動的生成を実現している</strong>ことが分かりました。動的に振る舞いを変更できるなんてメタプログラミングみたいでかっこいい！そう思い調査を開始し、CfP にこのテーマを選択しました。</p>
+
 <details>
-  <summary></summary>
-  <p><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+  <summary>mockio_sample.go</summary>
+  <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
 </span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
@@ -240,8 +241,7 @@
 </span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">dynamicCalculator</span>.<span style="color:#a6e22e">IsEven</span>(<span style="color:#ae81ff">1</span>))
 </span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Output: false</span>
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div></p>
-</details>
+</span></span></code></pre></div></details>
 
 <blockquote class="twitter-tweet"><a href=https://twitter.com/karamaru_alpha/status/1908879347445817487?ref_src&#61;twsrc%5Etfw></a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
@@ -273,7 +273,7 @@
 <h2 id="作者との思い出">作者との思い出</h2>
 <p>ということで、<strong><a href="https://github.com/ovechkin-dm">mockio/go-dyno 作者の ovechkin さん</a>に直接連絡して質問</strong>することにしました。GitHub に SNS リンクがなかったのですが、なんとか見つけ出すことに成功しました。オランダに住んでいる人のようです。</p>
 <p>追い詰められた人間って怖いですね。（思い返せば GoogleCloudNext の参加者の写真に写っていた PC のアドレスバーから<a href="https://x.com/karamaru_alpha/status/1832987457476006015">Go チームがブースで出題していたサイトを特定した</a>過去もありました。）</p>
-<p>「コード生成をせずにモック処理を行える<strong>あなたのライブラリが好き</strong>だ。内部処理をこのように理解してるんだけど、ここだけ理解できないから質問してもいいかな？」みたいな感じでダメ元連絡しました。すると、1 日も立たず返信を返してくれて、内部処理について教えてくださいました。</p>
+<p>「コード生成をせずにモック処理を行える<strong>あなたのライブラリが好き</strong>だ。内部処理をこのように理解してるんだけど、ここだけ理解できないから質問してもいいかな？」みたいな感じでダメ元で連絡しました。すると、 1 日も立たずに返信をいただきました。</p>
 <p>主に関数とメソッドで引数を共有するトリックについて、引数のレジスタ・スタック割り当てを利用していること、スタックが連続した時の FP の offset が 16 バイトになることを丁寧に教えてくれました（16 バイトの部分は OS や Go バージョンにより異なりビルドタグで制御される）。</p>
 <p>お話する過程で、スタックフレームの構造や、関数とメソッドの違いなどについての理解が大きく深まりました。</p>
 <p>連続するスタックフレームのオフセットについて<a href="https://github.com/karamaru-alpha/playground/pull/1">例示を僕のリポジトリにコミット</a>してくれたり、登壇を応援してくれたり、本当に優しい人だった&hellip;🥰</p>
@@ -370,6 +370,7 @@ Go のアップデートタイミングさえ気遣えばすぐに壊れるこ�
 
 	<div class="pagination">
 		<a href="/posts/github-default-filter/" class="left arrow">&#8592;</a>
+		<a href="/posts/docker-build-2025/" class="right arrow">&#8594;</a>
 
 		<a href="#" class="top">Top</a>
 	</div>
@@ -379,7 +380,7 @@ Go のアップデートタイミングさえ気遣えばすぐに壊れるこ�
         		<footer>
 			
 			<span>
-			&copy; <time datetime="2025-10-05 21:32:55.824626 &#43;0900 JST m=&#43;22767.053954335">2025</time> . Made with <a href='https://gohugo.io'>Hugo</a> using the <a href='https://github.com/EmielH/tale-hugo/'>Tale</a> theme.
+			&copy; <time datetime="2025-12-04 16:12:13.393216 &#43;0900 JST m=&#43;0.055330459">2025</time> . Made with <a href='https://gohugo.io'>Hugo</a> using the <a href='https://github.com/EmielH/tale-hugo/'>Tale</a> theme.
 			</span>
 		</footer>
 

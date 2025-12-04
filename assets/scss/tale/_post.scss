@@ -60,4 +60,59 @@
     padding: 0;
     margin: 0;
   }
+
+  // CSS for figure alignment
+  figure.left {
+    text-align: left;
+    margin-left: 0;
+    margin-right: auto;
+    
+    img {
+      margin-left: 0;
+      margin-right: auto;
+    }
+  }
+
+  figure.center {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    
+    img {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  figure.right {
+    text-align: right;
+    margin-left: auto;
+    margin-right: 0;
+    
+    img {
+      margin-left: auto;
+      margin-right: 0;
+    }
+  }
+
+  figure.inline {
+    display: inline-block;
+    margin: 0 0.5rem 0.5rem 0;
+    
+    img {
+      margin: 0;
+    }
+  }
+
+  .small-font75 {
+    pre code {
+      font-size: 75% !important;
+    }
+  }
+
+  .small-font50 {
+    pre code {
+      font-size: 50% !important;
+    }
+  }
 }

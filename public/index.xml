@@ -6,8 +6,15 @@
     <description>Recent content on からまるのブログ</description>
     <generator>Hugo</generator>
     <language>ja</language>
-    <lastBuildDate>Sat, 04 Oct 2025 10:42:42 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 04 Dec 2025 12:16:21 +0900</lastBuildDate>
     <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>docker-buildのチューニングTips全部書く【Go×GitHubActions】</title>
+      <link>http://localhost:1313/posts/docker-build-2025/</link>
+      <pubDate>Thu, 04 Dec 2025 12:16:21 +0900</pubDate>
+      <guid>http://localhost:1313/posts/docker-build-2025/</guid>
+      <description>&lt;p&gt;docker の最新記法や、GitHubActions でのビルドチューニングについて網羅的に書かれている記事って意外と少ない！&lt;/p&gt;&#xA;&lt;p&gt;主に Go*GitHubActions での image ビルドについて、実行時間を短く・レイヤーを小さくする Tips を共有します 🚀&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Go Conference 2025 に登壇しました！</title>
       <link>http://localhost:1313/posts/gocon2025/</link>
