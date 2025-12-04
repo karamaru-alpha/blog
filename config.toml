@@ -27,23 +27,17 @@ name = "karamaru"
     url = "https://speakerdeck.com/karamaru"
     weight = 3
   [[menu.main]]
-    identifier = "SizuIn"
-    name = "SizuIn"
-    title = "SizuIn"
-    url = "https://sizu.me/karamaru_alpha"
-    weight = 4
-  [[menu.main]]
     identifier = "LinkedIn"
     name = "LinkedIn"
     title = "LinkedIn"
     url = "https://www.linkedin.com/in/karamaru"
-    weight = 5
+    weight = 4
   [[menu.main]]
     identifier = "RSS"
     name = "RSS"
     title = "RSS"
     url = "https://karamaru-alpha.com/index.xml"
-    weight = 6
+    weight = 5
 
 [Params]
 toc = true

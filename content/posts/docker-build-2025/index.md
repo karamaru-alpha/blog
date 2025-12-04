@@ -14,6 +14,8 @@ docker の最新記法や、GitHubActions でのビルドチューニングに�
 
 [QualiArts Advent Calendar 2025](https://qiita.com/advent-calendar/2025/qualiarts) の 4 日目の記事です！
 
+最近 Go のビルド周りを改善するのが趣味で、情報が結構散らばっていて困った経験があるのでまとめます！
+
 皆様の docker-build 改善のきっかけになれるような記事を目指します！どれか刺され！🔥
 
 **目次**
