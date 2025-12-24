@@ -8,11 +8,9 @@ image: "thumbnail.jpg"s
 
 <!--more-->
 
-このブログは[whywaita Advent Calendar 2025](https://adventar.org/calendars/11433)の 24 日目の記事です！
+このブログは[whywaita Advent Calendar 2025](https://adventar.org/calendars/11433)の 24 日目の記事です。
 
-whywaita さんとは同じ会社で、isucon フレンズです！ ☺️
-
-10 周年だーわいわい！ということで、騒いでもいいような防音室を自作してみました！！
+whywaita さんとは同じ会社で isucon フレンズです。10 周年だーわいわい！ということで、騒いでもいいような防音室を自作してみました！
 
 **目次**
 
