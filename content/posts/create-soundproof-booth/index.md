@@ -1,7 +1,7 @@
 ---
 title: "防音室を自作しよう！"
 date: 2025-12-24T00:18:21+09:00
-image: "thumbnail.jpg"
+image: "thumbnail.jpg"s
 ---
 
 歌ってみたをするために防音室を DIY したよ！
@@ -54,8 +54,9 @@ cf. https://www.amazon.co.jp/dp/B01N9TS66N
 - MDF ボード(天井) 900mm×900mm×12mm
 - MDF ボード(机) 450mm\*900mm\*12mm
 
-材木屋ざいいちさんで注文しました。
-好きなサイズでカットできるし、お家の前まで届けてくれてありがたい！
+材木屋ざいいちさんで注文しました！
+
+好きなサイズでカットできるし、お家の前まで届けてくれてありがたい！👏
 
 重すぎるのでホームセンターから持って帰るとかは現実的ではないです 😇
 
@@ -86,9 +87,9 @@ cf. [蝶番](https://www.amazon.co.jp/dp/B0D3HZWLZ6)
 
 cf. [ドアハンドル](https://www.amazon.co.jp/dp/B0DSCC859C)
 
-{{< figure src="tyotsugai.jpg" class="left" width="200" >}}
+{{< figure src="tyotsugai.jpg" class="left" width="150" >}}
 
-{{< figure src="door.jpg" class="left" width="200" >}}
+{{< figure src="door.jpg" class="left" width="250" >}}
 
 ### 4. コーキングガンで木材の隙間を埋める
 
