@@ -6,8 +6,15 @@
     <description>Recent content on からまるのブログ</description>
     <generator>Hugo</generator>
     <language>ja</language>
-    <lastBuildDate>Thu, 04 Dec 2025 12:16:21 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 24 Dec 2025 00:18:21 +0900</lastBuildDate>
     <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>防音室を自作しよう！</title>
+      <link>http://localhost:1313/posts/create-soundproof-booth/</link>
+      <pubDate>Wed, 24 Dec 2025 00:18:21 +0900</pubDate>
+      <guid>http://localhost:1313/posts/create-soundproof-booth/</guid>
+      <description>&lt;p&gt;歌ってみたをするために防音室を DIY したよ！&lt;/p&gt;</description>
+    </item>
     <item>
       <title>docker-buildのチューニングTips全部書く【Go×GitHubActions】</title>
       <link>http://localhost:1313/posts/docker-build-2025/</link>
